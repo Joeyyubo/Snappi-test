@@ -208,12 +208,81 @@ const PoliciesPage = () => {
     }
   ];
 
+  const planPolicyData = [
+    {
+      name: 'default-plan',
+      type: 'PlanPolicy',
+      namespace: 'default',
+      status: 'Enforced',
+      statusType: 'success',
+      created: 'Jan 15, 2025, 9:00 AM',
+      badge: 'PP'
+    },
+    {
+      name: 'bronze-tier-plan',
+      type: 'PlanPolicy',
+      namespace: 'api-gateway-orla',
+      status: 'Enforced',
+      statusType: 'success',
+      created: 'Feb 1, 2025, 10:30 AM',
+      badge: 'PP'
+    },
+    {
+      name: 'silver-tier-plan',
+      type: 'PlanPolicy',
+      namespace: 'api-gateway-dmtest1',
+      status: 'Accepted (Not Enforced)',
+      statusType: 'info',
+      created: 'Feb 10, 2025, 2:15 PM',
+      badge: 'PP'
+    },
+    {
+      name: 'gold-tier-plan',
+      type: 'PlanPolicy',
+      namespace: 'toystore-orla',
+      status: 'Enforced',
+      statusType: 'success',
+      created: 'Feb 20, 2025, 11:00 AM',
+      badge: 'PP'
+    },
+    {
+      name: 'consumer-plan-default',
+      type: 'PlanPolicy',
+      namespace: 'consumer-namespace',
+      status: 'TargetNotFound (Not Accepted)',
+      statusType: 'error',
+      created: 'Mar 5, 2025, 4:45 PM',
+      badge: 'PP'
+    },
+    {
+      name: 'analytics-plans',
+      type: 'PlanPolicy',
+      namespace: 'default',
+      status: 'Enforced',
+      statusType: 'success',
+      created: 'Mar 12, 2025, 8:20 AM',
+      badge: 'PP'
+    },
+    {
+      name: 'payments-plans',
+      type: 'PlanPolicy',
+      namespace: 'api-gateway-orla',
+      status: 'Overridden (Not Enforced)',
+      statusType: 'warning',
+      created: 'Mar 18, 2025, 3:00 PM',
+      badge: 'PP'
+    }
+  ];
+
   const getFilteredData = () => {
     let dataToFilter = [];
     
     switch (activeTabKey) {
       case 'all-policies':
-        dataToFilter = [...policyData, ...tokenRateLimitData];
+        dataToFilter = [...policyData, ...tokenRateLimitData, ...planPolicyData];
+        break;
+      case 'plan':
+        dataToFilter = planPolicyData;
         break;
       case 'dns':
         dataToFilter = policyData.filter(policy => policy.type === 'DNSPolicy');
@@ -231,7 +300,7 @@ const PoliciesPage = () => {
         dataToFilter = tokenRateLimitData;
         break;
       default:
-        dataToFilter = [...policyData, ...tokenRateLimitData];
+        dataToFilter = [...policyData, ...tokenRateLimitData, ...planPolicyData];
     }
     
     return dataToFilter.filter(policy =>
@@ -250,6 +319,9 @@ const PoliciesPage = () => {
         break;
       case 'TRL':
         color = 'purple';
+        break;
+      case 'PP':
+        color = 'green';
         break;
       case 'AP':
         color = 'blue';
@@ -365,6 +437,7 @@ const PoliciesPage = () => {
           style={{ marginBottom: '24px' }}
         >
           <Tab eventKey="all-policies" title={<TabTitleText>All Policies</TabTitleText>} />
+          <Tab eventKey="plan" title={<TabTitleText>Plan</TabTitleText>} />
           <Tab eventKey="dns" title={<TabTitleText>DNS</TabTitleText>} />
           <Tab eventKey="tls" title={<TabTitleText>TLS</TabTitleText>} />
           <Tab eventKey="auth" title={<TabTitleText>Auth</TabTitleText>} />
