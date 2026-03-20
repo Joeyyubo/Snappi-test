@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Page,
   PageSection,
@@ -44,6 +44,9 @@ import RevealApiKeyModal from './components/RevealApiKeyModal';
 import EditApiKeyModal from './components/EditApiKeyModal';
 import DeleteApiKeyModal from './components/DeleteApiKeyModal';
 import RequestApiKeyModal from './components/RequestApiKeyModal';
+import RequestApiKeySuccessToast from './components/RequestApiKeySuccessToast';
+import APIKeyUpdatedToast from './components/APIKeyUpdatedToast';
+import APIKeyDeletedToast from './components/APIKeyDeletedToast';
 import {
   buildCredentialsData,
   DEMO_CURRENT_USER_OWNER,
@@ -70,30 +73,69 @@ const App = () => {
   const [revealedKeyIds, setRevealedKeyIds] = useState(() => new Set());
   const [revealModalRowId, setRevealModalRowId] = useState(null);
   const [credentialsList, setCredentialsList] = useState(() => buildCredentialsData());
+  const credentialNamesForRequestModal = useMemo(
+    () => credentialsList.map((c) => c.name),
+    [credentialsList]
+  );
   const [editCredentialId, setEditCredentialId] = useState(null);
   const [deleteCredentialId, setDeleteCredentialId] = useState(null);
   const [requestApiKeyOpen, setRequestApiKeyOpen] = useState(false);
+  const [requestKeySuccessToast, setRequestKeySuccessToast] = useState(null);
+  const [editKeySuccessToast, setEditKeySuccessToast] = useState(null);
+  const [deleteKeySuccessToast, setDeleteKeySuccessToast] = useState(null);
 
   const editingCredential = editCredentialId ? credentialsList.find((c) => c.id === editCredentialId) : null;
   const deletingCredential = deleteCredentialId ? credentialsList.find((c) => c.id === deleteCredentialId) : null;
 
   const handleEditApiKeySave = (id, { name, tier, useCase }) => {
-    setCredentialsList((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, name, tier, useCase, status: 'Pending' } : r))
-    );
+    let apiName = '';
+    let updatesSummary = '';
+    setCredentialsList((prev) => {
+      const prevRow = prev.find((r) => r.id === id);
+      if (prevRow) {
+        apiName = prevRow.api;
+        const lines = [];
+        if (prevRow.name !== name) lines.push(`API key name updated to "${name}".`);
+        if (prevRow.tier !== tier) lines.push(`Tier updated to ${tier}.`);
+        const prevUc = (prevRow.useCase || '').trim();
+        const nextUc = (useCase || '').trim();
+        if (prevUc !== nextUc) {
+          lines.push(nextUc || 'Use case cleared.');
+        }
+        updatesSummary =
+          lines.length > 0 ? lines.join(' ') : 'Changes saved. The API key is pending approval.';
+      }
+      return prev.map((r) => (r.id === id ? { ...r, name, tier, useCase, status: 'Pending' } : r));
+    });
     setSelectedApiKey((prev) =>
       prev && prev.id === id ? { ...prev, name, tier, useCase, status: 'Pending' } : prev
     );
+    setRequestKeySuccessToast(null);
+    setDeleteKeySuccessToast(null);
+    setEditKeySuccessToast({
+      api: apiName,
+      keyName: name,
+      updates: updatesSummary,
+      credentialId: id
+    });
   };
+
+  const openRequestApiKeyModal = useCallback(() => {
+    setRequestKeySuccessToast(null);
+    setEditKeySuccessToast(null);
+    setDeleteKeySuccessToast(null);
+    setRequestApiKeyOpen(true);
+  }, []);
 
   const handleRequestApiKeySubmit = ({ api: apiName, tier, name, useCase }) => {
     const id = `cred-${Date.now()}`;
+    let createdName = '';
     setCredentialsList((prev) => {
-      const displayName = (name && name.trim()) || `API key ${prev.length + 1}`;
+      createdName = (name && name.trim()) || `API key ${prev.length + 1}`;
       return [
         {
           id,
-          name: displayName,
+          name: createdName,
           owner: DEMO_CURRENT_USER_OWNER,
           api: apiName,
           status: 'Pending',
@@ -105,9 +147,54 @@ const App = () => {
         ...prev
       ];
     });
+    setEditKeySuccessToast(null);
+    setDeleteKeySuccessToast(null);
+    setRequestKeySuccessToast({
+      api: apiName,
+      keyName: createdName,
+      credentialId: id
+    });
   };
 
+  const dismissRequestKeyToast = useCallback(() => setRequestKeySuccessToast(null), []);
+
+  const handleRequestSuccessViewDetails = useCallback(() => {
+    if (!requestKeySuccessToast?.credentialId) return;
+    const id = requestKeySuccessToast.credentialId;
+    const row = credentialsList.find((c) => c.id === id);
+    setActiveItem('api-access');
+    setSelectedApiDetails(null);
+    setRequestKeySuccessToast(null);
+    if (row) setSelectedApiKey(row);
+  }, [requestKeySuccessToast, credentialsList]);
+
+  const dismissEditKeyToast = useCallback(() => setEditKeySuccessToast(null), []);
+
+  const handleEditSuccessViewDetails = useCallback(() => {
+    if (!editKeySuccessToast?.credentialId) return;
+    const id = editKeySuccessToast.credentialId;
+    const row = credentialsList.find((c) => c.id === id);
+    setActiveItem('api-access');
+    setSelectedApiDetails(null);
+    setEditKeySuccessToast(null);
+    if (row) setSelectedApiKey(row);
+  }, [editKeySuccessToast, credentialsList]);
+
+  const dismissDeleteKeyToast = useCallback(() => setDeleteKeySuccessToast(null), []);
+
+  /** Deleted key no longer exists; land on My API keys list. */
+  const handleDeleteSuccessViewDetails = useCallback(() => {
+    setActiveItem('api-access');
+    setSelectedApiDetails(null);
+    setSelectedApiKey(null);
+    setDeleteKeySuccessToast(null);
+  }, []);
+
   const handleDeleteApiKeyConfirm = (id) => {
+    const row = credentialsList.find((c) => c.id === id);
+    const apiName = row?.api ?? '';
+    const keyName = row?.name ?? '';
+
     setCredentialsList((prev) => prev.filter((r) => r.id !== id));
     setSelectedApiKey((prev) => (prev?.id === id ? null : prev));
     setRevealedKeyIds((prev) => {
@@ -118,6 +205,10 @@ const App = () => {
     setRevealModalRowId((current) => (current === id ? null : current));
     setEditCredentialId((current) => (current === id ? null : current));
     setDeleteCredentialId(null);
+
+    setRequestKeySuccessToast(null);
+    setEditKeySuccessToast(null);
+    setDeleteKeySuccessToast({ api: apiName, keyName });
   };
 
   /** Jump to API catalog details for the same API name shown in My API keys / approvals. */
@@ -148,6 +239,34 @@ const App = () => {
       setIsInternalPortalExpanded(true);
     }
   }, [activeItem]);
+
+  useEffect(() => {
+    if (!requestKeySuccessToast) return;
+    const eligible =
+      (activeItem === 'api-access' && !selectedApiKey) ||
+      (activeItem === 'internal-portals' && selectedApiDetails);
+    if (!eligible) {
+      setRequestKeySuccessToast(null);
+    }
+  }, [activeItem, selectedApiDetails, selectedApiKey, requestKeySuccessToast]);
+
+  useEffect(() => {
+    if (!editKeySuccessToast) return;
+    const eligible =
+      activeItem === 'api-access' || (activeItem === 'internal-portals' && selectedApiDetails);
+    if (!eligible) {
+      setEditKeySuccessToast(null);
+    }
+  }, [activeItem, selectedApiDetails, editKeySuccessToast]);
+
+  useEffect(() => {
+    if (!deleteKeySuccessToast) return;
+    const eligible =
+      activeItem === 'api-access' || (activeItem === 'internal-portals' && selectedApiDetails);
+    if (!eligible) {
+      setDeleteKeySuccessToast(null);
+    }
+  }, [activeItem, selectedApiDetails, deleteKeySuccessToast]);
 
   const handleGatewayNameClick = (gatewayName) => {
     setSelectedGateway(gatewayName);
@@ -375,7 +494,9 @@ const App = () => {
               apiName={selectedApiDetails}
               onBack={() => setSelectedApiDetails(null)}
               breadcrumbParent="API catalog"
-              onRequestApiKey={() => setRequestApiKeyOpen(true)}
+              onRequestApiKey={openRequestApiKeyModal}
+              apiKeysRows={credentialsList.filter((c) => c.api === selectedApiDetails)}
+              onOpenDelete={(row) => setDeleteCredentialId(row.id)}
             />
           );
         }
@@ -401,7 +522,7 @@ const App = () => {
             onOpenRevealModal={setRevealModalRowId}
             onOpenEdit={(row) => setEditCredentialId(row.id)}
             onOpenDelete={(row) => setDeleteCredentialId(row.id)}
-            onOpenRequestApiKey={() => setRequestApiKeyOpen(true)}
+            onOpenRequestApiKey={openRequestApiKeyModal}
             onNavigateToApiCatalog={navigateToApiCatalogDetail}
           />
         );
@@ -412,9 +533,52 @@ const App = () => {
     }
   };
 
+  /* My API keys (list only) + API catalog product details (incl. API keys tab) */
+  const showRequestKeySuccessToast = Boolean(
+    requestKeySuccessToast &&
+      ((activeItem === 'api-access' && !selectedApiKey) ||
+        (activeItem === 'internal-portals' && selectedApiDetails))
+  );
+
+  /* My API keys (list or detail) + API catalog product details */
+  const showEditKeySuccessToast = Boolean(
+    editKeySuccessToast &&
+      (activeItem === 'api-access' || (activeItem === 'internal-portals' && selectedApiDetails))
+  );
+
+  const showDeleteKeySuccessToast = Boolean(
+    deleteKeySuccessToast &&
+      (activeItem === 'api-access' || (activeItem === 'internal-portals' && selectedApiDetails))
+  );
+
   return (
     <Page masthead={masthead} sidebar={sidebar}>
       {renderContent()}
+      {showRequestKeySuccessToast && requestKeySuccessToast && (
+        <RequestApiKeySuccessToast
+          api={requestKeySuccessToast.api}
+          keyName={requestKeySuccessToast.keyName}
+          onClose={dismissRequestKeyToast}
+          onViewDetails={handleRequestSuccessViewDetails}
+        />
+      )}
+      {showEditKeySuccessToast && editKeySuccessToast && (
+        <APIKeyUpdatedToast
+          api={editKeySuccessToast.api}
+          keyName={editKeySuccessToast.keyName}
+          updates={editKeySuccessToast.updates}
+          onClose={dismissEditKeyToast}
+          onViewDetails={handleEditSuccessViewDetails}
+        />
+      )}
+      {showDeleteKeySuccessToast && deleteKeySuccessToast && (
+        <APIKeyDeletedToast
+          api={deleteKeySuccessToast.api}
+          keyName={deleteKeySuccessToast.keyName}
+          onClose={dismissDeleteKeyToast}
+          onViewDetails={handleDeleteSuccessViewDetails}
+        />
+      )}
       <RevealApiKeyModal
         rowId={revealModalRowId}
         onClose={() => setRevealModalRowId(null)}
@@ -436,6 +600,7 @@ const App = () => {
         isOpen={requestApiKeyOpen}
         onClose={() => setRequestApiKeyOpen(false)}
         onSubmit={handleRequestApiKeySubmit}
+        existingKeyNames={credentialNamesForRequestModal}
       />
     </Page>
   );

@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import {
   PageSection,
   Title,
-  Flex,
   Button,
   Dropdown,
   DropdownItem,
@@ -21,7 +20,8 @@ import {
   Tooltip,
   Alert,
   AlertVariant,
-  AlertActionLink
+  AlertActionLink,
+  Flex
 } from '@patternfly/react-core';
 import {
   Table,
@@ -29,8 +29,13 @@ import {
   Tr,
   Th,
   Tbody,
-  Td
+  Td,
+  ExpandableRowContent
 } from '@patternfly/react-table';
+import {
+  expandableRowContentStyleAfterExpandAndCheckbox,
+  expandedRowTdPaddingInline
+} from '../utils/expandableTableRowContentStyles';
 import {
   FilterIcon,
   EllipsisVIcon,
@@ -51,15 +56,32 @@ import {
 } from '../data/apiCredentialsModel';
 import {
   TierSortableColumnHeader,
-  TIER_TABLE_COLUMN_MIN_WIDTH,
+  TIER_TABLE_COLUMN_STYLE
 } from './TierSortableColumnHeader';
 import { TruncatedTableLink, TruncatedTableText } from './ApiKeyNameText';
 
-const STATUS_OPTIONS = ['Active', 'Pending', 'Rejected', 'Revoked', 'Expired'];
-const STATUS_RANK = { Active: 4, Pending: 3, Rejected: 2, Revoked: 1, Expired: 0 };
+const STATUS_OPTIONS = ['Approved', 'Pending', 'Rejected'];
+const STATUS_RANK = { Active: 4, Pending: 3, Rejected: 2 };
+
+/** Data layer still uses `Active`; approvals UI shows “Approved”. */
+function approvalStatusLabel(status) {
+  return status === 'Active' ? 'Approved' : status;
+}
+
+function rowMatchesApprovalStatusFilters(rowStatus, filters) {
+  if (filters.length === 0) return true;
+  return filters.some((f) => {
+    if (f === 'Approved') return rowStatus === 'Active';
+    return rowStatus === f;
+  });
+}
+
+const bulkActionButtonStyle = {
+  borderRadius: 'var(--pf-t--global--border--radius--large)'
+};
 
 const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
-  const credentialsData = useMemo(() => buildCredentialsData(), []);
+  const [credentialsData, setCredentialsData] = useState(() => buildCredentialsData());
 
   const [projectOpen, setProjectOpen] = useState(false);
   const [statusFilterOpen, setStatusFilterOpen] = useState(false);
@@ -103,12 +125,16 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
   };
 
   const filteredCredentials = credentialsData.filter((row) => {
+    const q = searchValue.trim().toLowerCase();
+    const statusForSearch =
+      row.status === 'Active' ? `${approvalStatusLabel(row.status)} active`.toLowerCase() : row.status.toLowerCase();
     const matchesSearch =
-      !searchValue ||
-      row.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-      row.api.toLowerCase().includes(searchValue.toLowerCase()) ||
-      row.owner.toLowerCase().includes(searchValue.toLowerCase());
-    const matchesStatus = statusFilters.length === 0 || statusFilters.includes(row.status);
+      !q ||
+      row.name.toLowerCase().includes(q) ||
+      row.api.toLowerCase().includes(q) ||
+      row.owner.toLowerCase().includes(q) ||
+      statusForSearch.includes(q);
+    const matchesStatus = rowMatchesApprovalStatusFilters(row.status, statusFilters);
     const matchesTier = tierFilters.length === 0 || tierFilters.includes(row.tier);
     return matchesSearch && matchesStatus && matchesTier;
   });
@@ -143,24 +169,30 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
     return list;
   }, [filteredCredentials, sortState.index, sortState.direction]);
 
-  const visibleIds = sortedCredentials.map((r) => r.id);
+  /** Only Pending rows can be selected (Approved / Rejected checkboxes are disabled). */
+  const pendingVisibleIds = useMemo(
+    () => sortedCredentials.filter((r) => r.status === 'Pending').map((r) => r.id),
+    [sortedCredentials]
+  );
   const allVisibleSelected =
-    visibleIds.length > 0 && visibleIds.every((id) => selectedIds.has(id));
-  const someVisibleSelected = visibleIds.some((id) => selectedIds.has(id)) && !allVisibleSelected;
+    pendingVisibleIds.length > 0 && pendingVisibleIds.every((id) => selectedIds.has(id));
+  const someVisibleSelected =
+    pendingVisibleIds.some((id) => selectedIds.has(id)) && !allVisibleSelected;
 
   const toggleSelectAllVisible = (checked) => {
     setSelectedIds((prev) => {
       const next = new Set(prev);
       if (checked) {
-        visibleIds.forEach((id) => next.add(id));
+        pendingVisibleIds.forEach((id) => next.add(id));
       } else {
-        visibleIds.forEach((id) => next.delete(id));
+        pendingVisibleIds.forEach((id) => next.delete(id));
       }
       return next;
     });
   };
 
-  const toggleRowSelected = (id, checked) => {
+  const toggleRowSelected = (id, checked, rowStatus) => {
+    if (rowStatus !== 'Pending') return;
     setSelectedIds((prev) => {
       const next = new Set(prev);
       if (checked) next.add(id);
@@ -170,6 +202,31 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
   };
 
   const clearSelection = () => setSelectedIds(new Set());
+
+  const selectedPendingCount = useMemo(() => {
+    const pendingIds = new Set(credentialsData.filter((r) => r.status === 'Pending').map((r) => r.id));
+    let n = 0;
+    selectedIds.forEach((id) => {
+      if (pendingIds.has(id)) n += 1;
+    });
+    return n;
+  }, [selectedIds, credentialsData]);
+
+  const handleBulkApprove = () => {
+    if (selectedPendingCount === 0) return;
+    setCredentialsData((prev) =>
+      prev.map((r) => (selectedIds.has(r.id) && r.status === 'Pending' ? { ...r, status: 'Active' } : r))
+    );
+    setSelectedIds(new Set());
+  };
+
+  const handleBulkReject = () => {
+    if (selectedPendingCount === 0) return;
+    setCredentialsData((prev) =>
+      prev.map((r) => (selectedIds.has(r.id) && r.status === 'Pending' ? { ...r, status: 'Rejected' } : r))
+    );
+    setSelectedIds(new Set());
+  };
 
   const renderStatus = (status) => {
     const isActive = status === 'Active';
@@ -194,7 +251,9 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
         <Icon size="sm" status={iconStatus} style={{ flexShrink: 0 }}>
           <StatusIcon />
         </Icon>
-        <span style={{ color: 'var(--pf-t--global--text--color--regular)' }}>{status}</span>
+        <span style={{ color: 'var(--pf-t--global--text--color--regular)' }}>
+          {approvalStatusLabel(status)}
+        </span>
       </span>
     );
   };
@@ -205,9 +264,21 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
         .toolbar-api-approvals .pf-v6-c-toolbar__content:last-of-type {
           display: flex;
           flex-direction: row;
-          flex-wrap: nowrap;
+          flex-wrap: wrap;
           align-items: center;
           gap: var(--pf-t--global--spacer--md);
+        }
+        /* Vertical center: filters, search, bulk frame, and action buttons on one baseline */
+        .toolbar-api-approvals .pf-v6-c-toolbar__group {
+          align-items: center;
+        }
+        .toolbar-api-approvals .pf-v6-c-toolbar__item {
+          align-self: center;
+          display: flex;
+          align-items: center;
+        }
+        .toolbar-api-approvals .pf-v6-c-toolbar__group .pf-v6-c-text-input-group {
+          align-items: center;
         }
         .tier-dropdown-list-approvals {
           max-height: 12rem;
@@ -235,6 +306,59 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
         }
         .toolbar-api-approvals .pf-v6-c-label-group .pf-v6-c-label.pf-m-outline .pf-v6-c-label__actions .pf-v6-c-button {
           --pf-v6-c-button__icon--Color: var(--pf-t--global--icon--color--regular);
+        }
+        /* Bulk select: outer frame matches Status/Tier filter MenuToggle (rounded rect, not pill) */
+        .approvals-bulk-select-frame {
+          display: inline-flex;
+          align-items: center;
+          box-sizing: border-box;
+          border: var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default);
+          border-radius: var(--pf-t--global--border--radius--small);
+          background-color: var(--pf-t--global--background--color--primary--default);
+          overflow: hidden;
+          padding-block: var(--pf-t--global--spacer--xs);
+        }
+        .approvals-bulk-select-frame .approvals-bulk-select-checkbox-wrap {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding-inline-start: var(--pf-t--global--spacer--sm);
+          padding-inline-end: var(--pf-t--global--spacer--xs);
+          padding-block: 0;
+        }
+        .approvals-bulk-select-frame .approvals-bulk-select-caret-toggle.pf-v6-c-menu-toggle {
+          --pf-v6-c-menu-toggle--BorderRadius: 0;
+          --pf-v6-c-menu-toggle--before--BorderWidth: 0;
+          --pf-v6-c-menu-toggle--BackgroundColor: transparent;
+          align-self: center;
+          border-inline-start: var(--pf-t--global--border--width--regular) solid
+            var(--pf-t--global--border--color--default);
+        }
+        .approvals-bulk-select-frame .approvals-bulk-select-caret-toggle.pf-v6-c-menu-toggle:hover:not(:disabled) {
+          --pf-v6-c-menu-toggle--hover--BackgroundColor: var(--pf-t--global--color--nonstatus--gray--hover);
+        }
+        .approvals-bulk-select-frame .approvals-bulk-selected-badge-wrap {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding-inline: var(--pf-t--global--spacer--sm);
+          padding-block: 0;
+          border-inline-start: var(--pf-t--global--border--width--regular) solid
+            var(--pf-t--global--border--color--default);
+        }
+        .approvals-toolbar-bulk-actions-wrap {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: var(--pf-t--global--spacer--md);
+          margin-inline-start: auto;
+        }
+        .approvals-toolbar-bulk-divider {
+          flex-shrink: 0;
+          align-self: center;
+          width: 1px;
+          height: var(--pf-t--global--spacer--xl);
+          background-color: var(--pf-t--global--border--color--default);
         }
       `}</style>
       <PageSection variant="light">
@@ -286,16 +410,26 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
           style={{ marginTop: 'var(--pf-t--global--spacer--md)' }}
         >
           <ToolbarContent>
-            <ToolbarGroup>
+            <ToolbarGroup alignItems={{ default: 'alignItemsCenter' }} gap={{ default: 'gapMd' }}>
               <ToolbarItem>
-                <Flex alignItems={{ default: 'alignItemsCenter' }} gap={{ default: 'gapNone' }}>
-                  <Checkbox
-                    id="approvals-select-all"
-                    isChecked={allVisibleSelected}
-                    isIndeterminate={someVisibleSelected}
-                    onChange={(_e, checked) => toggleSelectAllVisible(checked)}
-                    aria-label="Select all rows on this page"
-                  />
+                <div className="approvals-bulk-select-frame">
+                  <div className="approvals-bulk-select-checkbox-wrap">
+                    <Checkbox
+                      id="approvals-select-all"
+                      isChecked={allVisibleSelected}
+                      isIndeterminate={someVisibleSelected}
+                      isDisabled={pendingVisibleIds.length === 0}
+                      onChange={(_e, checked) => toggleSelectAllVisible(checked)}
+                      aria-label="Select all pending rows on this page"
+                    />
+                  </div>
+                  {selectedPendingCount > 0 ? (
+                    <div className="approvals-bulk-selected-badge-wrap">
+                      <Label color="blue" variant="filled" isCompact>
+                        {selectedPendingCount} selected
+                      </Label>
+                    </div>
+                  ) : null}
                   <Dropdown
                     isOpen={bulkOpen}
                     onOpenChange={setBulkOpen}
@@ -303,9 +437,11 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
                     toggle={(toggleRef) => (
                       <MenuToggle
                         ref={toggleRef}
+                        className="approvals-bulk-select-caret-toggle"
                         variant="plain"
                         onClick={() => setBulkOpen((prev) => !prev)}
                         isExpanded={bulkOpen}
+                        isDisabled={pendingVisibleIds.length === 0}
                         aria-label="Bulk selection options"
                       >
                         <CaretDownIcon />
@@ -314,14 +450,14 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
                   >
                     <DropdownList>
                       <DropdownItem key="all" onClick={() => toggleSelectAllVisible(true)}>
-                        Select all on page
+                        Select all pending on page
                       </DropdownItem>
                       <DropdownItem key="none" onClick={clearSelection}>
                         Select none
                       </DropdownItem>
                     </DropdownList>
                   </Dropdown>
-                </Flex>
+                </div>
               </ToolbarItem>
               <ToolbarFilter
                 categoryName="Status"
@@ -405,13 +541,34 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
               </ToolbarFilter>
               <ToolbarItem>
                 <SearchInput
-                  placeholder="Find by API or API key name"
+                  placeholder="Find by API or requester"
                   value={searchValue}
                   onChange={(_, value) => setSearchValue(value)}
                   onClear={() => setSearchValue('')}
                   style={{ width: '100%', minWidth: '280px', maxWidth: 'min(100%, 26rem)' }}
                 />
               </ToolbarItem>
+              {selectedPendingCount > 0 ? (
+                <ToolbarItem className="approvals-toolbar-bulk-actions-wrap">
+                  <div className="approvals-toolbar-bulk-divider" aria-hidden />
+                  <Flex gap={{ default: 'gapSm' }} flexWrap={{ default: 'nowrap' }}>
+                    <Button
+                      variant="primary"
+                      style={bulkActionButtonStyle}
+                      onClick={handleBulkApprove}
+                    >
+                      {`Approve ${selectedPendingCount} selected`}
+                    </Button>
+                    <Button
+                      variant="danger"
+                      style={bulkActionButtonStyle}
+                      onClick={handleBulkReject}
+                    >
+                      {`Reject ${selectedPendingCount} selected`}
+                    </Button>
+                  </Flex>
+                </ToolbarItem>
+              ) : null}
             </ToolbarGroup>
           </ToolbarContent>
         </Toolbar>
@@ -430,10 +587,7 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
               <Th screenReaderText="Row selection" />
               <Th sort={{ columnIndex: 2, sortBy: sortState, onSort: handleSort }}>API</Th>
               <Th sort={{ columnIndex: 3, sortBy: sortState, onSort: handleSort }}>Status</Th>
-              <Th
-                dataLabel="Tier"
-                style={{ minWidth: TIER_TABLE_COLUMN_MIN_WIDTH, whiteSpace: 'nowrap' }}
-              >
+              <Th dataLabel="Tier" style={TIER_TABLE_COLUMN_STYLE}>
                 <TierSortableColumnHeader columnIndex={4} sortBy={sortState} onSort={handleSort} />
               </Th>
               <Th sort={{ columnIndex: 5, sortBy: sortState, onSort: handleSort }}>Requester</Th>
@@ -470,9 +624,14 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
                   >
                     <Checkbox
                       id={`approvals-row-${row.id}`}
-                      isChecked={selectedIds.has(row.id)}
-                      onChange={(_e, checked) => toggleRowSelected(row.id, checked)}
-                      aria-label={`Select ${row.name}`}
+                      isChecked={row.status === 'Pending' && selectedIds.has(row.id)}
+                      isDisabled={row.status !== 'Pending'}
+                      onChange={(_e, checked) => toggleRowSelected(row.id, checked, row.status)}
+                      aria-label={
+                        row.status === 'Pending'
+                          ? `Select ${row.name}`
+                          : `Cannot select ${row.name} (${approvalStatusLabel(row.status)} keys are not selectable)`
+                      }
                     />
                   </Td>
                   <Td style={{ verticalAlign: 'middle' }}>
@@ -486,7 +645,7 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
                     />
                   </Td>
                   <Td style={{ verticalAlign: 'middle' }}>{renderStatus(row.status)}</Td>
-                  <Td style={{ verticalAlign: 'middle', minWidth: TIER_TABLE_COLUMN_MIN_WIDTH }}>
+                  <Td style={{ verticalAlign: 'middle', ...TIER_TABLE_COLUMN_STYLE }}>
                     <Tooltip content={TIER_TOOLTIPS[row.tier] || `${row.tier} tier`}>
                       <span style={{ display: 'inline-flex', alignItems: 'center' }}>
                         <Label variant="outline" isCompact>
@@ -536,17 +695,11 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
                         paddingTop: 0,
                         paddingBottom: 'var(--pf-t--global--spacer--md)',
                         verticalAlign: 'top',
-                        boxShadow: 'none'
+                        boxShadow: 'none',
+                        ...expandedRowTdPaddingInline
                       }}
                     >
-                      <div
-                        style={{
-                          paddingLeft: 'var(--pf-t--global--spacer--3xl)',
-                          paddingTop: 'var(--pf-t--global--spacer--md)',
-                          paddingBottom: 0,
-                          backgroundColor: 'var(--pf-t--global--background--color--100)'
-                        }}
-                      >
+                      <ExpandableRowContent style={expandableRowContentStyleAfterExpandAndCheckbox}>
                         <div
                           style={{
                             fontWeight: 'var(--pf-t--global--font--weight--body--bold)',
@@ -594,7 +747,7 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
                             style={{ marginTop: 'var(--pf-t--global--spacer--md)' }}
                           />
                         )}
-                      </div>
+                      </ExpandableRowContent>
                     </Td>
                   </Tr>
                 )}

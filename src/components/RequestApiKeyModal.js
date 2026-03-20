@@ -27,15 +27,21 @@ import {
   Popover,
   Tooltip
 } from '@patternfly/react-core';
-import { CheckIcon } from '@patternfly/react-icons';
-import { EDIT_MODAL_TIER_OPTIONS, REQUESTABLE_API_NAMES } from '../data/apiCredentialsModel';
+import { CheckIcon, ExclamationCircleIcon } from '@patternfly/react-icons';
+import {
+  EDIT_MODAL_TIER_OPTIONS,
+  REQUESTABLE_API_NAMES,
+  API_KEY_NAME_PATTERN,
+  API_KEY_NAME_FORMAT_ERROR,
+  API_KEY_NAME_DUPLICATE_ERROR
+} from '../data/apiCredentialsModel';
 import { QuestionCircleHelpTrigger } from './QuestionCircleHelpTrigger';
 
 /**
  * Request a new API key — same modal width as Edit API key (`variant="small"`).
  * Tier stays disabled until an API is selected.
  */
-const RequestApiKeyModal = ({ isOpen, onClose, onSubmit }) => {
+const RequestApiKeyModal = ({ isOpen, onClose, onSubmit, existingKeyNames = [] }) => {
   const [api, setApi] = useState('');
   const [tier, setTier] = useState('');
   const [name, setName] = useState('');
@@ -64,6 +70,25 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit }) => {
     return REQUESTABLE_API_NAMES.filter((n) => n.toLowerCase().includes(q));
   }, [apiSearchQuery]);
 
+  const existingNamesLower = useMemo(
+    () =>
+      new Set(
+        existingKeyNames
+          .map((n) => String(n ?? '').trim().toLowerCase())
+          .filter((n) => n.length > 0)
+      ),
+    [existingKeyNames]
+  );
+
+  const trimmedKeyName = name.trim();
+  /** @type {'format' | 'duplicate' | null} */
+  const nameValidationError = useMemo(() => {
+    if (!trimmedKeyName) return null;
+    if (!API_KEY_NAME_PATTERN.test(trimmedKeyName)) return 'format';
+    if (existingNamesLower.has(trimmedKeyName.toLowerCase())) return 'duplicate';
+    return null;
+  }, [trimmedKeyName, existingNamesLower]);
+
   const handleApiSelect = (_event, selection) => {
     setApi(selection);
     setTier('');
@@ -87,6 +112,10 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit }) => {
   const handleRequest = () => {
     if (!api || !tier) return;
     const trimmedName = name.trim();
+    if (trimmedName) {
+      if (!API_KEY_NAME_PATTERN.test(trimmedName)) return;
+      if (existingNamesLower.has(trimmedName.toLowerCase())) return;
+    }
     const trimmedUseCase = useCase.trim();
     onSubmit({
       api,
@@ -112,7 +141,7 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit }) => {
 
   const apiToggleDisplay = api || 'Select...';
 
-  const canRequest = Boolean(api && tier);
+  const canRequest = Boolean(api && tier && !nameValidationError);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} variant="small" aria-labelledby="request-api-key-title">
@@ -233,11 +262,13 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit }) => {
               )}
               </Dropdown>
             </div>
-            <FormHelperText>
-              <HelperText>
-                <HelperTextItem>Select an API. Submit a separate request for each additional API.</HelperTextItem>
-              </HelperText>
-            </FormHelperText>
+            {!api ? (
+              <FormHelperText>
+                <HelperText>
+                  <HelperTextItem>Select an API. Submit a separate request for each additional API.</HelperTextItem>
+                </HelperText>
+              </FormHelperText>
+            ) : null}
           </FormGroup>
 
           <FormGroup
@@ -326,7 +357,7 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit }) => {
               ))}
               </Select>
             </div>
-            {tierEnabled ? (
+            {tierEnabled && !tier ? (
               <FormHelperText>
                 <HelperText>
                   <HelperTextItem>
@@ -337,21 +368,44 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit }) => {
             ) : null}
           </FormGroup>
 
-          <FormGroup role="group" label="API key name" fieldId="request-api-key-name">
+          <FormGroup
+            role="group"
+            label="API key name"
+            fieldId="request-api-key-name"
+            validated={nameValidationError ? 'error' : 'default'}
+          >
             <TextInput
               id="request-api-key-name"
               value={name}
               onChange={(_e, v) => setName(v)}
               aria-label="API key name"
+              aria-invalid={nameValidationError ? true : undefined}
+              validated={nameValidationError ? 'error' : 'default'}
               style={{ width: '100%' }}
             />
-            <FormHelperText>
-              <HelperText>
-                <HelperTextItem>
-                  A unique name to identify this key. If left blank, a name is automatically generated.
-                </HelperTextItem>
-              </HelperText>
-            </FormHelperText>
+            {nameValidationError ? (
+              <FormHelperText>
+                <HelperText>
+                  {nameValidationError === 'format' ? (
+                    <HelperTextItem variant="error" icon={<ExclamationCircleIcon />}>
+                      {API_KEY_NAME_FORMAT_ERROR}
+                    </HelperTextItem>
+                  ) : (
+                    <HelperTextItem variant="error" icon={<ExclamationCircleIcon />}>
+                      {API_KEY_NAME_DUPLICATE_ERROR}
+                    </HelperTextItem>
+                  )}
+                </HelperText>
+              </FormHelperText>
+            ) : !trimmedKeyName ? (
+              <FormHelperText>
+                <HelperText>
+                  <HelperTextItem>
+                    A unique name to identify this key. If left blank, a name is automatically generated.
+                  </HelperTextItem>
+                </HelperText>
+              </FormHelperText>
+            ) : null}
           </FormGroup>
 
           <FormGroup role="group" label="Use case" fieldId="request-api-key-use-case">
@@ -364,11 +418,13 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit }) => {
               resizeOrientation="both"
               style={{ width: '100%' }}
             />
-            <FormHelperText>
-              <HelperText>
-                <HelperTextItem>A brief description of how you intend to use this API key.</HelperTextItem>
-              </HelperText>
-            </FormHelperText>
+            {!useCase.trim() ? (
+              <FormHelperText>
+                <HelperText>
+                  <HelperTextItem>A brief description of how you intend to use this API key.</HelperTextItem>
+                </HelperText>
+              </FormHelperText>
+            ) : null}
           </FormGroup>
         </Form>
       </ModalBody>

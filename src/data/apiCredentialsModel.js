@@ -106,6 +106,15 @@ export function getTierTooltipText(tier) {
 /** Requested time string — identical in table and detail (no extra suffix) */
 export const REQUESTED_TIME_DISPLAY = '2026/3/12';
 
+/** Non-empty API key names: letters (any case), digits, and hyphen only (Request API key / validation UX). */
+export const API_KEY_NAME_PATTERN = /^[a-zA-Z0-9-]+$/;
+
+export const API_KEY_NAME_FORMAT_ERROR =
+  "Only letters, numbers, and hyphens (-) are allowed. No spaces or other characters (e.g. 'My-Key-01').";
+
+export const API_KEY_NAME_DUPLICATE_ERROR =
+  'API key name already in use. Enter a unique name.';
+
 export function buildCredentialsData() {
   return KEY_NAMES.map((name, i) => {
     const apiName = CATALOG_PRODUCT_NAMES[i];

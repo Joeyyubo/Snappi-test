@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   PageSection,
   Title,
@@ -216,17 +216,26 @@ const APIDetailsPage = ({
   apiName,
   onBack,
   breadcrumbParent = 'API catalog',
-  onRequestApiKey
+  onRequestApiKey,
+  /** When set (e.g. from App credentialsList), catalog API keys tab uses live data and delete works. */
+  apiKeysRows: apiKeysRowsProp,
+  onOpenDelete
 }) => {
   const [activeTabKey, setActiveTabKey] = useState('overview');
   const [projectOpen, setProjectOpen] = useState(false);
 
   const product = getCatalogProductByName(apiName);
 
-  const catalogApiKeysRows = useMemo(
-    () => (product ? buildCatalogDetailsApiKeysDemo(apiName) : []),
-    [product, apiName]
-  );
+  const catalogApiKeysRows = useMemo(() => {
+    if (Array.isArray(apiKeysRowsProp)) {
+      return apiKeysRowsProp;
+    }
+    return product ? buildCatalogDetailsApiKeysDemo(apiName) : [];
+  }, [apiKeysRowsProp, product, apiName]);
+
+  useEffect(() => {
+    setActiveTabKey('overview');
+  }, [apiName]);
 
   const handleTabClick = (_event, tabIndex) => {
     setActiveTabKey(tabIndex);
@@ -485,7 +494,9 @@ const APIDetailsPage = ({
                 No API keys can be listed for &quot;{apiName}&quot; until it exists in the API catalog model.
               </Alert>
             )}
-            {product && <CatalogApiKeysTabPanel rows={catalogApiKeysRows} />}
+            {product && (
+              <CatalogApiKeysTabPanel rows={catalogApiKeysRows} onOpenDelete={onOpenDelete} />
+            )}
           </>
         )}
       </PageSection>

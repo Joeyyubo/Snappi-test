@@ -21,8 +21,13 @@ import {
   Tr,
   Th,
   Tbody,
-  Td
+  Td,
+  ExpandableRowContent
 } from '@patternfly/react-table';
+import {
+  expandableRowContentStyleAfterExpandColumn,
+  expandedRowTdPaddingInline
+} from '../utils/expandableTableRowContentStyles';
 import {
   EllipsisVIcon,
   CheckCircleIcon,
@@ -37,7 +42,7 @@ import { renderApiKeyField } from './apiKeyFieldDisplay';
 import { getApiKeyNameTableDisplay } from './ApiKeyNameText';
 import {
   TierSortableColumnHeader,
-  TIER_TABLE_COLUMN_MIN_WIDTH
+  TIER_TABLE_COLUMN_STYLE
 } from './TierSortableColumnHeader';
 
 const STATUS_RANK = { Active: 3, Pending: 2, Rejected: 1 };
@@ -54,7 +59,7 @@ const linkStyle = { color: 'var(--pf-t--global--text--color--link--default)' };
 /**
  * API keys tab on API catalog details (toolbar + expandable sortable table).
  */
-const CatalogApiKeysTabPanel = ({ rows }) => {
+const CatalogApiKeysTabPanel = ({ rows, onOpenDelete }) => {
   const [statusFilterOpen, setStatusFilterOpen] = useState(false);
   const [tierFilterOpen, setTierFilterOpen] = useState(false);
   const [statusFilters, setStatusFilters] = useState([]);
@@ -315,10 +320,7 @@ const CatalogApiKeysTabPanel = ({ rows }) => {
               />
               <Th sort={{ columnIndex: 1, sortBy: sortState, onSort: handleSort }}>API key name</Th>
               <Th sort={{ columnIndex: 2, sortBy: sortState, onSort: handleSort }}>Status</Th>
-              <Th
-                dataLabel="Tier"
-                style={{ minWidth: TIER_TABLE_COLUMN_MIN_WIDTH, whiteSpace: 'nowrap' }}
-              >
+              <Th dataLabel="Tier" style={TIER_TABLE_COLUMN_STYLE}>
                 <TierSortableColumnHeader columnIndex={3} sortBy={sortState} onSort={handleSort} />
               </Th>
               <Th sort={{ columnIndex: 4, sortBy: sortState, onSort: handleSort }}>API key</Th>
@@ -349,7 +351,7 @@ const CatalogApiKeysTabPanel = ({ rows }) => {
                   </Td>
                   <Td style={{ verticalAlign: 'middle' }}>{renderNameCell(row)}</Td>
                   <Td style={{ verticalAlign: 'middle' }}>{renderStatus(row.status)}</Td>
-                  <Td style={{ verticalAlign: 'middle', minWidth: TIER_TABLE_COLUMN_MIN_WIDTH }}>
+                  <Td style={{ verticalAlign: 'middle', ...TIER_TABLE_COLUMN_STYLE }}>
                     <Tooltip content={TIER_TOOLTIPS[row.tier] || `${row.tier} tier`}>
                       <span style={{ display: 'inline-flex', alignItems: 'center' }}>
                         <Label variant="outline" isCompact>
@@ -390,7 +392,14 @@ const CatalogApiKeysTabPanel = ({ rows }) => {
                         <DropdownItem key="edit" onClick={() => setActionsOpenRowId(null)}>
                           Edit
                         </DropdownItem>
-                        <DropdownItem key="delete" isDanger onClick={() => setActionsOpenRowId(null)}>
+                        <DropdownItem
+                          key="delete"
+                          isDanger
+                          onClick={() => {
+                            setActionsOpenRowId(null);
+                            onOpenDelete?.(row);
+                          }}
+                        >
                           Delete
                         </DropdownItem>
                       </DropdownList>
@@ -406,20 +415,14 @@ const CatalogApiKeysTabPanel = ({ rows }) => {
                         paddingTop: 0,
                         paddingBottom: 'var(--pf-t--global--spacer--md)',
                         verticalAlign: 'top',
-                        boxShadow: 'none'
+                        boxShadow: 'none',
+                        ...expandedRowTdPaddingInline
                       }}
                     >
-                      <div
-                        style={{
-                          paddingLeft: 'var(--pf-t--global--spacer--3xl)',
-                          paddingTop: 'var(--pf-t--global--spacer--md)',
-                          paddingBottom: 0,
-                          backgroundColor: 'var(--pf-t--global--background--color--100)'
-                        }}
-                      >
+                      <ExpandableRowContent style={expandableRowContentStyleAfterExpandColumn}>
                         <div style={{ fontWeight: 'bold', marginBottom: '8px' }}>Use case</div>
                         <div style={{ color: 'var(--pf-t--global--text--color--subtle)' }}>{row.useCase}</div>
-                      </div>
+                      </ExpandableRowContent>
                     </Td>
                   </Tr>
                 )}

@@ -32,7 +32,7 @@ import {
 } from './ApiKeyNameText';
 import {
   TierSortableColumnHeader,
-  TIER_TABLE_COLUMN_MIN_WIDTH,
+  TIER_TABLE_COLUMN_STYLE
 } from './TierSortableColumnHeader';
 import {
   Table,
@@ -40,8 +40,13 @@ import {
   Tr,
   Th,
   Tbody,
-  Td
+  Td,
+  ExpandableRowContent
 } from '@patternfly/react-table';
+import {
+  expandableRowContentStyleAfterExpandColumn,
+  expandedRowTdPaddingInline
+} from '../utils/expandableTableRowContentStyles';
 import {
   FilterIcon,
   EllipsisVIcon,
@@ -411,10 +416,7 @@ const APICredentialsPage = ({
               <Th sort={{ columnIndex: 2, sortBy: sortState, onSort: handleSort }}>Owner</Th>
               <Th sort={{ columnIndex: 3, sortBy: sortState, onSort: handleSort }}>API</Th>
               <Th sort={{ columnIndex: 4, sortBy: sortState, onSort: handleSort }}>Status</Th>
-              <Th
-                dataLabel="Tier"
-                style={{ minWidth: TIER_TABLE_COLUMN_MIN_WIDTH, whiteSpace: 'nowrap' }}
-              >
+              <Th dataLabel="Tier" style={TIER_TABLE_COLUMN_STYLE}>
                 <TierSortableColumnHeader columnIndex={5} sortBy={sortState} onSort={handleSort} />
               </Th>
               <Th sort={{ columnIndex: 6, sortBy: sortState, onSort: handleSort }}>API key</Th>
@@ -462,7 +464,7 @@ const APICredentialsPage = ({
                     />
                   </Td>
                   <Td style={{ verticalAlign: 'middle' }}>{renderStatus(row.status)}</Td>
-                  <Td style={{ verticalAlign: 'middle', minWidth: TIER_TABLE_COLUMN_MIN_WIDTH }}>
+                  <Td style={{ verticalAlign: 'middle', ...TIER_TABLE_COLUMN_STYLE }}>
                     <Tooltip content={TIER_TOOLTIPS[row.tier] || `${row.tier} tier`}>
                       <span style={{ display: 'inline-flex', alignItems: 'center' }}>
                         <Label variant="outline" isCompact>
@@ -534,17 +536,11 @@ const APICredentialsPage = ({
                         paddingTop: 0,
                         paddingBottom: 'var(--pf-t--global--spacer--md)',
                         verticalAlign: 'top',
-                        boxShadow: 'none'
+                        boxShadow: 'none',
+                        ...expandedRowTdPaddingInline
                       }}
                     >
-                      <div
-                        style={{
-                          paddingLeft: 'var(--pf-t--global--spacer--3xl)',
-                          paddingTop: 'var(--pf-t--global--spacer--md)',
-                          paddingBottom: 0,
-                          backgroundColor: 'var(--pf-t--global--background--color--100)'
-                        }}
-                      >
+                      <ExpandableRowContent style={expandableRowContentStyleAfterExpandColumn}>
                         <div style={{ fontWeight: 'bold', marginBottom: '8px' }}>Use case</div>
                         <div style={{ color: 'var(--pf-t--global--text--color--subtle)' }}>{row.useCase}</div>
                         {row.status === 'Rejected' && (
@@ -572,7 +568,7 @@ const APICredentialsPage = ({
                             style={{ marginTop: 'var(--pf-t--global--spacer--md)' }}
                           />
                         )}
-                      </div>
+                      </ExpandableRowContent>
                     </Td>
                   </Tr>
                 )}

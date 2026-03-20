@@ -9,8 +9,15 @@ const TIER_POPOVER_BODY = (
   <p style={{ margin: 0 }}>A Tier is a set of rate limits defined within the PlanPolicy.</p>
 );
 
-/** Min width for Tier column so “Tier”, sort control, and help icon stay visible. */
-export const TIER_TABLE_COLUMN_MIN_WIDTH = '11rem';
+/** Min width for Tier header (label + sort + help). Keep modest so the column does not look oversized. */
+export const TIER_TABLE_COLUMN_MIN_WIDTH = '7.5rem';
+
+/** Table header/body styles so Tier stays content-sized; `width: 1%` avoids extra space being assigned here. */
+export const TIER_TABLE_COLUMN_STYLE = {
+  width: '1%',
+  minWidth: TIER_TABLE_COLUMN_MIN_WIDTH,
+  whiteSpace: 'nowrap'
+};
 
 /**
  * Sortable "Tier" header with FA question-circle popover (My API keys / API key approval).
@@ -29,27 +36,26 @@ export function TierSortableColumnHeader({ columnIndex, sortBy, onSort }) {
     onSort?.(event, columnIndex, reversedDirection);
   };
 
+  /* PatternFly Table: `.pf-v6-c-table__column-help` is inline-grid; `.pf-v6-c-table__column-help-action`
+     uses `--pf-v6-c-table__column-help--MarginInlineStart` (token `--pf-t--global--spacer--sm`).
+     Do not use flex+gap here — it adds extra gap on top of that margin (see HeaderCellInfoWrapper). */
   return (
     <div
-      className={css(tableStyles.tableColumnHelp, tableStyles.modifiers.help)}
+      className={css(tableStyles.tableColumnHelp)}
       style={{
-        display: 'flex',
-        alignItems: 'center',
-        flexWrap: 'nowrap',
-        gap: 'var(--pf-t--global--spacer--sm)',
+        /* Still PF6 spacing scale; slightly tighter than table default sm for sort+help cluster */
+        ['--pf-v6-c-table__column-help--MarginInlineStart']: 'var(--pf-t--global--spacer--xs)'
       }}
     >
-      <span style={{ flexShrink: 0 }}>
-        <SortColumn
-          isSortedBy={isSortedBy}
-          sortDirection={isSortedBy ? sortBy.direction : ''}
-          onSort={sortClicked}
-          aria-label="Sort by Tier"
-        >
-          Tier
-        </SortColumn>
-      </span>
-      <span className={css(tableStyles.tableColumnHelpAction)} style={{ flexShrink: 0, display: 'inline-flex' }}>
+      <SortColumn
+        isSortedBy={isSortedBy}
+        sortDirection={isSortedBy ? sortBy.direction : ''}
+        onSort={sortClicked}
+        aria-label="Sort by Tier"
+      >
+        Tier
+      </SortColumn>
+      <span className={css(tableStyles.tableColumnHelpAction)}>
         <Popover
           headerContent="Tier"
           showClose
