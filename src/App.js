@@ -44,7 +44,11 @@ import RevealApiKeyModal from './components/RevealApiKeyModal';
 import EditApiKeyModal from './components/EditApiKeyModal';
 import DeleteApiKeyModal from './components/DeleteApiKeyModal';
 import RequestApiKeyModal from './components/RequestApiKeyModal';
-import { buildCredentialsData, REQUESTED_TIME_DISPLAY } from './data/apiCredentialsModel';
+import {
+  buildCredentialsData,
+  DEMO_CURRENT_USER_OWNER,
+  REQUESTED_TIME_DISPLAY
+} from './data/apiCredentialsModel';
 
 const App = () => {
   const [isNavOpen, setIsNavOpen] = useState(true);
@@ -90,7 +94,7 @@ const App = () => {
         {
           id,
           name: displayName,
-          owner: 'Guest',
+          owner: DEMO_CURRENT_USER_OWNER,
           api: apiName,
           status: 'Pending',
           tier,
@@ -114,6 +118,16 @@ const App = () => {
     setRevealModalRowId((current) => (current === id ? null : current));
     setEditCredentialId((current) => (current === id ? null : current));
     setDeleteCredentialId(null);
+  };
+
+  /** Jump to API catalog details for the same API name shown in My API keys / approvals. */
+  const navigateToApiCatalogDetail = (apiName) => {
+    setSelectedApiKey(null);
+    setRevealModalRowId(null);
+    setEditCredentialId(null);
+    setDeleteCredentialId(null);
+    setSelectedApiDetails(apiName);
+    setActiveItem('internal-portals');
   };
 
   const onNavToggle = () => {
@@ -212,22 +226,40 @@ const App = () => {
       </MastheadToggle>
       
       <MastheadContent>
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '8px',
-          marginLeft: 'auto'
-        }}>
-          <Button variant="plain" aria-label="Applications" style={{ color: 'black' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--pf-t--global--spacer--sm)',
+            marginLeft: 'auto'
+          }}
+        >
+          <Button
+            variant="plain"
+            aria-label="Applications"
+            style={{ color: 'var(--pf-t--global--icon--color--regular)' }}
+          >
             <ThIcon />
           </Button>
-          <Button variant="plain" aria-label="Notifications" style={{ color: 'black' }}>
+          <Button
+            variant="plain"
+            aria-label="Notifications"
+            style={{ color: 'var(--pf-t--global--icon--color--regular)' }}
+          >
             <BellIcon />
           </Button>
-          <Button variant="plain" aria-label="Settings" style={{ color: 'black' }}>
+          <Button
+            variant="plain"
+            aria-label="Settings"
+            style={{ color: 'var(--pf-t--global--icon--color--regular)' }}
+          >
             <CogIcon />
           </Button>
-          <Button variant="plain" aria-label="Help" style={{ color: 'black' }}>
+          <Button
+            variant="plain"
+            aria-label="Help"
+            style={{ color: 'var(--pf-t--global--icon--color--regular)' }}
+          >
             <FaQuestionCircleRegular style={{ color: 'inherit' }} />
           </Button>
         </div>
@@ -343,6 +375,7 @@ const App = () => {
               apiName={selectedApiDetails}
               onBack={() => setSelectedApiDetails(null)}
               breadcrumbParent="API catalog"
+              onRequestApiKey={() => setRequestApiKeyOpen(true)}
             />
           );
         }
@@ -369,10 +402,11 @@ const App = () => {
             onOpenEdit={(row) => setEditCredentialId(row.id)}
             onOpenDelete={(row) => setDeleteCredentialId(row.id)}
             onOpenRequestApiKey={() => setRequestApiKeyOpen(true)}
+            onNavigateToApiCatalog={navigateToApiCatalogDetail}
           />
         );
       case 'api-key-approvals':
-        return <APIKeyApprovalsPage />;
+        return <APIKeyApprovalsPage onNavigateToApiCatalog={navigateToApiCatalogDetail} />;
       default:
         return <PortalPage onApiNameClick={setSelectedApiDetails} />;
     }

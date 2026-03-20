@@ -25,7 +25,11 @@ import {
 } from '@patternfly/react-core';
 import { TIER_TOOLTIPS, TIER_LIMIT, CREDENTIAL_TIER_OPTIONS } from '../data/apiCredentialsModel';
 import { renderApiKeyField } from './apiKeyFieldDisplay';
-import { getApiKeyNameTableDisplay } from './ApiKeyNameText';
+import {
+  getApiKeyNameTableDisplay,
+  TruncatedTableLink,
+  TruncatedTableText
+} from './ApiKeyNameText';
 import {
   TierSortableColumnHeader,
   TIER_TABLE_COLUMN_MIN_WIDTH,
@@ -66,7 +70,8 @@ const APICredentialsPage = ({
   credentialsData,
   onOpenEdit,
   onOpenDelete,
-  onOpenRequestApiKey
+  onOpenRequestApiKey,
+  onNavigateToApiCatalog
 }) => {
   const [projectOpen, setProjectOpen] = useState(false);
   const [statusFilterOpen, setStatusFilterOpen] = useState(false);
@@ -160,8 +165,14 @@ const APICredentialsPage = ({
     const isActive = status === 'Active';
     const isPending = status === 'Pending';
     const isRejected = status === 'Rejected';
-    const iconStatus = isActive ? 'success' : isPending ? 'info' : 'danger';
-    const StatusIcon = isActive ? CheckCircleIcon : isPending ? PendingIcon : ExclamationCircleIcon;
+    const iconStatus = isActive ? 'success' : isPending ? 'info' : isRejected ? 'warning' : 'danger';
+    const StatusIcon = isActive
+      ? CheckCircleIcon
+      : isPending
+        ? PendingIcon
+        : isRejected
+          ? ExclamationTriangleIcon
+          : ExclamationCircleIcon;
     return (
       <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
         <Icon size="sm" status={iconStatus} style={{ flexShrink: 0 }}>
@@ -274,7 +285,12 @@ const APICredentialsPage = ({
         <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }} alignItems={{ default: 'alignItemsFlexStart' }}>
           <FlexItem>
             <Title headingLevel="h1" size="2xl">My API keys</Title>
-            <p style={{ marginTop: '8px', color: 'var(--pf-t--global--text--color--subtle)' }}>
+            <p
+              style={{
+                marginTop: 'var(--pf-t--global--spacer--sm)',
+                color: 'var(--pf-t--global--text--color--subtle)'
+              }}
+            >
               View and manage your API keys.
             </p>
           </FlexItem>
@@ -384,7 +400,13 @@ const APICredentialsPage = ({
           <Table aria-label="My API keys table">
           <Thead>
             <Tr>
-              <Th style={{ width: '24px', paddingLeft: '8px', paddingRight: '4px' }} />
+              <Th
+                style={{
+                  width: 'var(--pf-t--global--spacer--2xl)',
+                  paddingLeft: 'var(--pf-t--global--spacer--sm)',
+                  paddingRight: 'var(--pf-t--global--spacer--xs)'
+                }}
+              />
               <Th sort={{ columnIndex: 1, sortBy: sortState, onSort: handleSort }}>API key name</Th>
               <Th sort={{ columnIndex: 2, sortBy: sortState, onSort: handleSort }}>Owner</Th>
               <Th sort={{ columnIndex: 3, sortBy: sortState, onSort: handleSort }}>API</Th>
@@ -404,7 +426,14 @@ const APICredentialsPage = ({
             {sortedCredentials.map((row) => (
               <React.Fragment key={row.id}>
                 <Tr style={expandedRows[row.id] ? { borderBottom: 'none' } : undefined}>
-                  <Td style={{ width: '24px', paddingLeft: '8px', paddingRight: '4px', verticalAlign: 'middle' }}>
+                  <Td
+                    style={{
+                      width: 'var(--pf-t--global--spacer--2xl)',
+                      paddingLeft: 'var(--pf-t--global--spacer--sm)',
+                      paddingRight: 'var(--pf-t--global--spacer--xs)',
+                      verticalAlign: 'middle'
+                    }}
+                  >
                     <Button
                       variant="plain"
                       aria-label={expandedRows[row.id] ? 'Collapse' : 'Expand'}
@@ -419,11 +448,18 @@ const APICredentialsPage = ({
                     </Button>
                   </Td>
                   <Td style={{ verticalAlign: 'middle' }}>{renderApiKeyNameCell(row)}</Td>
-                  <Td style={{ verticalAlign: 'middle' }}>{row.owner}</Td>
                   <Td style={{ verticalAlign: 'middle' }}>
-                    <Button variant="link" isInline component="a" href="#">
-                      {row.api}
-                    </Button>
+                    <TruncatedTableText text={row.owner} />
+                  </Td>
+                  <Td style={{ verticalAlign: 'middle' }}>
+                    <TruncatedTableLink
+                      text={row.api}
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onNavigateToApiCatalog?.(row.api);
+                      }}
+                    />
                   </Td>
                   <Td style={{ verticalAlign: 'middle' }}>{renderStatus(row.status)}</Td>
                   <Td style={{ verticalAlign: 'middle', minWidth: TIER_TABLE_COLUMN_MIN_WIDTH }}>
@@ -496,15 +532,15 @@ const APICredentialsPage = ({
                       style={{
                         borderTop: 'none',
                         paddingTop: 0,
-                        paddingBottom: '16px',
+                        paddingBottom: 'var(--pf-t--global--spacer--md)',
                         verticalAlign: 'top',
                         boxShadow: 'none'
                       }}
                     >
                       <div
                         style={{
-                          paddingLeft: '52px',
-                          paddingTop: '16px',
+                          paddingLeft: 'var(--pf-t--global--spacer--3xl)',
+                          paddingTop: 'var(--pf-t--global--spacer--md)',
                           paddingBottom: 0,
                           backgroundColor: 'var(--pf-t--global--background--color--100)'
                         }}
@@ -513,7 +549,7 @@ const APICredentialsPage = ({
                         <div style={{ color: 'var(--pf-t--global--text--color--subtle)' }}>{row.useCase}</div>
                         {row.status === 'Rejected' && (
                           <Alert
-                            variant={AlertVariant.danger}
+                            variant={AlertVariant.warning}
                             isInline
                             title={
                               <>
@@ -533,7 +569,7 @@ const APICredentialsPage = ({
                                 Request a new API key
                               </AlertActionLink>
                             }
-                            style={{ marginTop: '16px' }}
+                            style={{ marginTop: 'var(--pf-t--global--spacer--md)' }}
                           />
                         )}
                       </div>

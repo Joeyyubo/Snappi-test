@@ -29,7 +29,13 @@ import {
   AlertActionLink
 } from '@patternfly/react-core';
 import { Table, Thead, Tr, Th, Tbody, Td } from '@patternfly/react-table';
-import { CheckCircleIcon, PendingIcon, ExclamationCircleIcon, CopyIcon } from '@patternfly/react-icons';
+import {
+  CheckCircleIcon,
+  PendingIcon,
+  ExclamationCircleIcon,
+  ExclamationTriangleIcon,
+  CopyIcon
+} from '@patternfly/react-icons';
 import { getTierTooltipText } from '../data/apiCredentialsModel';
 import { renderApiKeyField } from './apiKeyFieldDisplay';
 import { ApiKeyNameText } from './ApiKeyNameText';
@@ -83,8 +89,15 @@ const HISTORY_ROWS_REJECTED = [
 const renderStatus = (status) => {
   const isActive = status === 'Active';
   const isPending = status === 'Pending';
-  const iconStatus = isActive ? 'success' : isPending ? 'info' : 'danger';
-  const StatusIcon = isActive ? CheckCircleIcon : isPending ? PendingIcon : ExclamationCircleIcon;
+  const isRejected = status === 'Rejected';
+  const iconStatus = isActive ? 'success' : isPending ? 'info' : isRejected ? 'warning' : 'danger';
+  const StatusIcon = isActive
+    ? CheckCircleIcon
+    : isPending
+      ? PendingIcon
+      : isRejected
+        ? ExclamationTriangleIcon
+        : ExclamationCircleIcon;
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
       <Icon size="sm" status={iconStatus} style={{ flexShrink: 0 }}>
@@ -130,15 +143,30 @@ const APIKeyDetailPage = ({ credential, onBack, revealedKeyIds, onOpenRevealModa
 
   return (
     <>
+      <style>{`
+        /* PF breadcrumb items default to nowrap, which truncates long active labels */
+        .api-key-detail-breadcrumb .pf-v6-c-breadcrumb__item:last-child {
+          white-space: normal;
+          max-width: 100%;
+        }
+      `}</style>
       <PageSection variant="light">
-        <Breadcrumb>
+        <Breadcrumb className="api-key-detail-breadcrumb" style={{ flexWrap: 'wrap' }}>
           <BreadcrumbItem>
             <Button variant="link" onClick={onBack} isInline>
               My API keys
             </Button>
           </BreadcrumbItem>
-          <BreadcrumbItem isActive>
-            <ApiKeyNameText name={name} />
+          <BreadcrumbItem
+            isActive
+            style={{
+              maxWidth: 'none',
+              whiteSpace: 'normal',
+              wordBreak: 'break-word',
+              overflowWrap: 'anywhere'
+            }}
+          >
+            <ApiKeyNameText name={name} truncate={false} />
           </BreadcrumbItem>
         </Breadcrumb>
 
@@ -147,26 +175,27 @@ const APIKeyDetailPage = ({ credential, onBack, revealedKeyIds, onOpenRevealModa
           alignItems={{ default: 'alignItemsFlexStart' }}
           style={{ marginTop: '16px' }}
         >
-          <FlexItem>
-            <Flex alignItems={{ default: 'alignItemsCenter' }} gap={{ default: 'gapMd' }} flexWrap={{ default: 'wrap' }}>
-              <Title headingLevel="h1" size="2xl">
-                <ApiKeyNameText name={name} />
+          <FlexItem grow={{ default: 'grow' }} style={{ minWidth: 0 }}>
+            <Flex
+              alignItems={{ default: 'alignItemsCenter' }}
+              gap={{ default: 'gapMd' }}
+              flexWrap={{ default: 'wrap' }}
+            >
+              <Title
+                headingLevel="h1"
+                size="2xl"
+                style={{
+                  whiteSpace: 'normal',
+                  wordBreak: 'break-word',
+                  overflowWrap: 'anywhere',
+                  marginBlock: 0
+                }}
+              >
+                <ApiKeyNameText name={name} truncate={false} />
               </Title>
-              {status === 'Active' && (
-                <Label color="green" variant="filled" icon={<CheckCircleIcon />}>
-                  Active
-                </Label>
-              )}
-              {status === 'Pending' && (
-                <Label color="purple" variant="filled" icon={<PendingIcon />}>
-                  Pending
-                </Label>
-              )}
-              {status === 'Rejected' && (
-                <Label color="red" variant="filled" icon={<ExclamationCircleIcon />}>
-                  Rejected
-                </Label>
-              )}
+              <FlexItem style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                {renderStatus(status)}
+              </FlexItem>
             </Flex>
           </FlexItem>
           <FlexItem>
@@ -190,7 +219,7 @@ const APIKeyDetailPage = ({ credential, onBack, revealedKeyIds, onOpenRevealModa
         <PageSection>
           {status === 'Rejected' && (
             <Alert
-              variant={AlertVariant.danger}
+              variant={AlertVariant.warning}
               isInline
               title={
                 <>
@@ -212,8 +241,14 @@ const APIKeyDetailPage = ({ credential, onBack, revealedKeyIds, onOpenRevealModa
               <DescriptionList>
                 <DescriptionListGroup>
                   <DescriptionListTerm>API key name</DescriptionListTerm>
-                  <DescriptionListDescription>
-                    <ApiKeyNameText name={name} />
+                  <DescriptionListDescription
+                    style={{
+                      whiteSpace: 'normal',
+                      wordBreak: 'break-word',
+                      overflowWrap: 'anywhere'
+                    }}
+                  >
+                    <ApiKeyNameText name={name} truncate={false} />
                   </DescriptionListDescription>
                 </DescriptionListGroup>
                 <DescriptionListGroup>
@@ -235,8 +270,26 @@ const APIKeyDetailPage = ({ credential, onBack, revealedKeyIds, onOpenRevealModa
                 </DescriptionListGroup>
                 <DescriptionListGroup>
                   <DescriptionListTerm>API</DescriptionListTerm>
-                  <DescriptionListDescription>
-                    <Button variant="link" isInline component="a" href="#">
+                  <DescriptionListDescription
+                    style={{
+                      whiteSpace: 'normal',
+                      wordBreak: 'break-word',
+                      overflowWrap: 'anywhere'
+                    }}
+                  >
+                    <Button
+                      variant="link"
+                      isInline
+                      component="a"
+                      href="#"
+                      style={{
+                        whiteSpace: 'normal',
+                        wordBreak: 'break-word',
+                        overflowWrap: 'anywhere',
+                        textAlign: 'left',
+                        height: 'auto'
+                      }}
+                    >
                       {api}
                     </Button>
                   </DescriptionListDescription>

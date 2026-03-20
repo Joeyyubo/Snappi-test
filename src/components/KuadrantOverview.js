@@ -37,17 +37,26 @@ import {
   EllipsisVIcon
 } from '@patternfly/react-icons';
 import GatewayTable from './GatewayTable';
+import { pf } from '../styles/pf6Tokens';
 
 // Mock chart components since PatternFly charts require additional setup
 const DonutChart = ({ data, title, subTitle }) => (
-  <div style={{ position: 'relative', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+  <div
+    style={{
+      position: 'relative',
+      height: '12.5rem',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}
+  >
     <svg width="160" height="160" viewBox="0 0 160 160">
       <circle
         cx="80"
         cy="80"
         r="60"
         fill="none"
-        stroke="#f0f0f0"
+        stroke={pf.color.borderSubtle}
         strokeWidth="20"
       />
       <circle
@@ -55,16 +64,30 @@ const DonutChart = ({ data, title, subTitle }) => (
         cy="80"
         r="60"
         fill="none"
-        stroke="#3e8635"
+        stroke={pf.color.success}
         strokeWidth="20"
         strokeDasharray={`${data.healthy * 3.77} ${(100 - data.healthy) * 3.77}`}
         strokeDashoffset="0"
         transform="rotate(-90 80 80)"
       />
-      <text x="80" y="75" textAnchor="middle" style={{ fontSize: '24px', fontWeight: 'bold', fill: '#3e8635' }}>
+      <text
+        x="80"
+        y="75"
+        textAnchor="middle"
+        style={{
+          fontSize: pf.font.headingMd,
+          fontWeight: pf.font.weightBold,
+          fill: pf.color.success
+        }}
+      >
         {data.healthy}%
       </text>
-      <text x="80" y="95" textAnchor="middle" style={{ fontSize: '14px', fill: '#6a6e73' }}>
+      <text
+        x="80"
+        y="95"
+        textAnchor="middle"
+        style={{ fontSize: pf.font.bodyDefault, fill: pf.color.textSubtle }}
+      >
         {title}
       </text>
     </svg>
@@ -72,27 +95,57 @@ const DonutChart = ({ data, title, subTitle }) => (
 );
 
 const LineChart = ({ data, title }) => (
-  <div style={{ height: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-    <h4 style={{ textAlign: 'center', marginBottom: '16px', color: '#151515' }}>{title}</h4>
+  <div
+    style={{
+      height: '12.5rem',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center'
+    }}
+  >
+    <h4
+      style={{
+        textAlign: 'center',
+        marginBottom: pf.space.md,
+        color: pf.color.textRegular,
+        fontSize: pf.font.bodyDefault,
+        fontWeight: pf.font.weightBold
+      }}
+    >
+      {title}
+    </h4>
     <svg width="100%" height="120" viewBox="0 0 300 120">
       <defs>
         <linearGradient id="requestGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style={{ stopColor: '#0066cc', stopOpacity: 0.3 }} />
-          <stop offset="100%" style={{ stopColor: '#0066cc', stopOpacity: 0 }} />
+          <stop offset="0%" style={{ stopColor: pf.color.brand, stopOpacity: 0.3 }} />
+          <stop offset="100%" style={{ stopColor: pf.color.brand, stopOpacity: 0 }} />
         </linearGradient>
       </defs>
       <polyline
         fill="url(#requestGradient)"
-        stroke="#0066cc"
+        stroke={pf.color.brand}
         strokeWidth="2"
         points="0,80 50,60 100,70 150,50 200,55 250,45 300,40"
       />
-      <circle cx="300" cy="40" r="4" fill="#0066cc" />
-      <text x="150" y="110" textAnchor="middle" style={{ fontSize: '12px', fill: '#6a6e73' }}>
+      <circle cx="300" cy="40" r="4" fill={pf.color.brand} />
+      <text
+        x="150"
+        y="110"
+        textAnchor="middle"
+        style={{ fontSize: pf.font.bodySm, fill: pf.color.textSubtle }}
+      >
         Last 24 hours
       </text>
     </svg>
-    <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '8px', fontSize: '12px', color: '#6a6e73' }}>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'space-around',
+        marginTop: pf.space.sm,
+        fontSize: pf.font.bodySm,
+        color: pf.color.textSubtle
+      }}
+    >
       <span>Success: 94.2%</span>
       <span>Errors: 5.8%</span>
     </div>
@@ -133,13 +186,13 @@ const KuadrantOverview = ({ onGatewayNameClick, onCreateGateway, onCreateHTTPRou
   const renderNamespace = (namespace) => (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <Label color="green" variant="filled" isCompact>NS</Label>
-      <span style={{ marginLeft: '8px' }}>{namespace}</span>
+      <span style={{ marginLeft: pf.space.sm }}>{namespace}</span>
     </div>
   );
 
   const renderRouteStatus = (status) => (
     <div style={{ display: 'flex', alignItems: 'center' }}>
-      <Icon style={{ marginRight: '8px' }}>
+      <Icon style={{ marginRight: pf.space.sm }}>
         <CheckCircleIcon color="var(--pf-t--global--color--status--success--100)" />
       </Icon>
       <span>{status}</span>
@@ -153,8 +206,15 @@ const KuadrantOverview = ({ onGatewayNameClick, onCreateGateway, onCreateHTTPRou
           Connectivity Link overview
         </Title>
         
-        <div style={{ marginTop: '48px' }}>
-          <h2 style={{ marginBottom: '16px', fontSize: '16px', fontWeight: 'bold' }}>
+        <div style={{ marginTop: pf.space['3xl'] }}>
+          <h2
+            style={{
+              marginBottom: pf.space.md,
+              fontSize: pf.font.bodyDefault,
+              fontWeight: pf.font.weightBold,
+              color: pf.color.textRegular
+            }}
+          >
             System overview
           </h2>
           
@@ -171,29 +231,29 @@ const KuadrantOverview = ({ onGatewayNameClick, onCreateGateway, onCreateHTTPRou
                           </Icon>
                         </FlexItem>
                         <FlexItem>
-                          <h3 style={{ color: 'var(--pf-t--global--color--brand--200)', fontWeight: 'bold' }}>
+                          <h3 style={{ color: pf.color.brand, fontWeight: pf.font.weightBold }}>
                             Impact
                           </h3>
                         </FlexItem>
                       </Flex>
                     </FlexItem>
                     <FlexItem>
-                      <p style={{ color: 'var(--pf-t--global--text--color--subtle)', fontSize: '14px' }}>
+                      <p style={{ color: pf.color.textSubtle, fontSize: pf.font.bodyDefault }}>
                         Impact scope
                       </p>
                     </FlexItem>
                     <FlexItem>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ color: 'var(--pf-t--global--color--brand--200)', fontSize: '24px', fontWeight: '600' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: pf.space.sm }}>
+                        <span style={{ color: pf.color.brand, fontSize: pf.font.headingMd, fontWeight: pf.font.weightBold }}>
                           95%
                         </span>
-                        <span style={{ color: 'var(--pf-t--global--text--color--subtle)', fontSize: '14px' }}>
+                        <span style={{ color: pf.color.textSubtle, fontSize: pf.font.bodyDefault }}>
                           Coverage
                         </span>
                       </div>
                     </FlexItem>
                     <FlexItem>
-                      <div style={{ color: 'var(--pf-t--global--text--color--subtle)', fontSize: '14px' }}>
+                      <div style={{ color: pf.color.textSubtle, fontSize: pf.font.bodyDefault }}>
                         <div>• 8 active gateways</div>
                         <div>• 16 policies enforced</div>
                         <div>• 3 namespaces</div>
@@ -216,29 +276,29 @@ const KuadrantOverview = ({ onGatewayNameClick, onCreateGateway, onCreateHTTPRou
                           </Icon>
                         </FlexItem>
                         <FlexItem>
-                          <h3 style={{ color: 'var(--pf-t--global--color--status--success--100)', fontWeight: 'bold' }}>
+                          <h3 style={{ color: pf.color.success, fontWeight: pf.font.weightBold }}>
                             Stability
                           </h3>
                         </FlexItem>
                       </Flex>
                     </FlexItem>
                     <FlexItem>
-                      <p style={{ color: 'var(--pf-t--global--text--color--subtle)', fontSize: '14px' }}>
+                      <p style={{ color: pf.color.textSubtle, fontSize: pf.font.bodyDefault }}>
                         System status
                       </p>
                     </FlexItem>
                     <FlexItem>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ color: 'var(--pf-t--global--color--status--success--100)', fontSize: '24px', fontWeight: '600' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: pf.space.sm }}>
+                        <span style={{ color: pf.color.success, fontSize: pf.font.headingMd, fontWeight: pf.font.weightBold }}>
                           99.9%
                         </span>
-                        <span style={{ color: 'var(--pf-t--global--text--color--subtle)', fontSize: '14px' }}>
+                        <span style={{ color: pf.color.textSubtle, fontSize: pf.font.bodyDefault }}>
                           Uptime
                         </span>
                       </div>
                     </FlexItem>
                     <FlexItem>
-                      <div style={{ color: 'var(--pf-t--global--text--color--subtle)', fontSize: '14px' }}>
+                      <div style={{ color: pf.color.textSubtle, fontSize: pf.font.bodyDefault }}>
                         <div>• Average latency 850ms</div>
                         <div>• 0 critical errors</div>
                         <div>• Health checks passing</div>
@@ -261,29 +321,29 @@ const KuadrantOverview = ({ onGatewayNameClick, onCreateGateway, onCreateHTTPRou
                           </Icon>
                         </FlexItem>
                         <FlexItem>
-                          <h3 style={{ color: 'var(--pf-t--global--color--status--warning--200)', fontWeight: 'bold' }}>
+                          <h3 style={{ color: pf.color.warning, fontWeight: pf.font.weightBold }}>
                             Value
                           </h3>
                         </FlexItem>
                       </Flex>
                     </FlexItem>
                     <FlexItem>
-                      <p style={{ color: 'var(--pf-t--global--text--color--subtle)', fontSize: '14px' }}>
+                      <p style={{ color: pf.color.textSubtle, fontSize: pf.font.bodyDefault }}>
                         Business impact
                       </p>
                     </FlexItem>
                     <FlexItem>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ color: 'var(--pf-t--global--color--status--warning--200)', fontSize: '24px', fontWeight: '600' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: pf.space.sm }}>
+                        <span style={{ color: pf.color.warning, fontSize: pf.font.headingMd, fontWeight: pf.font.weightBold }}>
                           $2,450
                         </span>
-                        <span style={{ color: 'var(--pf-t--global--text--color--subtle)', fontSize: '14px' }}>
+                        <span style={{ color: pf.color.textSubtle, fontSize: pf.font.bodyDefault }}>
                           Monthly savings
                         </span>
                       </div>
                     </FlexItem>
                     <FlexItem>
-                      <div style={{ color: 'var(--pf-t--global--text--color--subtle)', fontSize: '14px' }}>
+                      <div style={{ color: pf.color.textSubtle, fontSize: pf.font.bodyDefault }}>
                         <div>• 40% throughput increase</div>
                         <div>• 25% response time improvement</div>
                         <div>• 78% resource utilization</div>
@@ -295,13 +355,19 @@ const KuadrantOverview = ({ onGatewayNameClick, onCreateGateway, onCreateHTTPRou
             </GridItem>
           </Grid>
           
-          <Grid hasGutter style={{ marginTop: '24px' }}>
+          <Grid hasGutter style={{ marginTop: pf.space.lg }}>
             <GridItem xl={6} lg={6} md={12} sm={12}>
               <Card isFullHeight>
                 <CardBody>
                   <Flex direction={{ default: 'column' }} spaceItems={{ default: 'spaceItemsSm' }}>
                     <FlexItem>
-                      <h3 style={{ fontWeight: 'bold', marginBottom: '16px' }}>
+                      <h3
+                        style={{
+                          fontWeight: pf.font.weightBold,
+                          marginBottom: pf.space.md,
+                          color: pf.color.textRegular
+                        }}
+                      >
                         System Health
                       </h3>
                     </FlexItem>
@@ -312,17 +378,24 @@ const KuadrantOverview = ({ onGatewayNameClick, onCreateGateway, onCreateHTTPRou
                       />
                     </FlexItem>
                     <FlexItem>
-                      <div style={{ display: 'flex', justifyContent: 'space-around', fontSize: '14px', color: '#6a6e73' }}>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-around',
+                          fontSize: pf.font.bodyDefault,
+                          color: pf.color.textSubtle
+                        }}
+                      >
                         <div style={{ textAlign: 'center' }}>
-                          <div style={{ fontWeight: 'bold', color: '#3e8635' }}>8</div>
+                          <div style={{ fontWeight: pf.font.weightBold, color: pf.color.success }}>8</div>
                           <div>Healthy</div>
                         </div>
                         <div style={{ textAlign: 'center' }}>
-                          <div style={{ fontWeight: 'bold', color: '#f0ab00' }}>1</div>
+                          <div style={{ fontWeight: pf.font.weightBold, color: pf.color.warning }}>1</div>
                           <div>Warning</div>
                         </div>
                         <div style={{ textAlign: 'center' }}>
-                          <div style={{ fontWeight: 'bold', color: '#c9190b' }}>0</div>
+                          <div style={{ fontWeight: pf.font.weightBold, color: pf.color.danger }}>0</div>
                           <div>Critical</div>
                         </div>
                       </div>
@@ -337,7 +410,13 @@ const KuadrantOverview = ({ onGatewayNameClick, onCreateGateway, onCreateHTTPRou
                 <CardBody>
                   <Flex direction={{ default: 'column' }} spaceItems={{ default: 'spaceItemsSm' }}>
                     <FlexItem>
-                      <h3 style={{ fontWeight: 'bold', marginBottom: '16px' }}>
+                      <h3
+                        style={{
+                          fontWeight: pf.font.weightBold,
+                          marginBottom: pf.space.md,
+                          color: pf.color.textRegular
+                        }}
+                      >
                         Request Health Trend
                       </h3>
                     </FlexItem>
@@ -348,17 +427,24 @@ const KuadrantOverview = ({ onGatewayNameClick, onCreateGateway, onCreateHTTPRou
                       />
                     </FlexItem>
                     <FlexItem>
-                      <div style={{ display: 'flex', justifyContent: 'space-around', fontSize: '14px', color: '#6a6e73' }}>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-around',
+                          fontSize: pf.font.bodyDefault,
+                          color: pf.color.textSubtle
+                        }}
+                      >
                         <div style={{ textAlign: 'center' }}>
-                          <div style={{ fontWeight: 'bold', color: '#0066cc' }}>3.2K</div>
+                          <div style={{ fontWeight: pf.font.weightBold, color: pf.color.brand }}>3.2K</div>
                           <div>Req/min</div>
                         </div>
                         <div style={{ textAlign: 'center' }}>
-                          <div style={{ fontWeight: 'bold', color: '#3e8635' }}>94.2%</div>
+                          <div style={{ fontWeight: pf.font.weightBold, color: pf.color.success }}>94.2%</div>
                           <div>Success</div>
                         </div>
                         <div style={{ textAlign: 'center' }}>
-                          <div style={{ fontWeight: 'bold', color: '#c9190b' }}>5.8%</div>
+                          <div style={{ fontWeight: pf.font.weightBold, color: pf.color.danger }}>5.8%</div>
                           <div>Errors</div>
                         </div>
                       </div>
@@ -376,7 +462,7 @@ const KuadrantOverview = ({ onGatewayNameClick, onCreateGateway, onCreateHTTPRou
         isFilled={false}
       >
         {/* Gateways card */}
-        <Card style={{ marginBottom: '24px' }}>
+        <Card style={{ marginBottom: pf.space.lg }}>
           <CardHeader>
             <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }} alignItems={{ default: 'alignItemsCenter' }}>
               <Title headingLevel="h2" size="xl">Gateways</Title>
@@ -389,7 +475,7 @@ const KuadrantOverview = ({ onGatewayNameClick, onCreateGateway, onCreateHTTPRou
             <Tabs
               activeKey={activeGatewayTabKey}
               onSelect={(e, tabKey) => setActiveGatewayTabKey(tabKey)}
-              style={{ marginBottom: '24px' }}
+              style={{ marginBottom: pf.space.lg }}
             >
               <Tab eventKey="all-gateways" title={<TabTitleText>All gateways</TabTitleText>} />
               <Tab eventKey="api-gateways" title={<TabTitleText>API gateways</TabTitleText>} />
@@ -414,21 +500,28 @@ const KuadrantOverview = ({ onGatewayNameClick, onCreateGateway, onCreateHTTPRou
             <Tabs
               activeKey={activeRoutesTabKey}
               onSelect={(e, tabKey) => setActiveRoutesTabKey(tabKey)}
-              style={{ marginBottom: '24px' }}
+              style={{ marginBottom: pf.space.lg }}
             >
               <Tab eventKey="all" title={<TabTitleText>All Routes ({ROUTES_DATA.length})</TabTitleText>} />
               <Tab eventKey="httproutes" title={<TabTitleText>HTTPRoutes ({ROUTES_DATA.filter((r) => r.type === 'HTTPRoute').length})</TabTitleText>} />
               <Tab eventKey="grpcroutes" title={<TabTitleText>GRPCRoutes ({ROUTES_DATA.filter((r) => r.type === 'GRPCRoute').length})</TabTitleText>} />
             </Tabs>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: pf.space.md,
+                marginBottom: pf.space.md
+              }}
+            >
               <SearchInput
                 placeholder="Search routes..."
                 value={routesSearchValue}
                 onChange={(e, value) => setRoutesSearchValue(value)}
                 onClear={() => setRoutesSearchValue('')}
-                style={{ width: '300px' }}
+                style={{ width: 'min(100%, 18.75rem)' }}
               />
-              <span style={{ fontSize: '14px', color: '#6a6e73' }}>
+              <span style={{ fontSize: pf.font.bodyDefault, color: pf.color.textSubtle }}>
                 {filteredRoutes.length} of {ROUTES_DATA.length} routes
               </span>
             </div>
@@ -460,7 +553,7 @@ const KuadrantOverview = ({ onGatewayNameClick, onCreateGateway, onCreateHTTPRou
                     <Td>
                       <div style={{ display: 'flex', alignItems: 'center' }}>
                         <span>{route.service}</span>
-                        <span style={{ marginLeft: '8px', color: '#6a6e73' }}>:{route.port}</span>
+                        <span style={{ marginLeft: pf.space.sm, color: pf.color.textSubtle }}>:{route.port}</span>
                       </div>
                     </Td>
                     <Td>{route.lastUpdated}</Td>

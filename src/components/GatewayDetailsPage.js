@@ -264,7 +264,7 @@ const GatewayDetailsPage = ({ gatewayName = 'example', onBack, onCreateHTTPRoute
         <DescriptionListGroup>
           <DescriptionListTerm>Owner</DescriptionListTerm>
           <DescriptionListDescription>
-            <span style={{ color: '#6a6e73' }}>No owner</span>
+            <span style={{ color: 'var(--pf-t--global--text--color--subtle)' }}>No owner</span>
           </DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
@@ -420,9 +420,9 @@ const GatewayDetailsPage = ({ gatewayName = 'example', onBack, onCreateHTTPRoute
           <Grid hasGutter>
             <GridItem xl={4} lg={4} md={4} sm={12}>
               <div style={{ 
-                backgroundColor: 'white', 
-                border: '1px solid #d7d7d7', 
-                borderRadius: '8px', 
+                backgroundColor: 'var(--pf-t--global--background--color--primary--default)', 
+                border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+                borderRadius: 'var(--pf-t--global--border--radius--medium)', 
                 padding: '16px',
                 textAlign: 'center'
               }}>
@@ -436,9 +436,9 @@ const GatewayDetailsPage = ({ gatewayName = 'example', onBack, onCreateHTTPRoute
             </GridItem>
             <GridItem xl={4} lg={4} md={4} sm={12}>
               <div style={{ 
-                backgroundColor: 'white', 
-                border: '1px solid #d7d7d7', 
-                borderRadius: '8px', 
+                backgroundColor: 'var(--pf-t--global--background--color--primary--default)', 
+                border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+                borderRadius: 'var(--pf-t--global--border--radius--medium)', 
                 padding: '16px',
                 textAlign: 'center'
               }}>
@@ -452,9 +452,9 @@ const GatewayDetailsPage = ({ gatewayName = 'example', onBack, onCreateHTTPRoute
             </GridItem>
             <GridItem xl={4} lg={4} md={4} sm={12}>
               <div style={{ 
-                backgroundColor: 'white', 
-                border: '1px solid #d7d7d7', 
-                borderRadius: '8px', 
+                backgroundColor: 'var(--pf-t--global--background--color--primary--default)', 
+                border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+                borderRadius: 'var(--pf-t--global--border--radius--medium)', 
                 padding: '16px',
                 textAlign: 'center'
               }}>
@@ -483,26 +483,26 @@ const GatewayDetailsPage = ({ gatewayName = 'example', onBack, onCreateHTTPRoute
             alignItems: 'center', 
             justifyContent: 'space-between',
             padding: '12px 16px',
-            borderBottom: '1px solid #f0f0f0'
+            borderBottom: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--nonstatus--gray--default)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
               <div style={{ 
                 width: '8px', 
                 height: '8px', 
                 borderRadius: '50%', 
-                backgroundColor: '#52c41a',
+                backgroundColor: 'var(--pf-t--global--color--status--success--100)',
                 flexShrink: 0
               }} />
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '14px', fontWeight: '500', color: '#151515' }}>
+                <div style={{ fontSize: '14px', fontWeight: '500', color: 'var(--pf-t--global--text--color--regular)' }}>
                   Accepted
                 </div>
-                <div style={{ fontSize: '12px', color: '#8a8a8a', marginTop: '2px' }}>
+                <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)', marginTop: '2px' }}>
                   Resource accepted by gateway controller
                 </div>
               </div>
             </div>
-            <div style={{ fontSize: '12px', color: '#8a8a8a' }}>
+            <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)' }}>
               Jun 13, 2025, 9:59 PM
             </div>
           </div>
@@ -513,26 +513,26 @@ const GatewayDetailsPage = ({ gatewayName = 'example', onBack, onCreateHTTPRoute
             alignItems: 'center', 
             justifyContent: 'space-between',
             padding: '12px 16px',
-            borderBottom: '1px solid #f0f0f0'
+            borderBottom: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--nonstatus--gray--default)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
               <div style={{ 
                 width: '8px', 
                 height: '8px', 
                 borderRadius: '50%', 
-                backgroundColor: '#52c41a',
+                backgroundColor: 'var(--pf-t--global--color--status--success--100)',
                 flexShrink: 0
               }} />
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '14px', fontWeight: '500', color: '#151515' }}>
+                <div style={{ fontSize: '14px', fontWeight: '500', color: 'var(--pf-t--global--text--color--regular)' }}>
                   Programmed
                 </div>
-                <div style={{ fontSize: '12px', color: '#8a8a8a', marginTop: '2px' }}>
+                <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)', marginTop: '2px' }}>
                   Gateway configuration programmed successfully
                 </div>
               </div>
             </div>
-            <div style={{ fontSize: '12px', color: '#8a8a8a' }}>
+            <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)' }}>
               Jun 13, 2025, 9:59 PM
             </div>
           </div>
@@ -549,19 +549,19 @@ const GatewayDetailsPage = ({ gatewayName = 'example', onBack, onCreateHTTPRoute
                 width: '8px', 
                 height: '8px', 
                 borderRadius: '50%', 
-                backgroundColor: '#52c41a',
+                backgroundColor: 'var(--pf-t--global--color--status--success--100)',
                 flexShrink: 0
               }} />
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '14px', fontWeight: '500', color: '#151515' }}>
+                <div style={{ fontSize: '14px', fontWeight: '500', color: 'var(--pf-t--global--text--color--regular)' }}>
                   Enforced
                 </div>
-                <div style={{ fontSize: '12px', color: '#8a8a8a', marginTop: '2px' }}>
+                <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)', marginTop: '2px' }}>
                   All policies enforced successfully
                 </div>
               </div>
             </div>
-            <div style={{ fontSize: '12px', color: '#8a8a8a' }}>
+            <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)' }}>
               Jun 13, 2025, 9:59 PM
             </div>
           </div>
@@ -684,9 +684,9 @@ status:
 
         {/* YAML Content */}
         <div style={{ 
-          backgroundColor: '#f5f5f5', 
-          border: '1px solid #d7d7d7',
-          borderRadius: '8px', 
+          backgroundColor: 'var(--pf-t--global--background--color--secondary--default)', 
+          border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)',
+          borderRadius: 'var(--pf-t--global--border--radius--medium)', 
           padding: '16px',
           fontFamily: 'monospace',
           position: 'relative'
@@ -718,16 +718,19 @@ status:
           
           {/* Syntax highlighting overlay for read-only mode */}
           {!isEditing && (
-            <div style={{
-              position: 'absolute',
-              top: '16px',
-              right: '16px',
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              fontSize: '12px',
-              color: 'var(--pf-t--global--text--color--subtle)'
-            }}>
+            <div
+              style={{
+                position: 'absolute',
+                top: 'var(--pf-t--global--spacer--md)',
+                right: 'var(--pf-t--global--spacer--md)',
+                backgroundColor:
+                  'color-mix(in srgb, var(--pf-t--global--background--color--primary--default) 92%, transparent)',
+                padding: 'var(--pf-t--global--spacer--xs) var(--pf-t--global--spacer--sm)',
+                borderRadius: 'var(--pf-t--global--border--radius--small)',
+                fontSize: 'var(--pf-t--global--font--size--body--sm)',
+                color: 'var(--pf-t--global--text--color--subtle)'
+              }}
+            >
               YAML
             </div>
           )}
@@ -1148,67 +1151,67 @@ status:
       <div style={{ display: 'flex', gap: '24px', marginBottom: '32px' }}>
         <div style={{ 
           flex: 1, 
-          backgroundColor: 'white', 
-          border: '1px solid #d7d7d7', 
-          borderRadius: '8px', 
+          backgroundColor: 'var(--pf-t--global--background--color--primary--default)', 
+          border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+          borderRadius: 'var(--pf-t--global--border--radius--medium)', 
           padding: '24px' 
         }}>
           <div style={{ fontSize: '16px', fontWeight: '500', marginBottom: '16px' }}>requests</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#0066cc' }}></div>
-              <span style={{ color: '#0066cc', fontSize: '16px', fontWeight: '500' }}>900 Total</span>
+              <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--pf-t--global--text--color--link--default)' }}></div>
+              <span style={{ color: 'var(--pf-t--global--text--color--link--default)', fontSize: '16px', fontWeight: '500' }}>900 Total</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Icon><CheckCircleIcon color="var(--pf-t--global--color--status--success--100)" /></Icon>
-              <span style={{ color: '#6a6e73', fontSize: '16px' }}>890 successful</span>
+              <span style={{ color: 'var(--pf-t--global--text--color--subtle)', fontSize: '16px' }}>890 successful</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Icon><ExclamationTriangleIcon color="var(--pf-t--global--color--status--warning--200)" /></Icon>
-              <span style={{ color: '#6a6e73', fontSize: '16px' }}>10 error</span>
+              <span style={{ color: 'var(--pf-t--global--text--color--subtle)', fontSize: '16px' }}>10 error</span>
             </div>
           </div>
         </div>
         
         <div style={{ 
           flex: 1, 
-          backgroundColor: 'white', 
-          border: '1px solid #d7d7d7', 
-          borderRadius: '8px', 
+          backgroundColor: 'var(--pf-t--global--background--color--primary--default)', 
+          border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+          borderRadius: 'var(--pf-t--global--border--radius--medium)', 
           padding: '24px' 
         }}>
           <div style={{ fontSize: '16px', fontWeight: '500', marginBottom: '16px' }}>Tokens consumptions</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#0066cc' }}></div>
-              <span style={{ color: '#0066cc', fontSize: '16px', fontWeight: '500' }}>900 Total</span>
+              <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--pf-t--global--text--color--link--default)' }}></div>
+              <span style={{ color: 'var(--pf-t--global--text--color--link--default)', fontSize: '16px', fontWeight: '500' }}>900 Total</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#6a6e73' }}></div>
-              <span style={{ color: '#6a6e73', fontSize: '16px' }}>890 completion</span>
+              <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--pf-t--global--text--color--subtle)' }}></div>
+              <span style={{ color: 'var(--pf-t--global--text--color--subtle)', fontSize: '16px' }}>890 completion</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#0066cc' }}></div>
-              <span style={{ color: '#0066cc', fontSize: '16px' }}>10 Prompt</span>
+              <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--pf-t--global--text--color--link--default)' }}></div>
+              <span style={{ color: 'var(--pf-t--global--text--color--link--default)', fontSize: '16px' }}>10 Prompt</span>
             </div>
           </div>
         </div>
         
         <div style={{ 
           flex: 1, 
-          backgroundColor: 'white', 
-          border: '1px solid #d7d7d7', 
-          borderRadius: '8px', 
+          backgroundColor: 'var(--pf-t--global--background--color--primary--default)', 
+          border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+          borderRadius: 'var(--pf-t--global--border--radius--medium)', 
           padding: '24px' 
         }}>
           <div style={{ fontSize: '16px', fontWeight: '500', marginBottom: '16px' }}>Cost</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#0066cc' }}></div>
-              <span style={{ color: '#0066cc', fontSize: '16px', fontWeight: '500' }}>900$ Total</span>
+              <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--pf-t--global--text--color--link--default)' }}></div>
+              <span style={{ color: 'var(--pf-t--global--text--color--link--default)', fontSize: '16px', fontWeight: '500' }}>900$ Total</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#6a6e73', fontSize: '16px' }}>0.02$ Per req</span>
+              <span style={{ color: 'var(--pf-t--global--text--color--subtle)', fontSize: '16px' }}>0.02$ Per req</span>
             </div>
           </div>
         </div>
@@ -1238,9 +1241,9 @@ status:
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
           {/* Requests details chart */}
           <div style={{ 
-            backgroundColor: 'white', 
-            border: '1px solid #d7d7d7', 
-            borderRadius: '8px', 
+            backgroundColor: 'var(--pf-t--global--background--color--primary--default)', 
+            border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+            borderRadius: 'var(--pf-t--global--border--radius--medium)', 
             padding: '24px' 
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
@@ -1249,69 +1252,69 @@ status:
                 <Icon><CogIcon /></Icon>
               </Button>
             </div>
-            <div style={{ height: '200px', position: 'relative', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
+            <div style={{ height: '200px', position: 'relative', backgroundColor: 'var(--pf-t--global--background--color--secondary--default)', borderRadius: 'var(--pf-t--global--border--radius--small)' }}>
               <svg width="100%" height="100%" viewBox="0 0 400 200">
                 {/* Grid lines */}
                 <defs>
                   <pattern id="grid" width="40" height="25" patternUnits="userSpaceOnUse">
-                    <path d="M 40 0 L 0 0 0 25" fill="none" stroke="#e6e6e6" strokeWidth="1"/>
+                    <path d="M 40 0 L 0 0 0 25" fill="none" stroke="var(--pf-t--global--border--color--default)" strokeWidth="1"/>
                   </pattern>
                 </defs>
                 <rect width="100%" height="100%" fill="url(#grid)" />
                 
                 {/* Time labels */}
-                <text x="30" y="190" fontSize="12" fill="#6a6e73">8:00</text>
-                <text x="70" y="190" fontSize="12" fill="#6a6e73">8:01</text>
-                <text x="110" y="190" fontSize="12" fill="#6a6e73">8:02</text>
-                <text x="150" y="190" fontSize="12" fill="#6a6e73">8:03</text>
-                <text x="190" y="190" fontSize="12" fill="#6a6e73">8:04</text>
-                <text x="230" y="190" fontSize="12" fill="#6a6e73">8:05</text>
-                <text x="270" y="190" fontSize="12" fill="#6a6e73">8:06</text>
-                <text x="310" y="190" fontSize="12" fill="#6a6e73">8:07</text>
-                <text x="350" y="190" fontSize="12" fill="#6a6e73">8:08</text>
-                <text x="390" y="190" fontSize="12" fill="#6a6e73">8:09</text>
+                <text x="30" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:00</text>
+                <text x="70" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:01</text>
+                <text x="110" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:02</text>
+                <text x="150" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:03</text>
+                <text x="190" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:04</text>
+                <text x="230" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:05</text>
+                <text x="270" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:06</text>
+                <text x="310" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:07</text>
+                <text x="350" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:08</text>
+                <text x="390" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:09</text>
                 
                 {/* Y-axis labels */}
-                <text x="10" y="180" fontSize="12" fill="#6a6e73">100</text>
-                <text x="10" y="155" fontSize="12" fill="#6a6e73">125</text>
-                <text x="10" y="130" fontSize="12" fill="#6a6e73">150</text>
-                <text x="10" y="105" fontSize="12" fill="#6a6e73">175</text>
-                <text x="10" y="80" fontSize="12" fill="#6a6e73">200</text>
-                <text x="10" y="55" fontSize="12" fill="#6a6e73">225</text>
-                <text x="10" y="30" fontSize="12" fill="#6a6e73">250</text>
+                <text x="10" y="180" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">100</text>
+                <text x="10" y="155" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">125</text>
+                <text x="10" y="130" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">150</text>
+                <text x="10" y="105" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">175</text>
+                <text x="10" y="80" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">200</text>
+                <text x="10" y="55" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">225</text>
+                <text x="10" y="30" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">250</text>
                 
                 {/* Sample data lines */}
                 <polyline points="30,120 70,40 110,160 150,100 190,110 230,80 270,60 310,30 350,35 390,50" 
-                          fill="none" stroke="#0066cc" strokeWidth="2"/>
+                          fill="none" stroke="var(--pf-t--global--text--color--link--default)" strokeWidth="2"/>
                 <polyline points="30,100 70,50 110,140 150,90 190,95 230,70 270,45 310,25 350,30 390,45" 
-                          fill="none" stroke="#ff6b35" strokeWidth="2"/>
+                          fill="none" stroke="var(--pf-t--global--color--status--warning--200)" strokeWidth="2"/>
                 <polyline points="30,140 70,80 110,180 150,120 190,125 230,100 270,85 310,55 350,60 390,75" 
-                          fill="none" stroke="#28a745" strokeWidth="2"/>
+                          fill="none" stroke="var(--pf-t--global--color--status--success--100)" strokeWidth="2"/>
                 <polyline points="30,160 70,100 110,190 150,140 190,145 230,120 270,105 310,75 350,80 390,95" 
-                          fill="none" stroke="#ffc107" strokeWidth="2"/>
+                          fill="none" stroke="var(--pf-t--global--color--gold--300)" strokeWidth="2"/>
                 <polyline points="30,180 70,120 110,200 150,160 190,165 230,140 270,125 310,95 350,100 390,115" 
-                          fill="none" stroke="#17a2b8" strokeWidth="2"/>
+                          fill="none" stroke="var(--pf-t--global--color--status--info--100)" strokeWidth="2"/>
               </svg>
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '16px', fontSize: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#ff6b35' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--status--warning--200)' }}></div>
                 <span>Azure</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#0066cc' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--text--color--link--default)' }}></div>
                 <span>OpenAI</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#17a2b8' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--status--info--100)' }}></div>
                 <span>Gemini</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#ffc107' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--gold--300)' }}></div>
                 <span>Waston</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#28a745' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--status--success--100)' }}></div>
                 <span>DeepSeek</span>
               </div>
             </div>
@@ -1319,9 +1322,9 @@ status:
 
           {/* Requests statistics */}
           <div style={{ 
-            backgroundColor: 'white', 
-            border: '1px solid #d7d7d7', 
-            borderRadius: '8px', 
+            backgroundColor: 'var(--pf-t--global--background--color--primary--default)', 
+            border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+            borderRadius: 'var(--pf-t--global--border--radius--medium)', 
             padding: '24px' 
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
@@ -1334,51 +1337,51 @@ status:
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '8px', height: '8px', backgroundColor: '#ff6b35' }}></div>
+                  <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--status--warning--200)' }}></div>
                   <span style={{ fontSize: '14px' }}>Azure</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '60px', height: '8px', backgroundColor: '#0066cc', borderRadius: '4px' }}></div>
+                  <div style={{ width: '60px', height: '8px', backgroundColor: 'var(--pf-t--global--text--color--link--default)', borderRadius: 'var(--pf-t--global--border--radius--small)' }}></div>
                   <span style={{ fontSize: '14px', fontWeight: '500' }}>234</span>
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '8px', height: '8px', backgroundColor: '#0066cc' }}></div>
+                  <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--text--color--link--default)' }}></div>
                   <span style={{ fontSize: '14px' }}>OpenAI</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '80px', height: '8px', backgroundColor: '#87ceeb', borderRadius: '4px' }}></div>
+                  <div style={{ width: '80px', height: '8px', backgroundColor: 'var(--pf-t--global--color--status--info--200)', borderRadius: 'var(--pf-t--global--border--radius--small)' }}></div>
                   <span style={{ fontSize: '14px', fontWeight: '500' }}>432</span>
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '8px', height: '8px', backgroundColor: '#17a2b8' }}></div>
+                  <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--status--info--100)' }}></div>
                   <span style={{ fontSize: '14px' }}>Gemini</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '85px', height: '8px', backgroundColor: '#1e3a8a', borderRadius: '4px' }}></div>
+                  <div style={{ width: '85px', height: '8px', backgroundColor: 'var(--pf-t--global--color--brand--300)', borderRadius: 'var(--pf-t--global--border--radius--small)' }}></div>
                   <span style={{ fontSize: '14px', fontWeight: '500' }}>442</span>
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '8px', height: '8px', backgroundColor: '#ffc107' }}></div>
+                  <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--gold--300)' }}></div>
                   <span style={{ fontSize: '14px' }}>Waston</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '100px', height: '8px', backgroundColor: '#87ceeb', borderRadius: '4px' }}></div>
+                  <div style={{ width: '100px', height: '8px', backgroundColor: 'var(--pf-t--global--color--status--info--200)', borderRadius: 'var(--pf-t--global--border--radius--small)' }}></div>
                   <span style={{ fontSize: '14px', fontWeight: '500' }}>501</span>
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '8px', height: '8px', backgroundColor: '#28a745' }}></div>
+                  <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--status--success--100)' }}></div>
                   <span style={{ fontSize: '14px' }}>Deepseek</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '120px', height: '8px', backgroundColor: '#1e3a8a', borderRadius: '4px' }}></div>
+                  <div style={{ width: '120px', height: '8px', backgroundColor: 'var(--pf-t--global--color--brand--300)', borderRadius: 'var(--pf-t--global--border--radius--small)' }}></div>
                   <span style={{ fontSize: '14px', fontWeight: '500' }}>580</span>
                 </div>
               </div>
@@ -1387,9 +1390,9 @@ status:
 
           {/* Requests latency */}
           <div style={{ 
-            backgroundColor: 'white', 
-            border: '1px solid #d7d7d7', 
-            borderRadius: '8px', 
+            backgroundColor: 'var(--pf-t--global--background--color--primary--default)', 
+            border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+            borderRadius: 'var(--pf-t--global--border--radius--medium)', 
             padding: '24px' 
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
@@ -1398,48 +1401,48 @@ status:
                 <Icon><CogIcon /></Icon>
               </Button>
             </div>
-            <div style={{ height: '200px', position: 'relative', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
+            <div style={{ height: '200px', position: 'relative', backgroundColor: 'var(--pf-t--global--background--color--secondary--default)', borderRadius: 'var(--pf-t--global--border--radius--small)' }}>
               <svg width="100%" height="100%" viewBox="0 0 400 200">
                 <rect width="100%" height="100%" fill="url(#grid)" />
                 
-                <text x="30" y="190" fontSize="12" fill="#6a6e73">8:00</text>
-                <text x="70" y="190" fontSize="12" fill="#6a6e73">8:01</text>
-                <text x="110" y="190" fontSize="12" fill="#6a6e73">8:02</text>
-                <text x="150" y="190" fontSize="12" fill="#6a6e73">8:03</text>
-                <text x="190" y="190" fontSize="12" fill="#6a6e73">8:04</text>
-                <text x="230" y="190" fontSize="12" fill="#6a6e73">8:05</text>
-                <text x="270" y="190" fontSize="12" fill="#6a6e73">8:06</text>
-                <text x="310" y="190" fontSize="12" fill="#6a6e73">8:07</text>
-                <text x="350" y="190" fontSize="12" fill="#6a6e73">8:08</text>
-                <text x="390" y="190" fontSize="12" fill="#6a6e73">8:09</text>
+                <text x="30" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:00</text>
+                <text x="70" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:01</text>
+                <text x="110" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:02</text>
+                <text x="150" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:03</text>
+                <text x="190" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:04</text>
+                <text x="230" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:05</text>
+                <text x="270" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:06</text>
+                <text x="310" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:07</text>
+                <text x="350" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:08</text>
+                <text x="390" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:09</text>
                 
-                <text x="10" y="180" fontSize="12" fill="#6a6e73">100</text>
-                <text x="10" y="155" fontSize="12" fill="#6a6e73">125</text>
-                <text x="10" y="130" fontSize="12" fill="#6a6e73">150</text>
-                <text x="10" y="105" fontSize="12" fill="#6a6e73">175</text>
-                <text x="10" y="80" fontSize="12" fill="#6a6e73">200</text>
-                <text x="10" y="55" fontSize="12" fill="#6a6e73">225</text>
-                <text x="10" y="30" fontSize="12" fill="#6a6e73">250</text>
+                <text x="10" y="180" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">100</text>
+                <text x="10" y="155" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">125</text>
+                <text x="10" y="130" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">150</text>
+                <text x="10" y="105" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">175</text>
+                <text x="10" y="80" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">200</text>
+                <text x="10" y="55" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">225</text>
+                <text x="10" y="30" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">250</text>
                 
                 <polyline points="30,130 70,60 110,170 150,110 190,120 230,90 270,70 310,40 350,45 390,60" 
-                          fill="none" stroke="#ff6b35" strokeWidth="2"/>
+                          fill="none" stroke="var(--pf-t--global--color--status--warning--200)" strokeWidth="2"/>
                 <polyline points="30,140 70,70 110,180 150,120 190,130 230,100 270,80 310,50 350,55 390,70" 
-                          fill="none" stroke="#0066cc" strokeWidth="2"/>
+                          fill="none" stroke="var(--pf-t--global--text--color--link--default)" strokeWidth="2"/>
                 <polyline points="30,150 70,80 110,190 150,130 190,140 230,110 270,90 310,60 350,65 390,80" 
-                          fill="none" stroke="#17a2b8" strokeWidth="2"/>
+                          fill="none" stroke="var(--pf-t--global--color--status--info--100)" strokeWidth="2"/>
               </svg>
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '16px', fontSize: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#ff6b35' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--status--warning--200)' }}></div>
                 <span>p90</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#0066cc' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--text--color--link--default)' }}></div>
                 <span>p95</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#17a2b8' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--status--info--100)' }}></div>
                 <span>p99</span>
               </div>
             </div>
@@ -1447,9 +1450,9 @@ status:
 
           {/* Requests status codes */}
           <div style={{ 
-            backgroundColor: 'white', 
-            border: '1px solid #d7d7d7', 
-            borderRadius: '8px', 
+            backgroundColor: 'var(--pf-t--global--background--color--primary--default)', 
+            border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+            borderRadius: 'var(--pf-t--global--border--radius--medium)', 
             padding: '24px' 
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
@@ -1460,25 +1463,25 @@ status:
             </div>
             <div style={{ height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <svg width="160" height="160" viewBox="0 0 160 160">
-                <circle cx="80" cy="80" r="70" fill="#28a745" stroke="white" strokeWidth="2"/>
-                <path d="M 80 10 A 70 70 0 0 1 126 45 L 80 80 Z" fill="#ffc107" stroke="white" strokeWidth="2"/>
-                <path d="M 126 45 A 70 70 0 0 1 134 95 L 80 80 Z" fill="#dc3545" stroke="white" strokeWidth="2"/>
-                <text x="80" y="85" textAnchor="middle" fontSize="16" fontWeight="500" fill="white">82%</text>
-                <text x="110" y="35" textAnchor="middle" fontSize="12" fill="white">9%</text>
-                <text x="130" y="70" textAnchor="middle" fontSize="12" fill="white">9%</text>
+                <circle cx="80" cy="80" r="70" fill="var(--pf-t--global--color--status--success--100)" stroke="var(--pf-t--global--background--color--primary--default)" strokeWidth="2"/>
+                <path d="M 80 10 A 70 70 0 0 1 126 45 L 80 80 Z" fill="var(--pf-t--global--color--gold--300)" stroke="var(--pf-t--global--background--color--primary--default)" strokeWidth="2"/>
+                <path d="M 126 45 A 70 70 0 0 1 134 95 L 80 80 Z" fill="var(--pf-t--global--color--status--danger--100)" stroke="var(--pf-t--global--background--color--primary--default)" strokeWidth="2"/>
+                <text x="80" y="85" textAnchor="middle" fontSize="16" fontWeight="500" fill="var(--pf-t--global--text--color--inverse)">82%</text>
+                <text x="110" y="35" textAnchor="middle" fontSize="12" fill="var(--pf-t--global--text--color--inverse)">9%</text>
+                <text x="130" y="70" textAnchor="middle" fontSize="12" fill="var(--pf-t--global--text--color--inverse)">9%</text>
               </svg>
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', fontSize: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#28a745' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--status--success--100)' }}></div>
                 <span>200</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#ffc107' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--gold--300)' }}></div>
                 <span>4XX</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#dc3545' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--status--danger--100)' }}></div>
                 <span>5XX</span>
               </div>
             </div>
@@ -1510,9 +1513,9 @@ status:
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
           {/* Token usage details */}
           <div style={{ 
-            backgroundColor: 'white', 
-            border: '1px solid #d7d7d7', 
-            borderRadius: '8px', 
+            backgroundColor: 'var(--pf-t--global--background--color--primary--default)', 
+            border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+            borderRadius: 'var(--pf-t--global--border--radius--medium)', 
             padding: '24px' 
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
@@ -1521,77 +1524,77 @@ status:
                 <Icon><CogIcon /></Icon>
               </Button>
             </div>
-            <div style={{ height: '200px', position: 'relative', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
+            <div style={{ height: '200px', position: 'relative', backgroundColor: 'var(--pf-t--global--background--color--secondary--default)', borderRadius: 'var(--pf-t--global--border--radius--small)' }}>
               <svg width="100%" height="100%" viewBox="0 0 400 200">
                 <rect width="100%" height="100%" fill="url(#grid)" />
                 
-                <text x="30" y="190" fontSize="12" fill="#6a6e73">8:00</text>
-                <text x="70" y="190" fontSize="12" fill="#6a6e73">8:01</text>
-                <text x="110" y="190" fontSize="12" fill="#6a6e73">8:02</text>
-                <text x="150" y="190" fontSize="12" fill="#6a6e73">8:03</text>
-                <text x="190" y="190" fontSize="12" fill="#6a6e73">8:04</text>
-                <text x="230" y="190" fontSize="12" fill="#6a6e73">8:05</text>
-                <text x="270" y="190" fontSize="12" fill="#6a6e73">8:06</text>
-                <text x="310" y="190" fontSize="12" fill="#6a6e73">8:07</text>
-                <text x="350" y="190" fontSize="12" fill="#6a6e73">8:08</text>
-                <text x="390" y="190" fontSize="12" fill="#6a6e73">8:09</text>
+                <text x="30" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:00</text>
+                <text x="70" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:01</text>
+                <text x="110" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:02</text>
+                <text x="150" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:03</text>
+                <text x="190" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:04</text>
+                <text x="230" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:05</text>
+                <text x="270" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:06</text>
+                <text x="310" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:07</text>
+                <text x="350" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:08</text>
+                <text x="390" y="190" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">8:09</text>
                 
-                <text x="10" y="180" fontSize="12" fill="#6a6e73">100</text>
-                <text x="10" y="155" fontSize="12" fill="#6a6e73">125</text>
-                <text x="10" y="130" fontSize="12" fill="#6a6e73">150</text>
-                <text x="10" y="105" fontSize="12" fill="#6a6e73">175</text>
-                <text x="10" y="80" fontSize="12" fill="#6a6e73">200</text>
-                <text x="10" y="55" fontSize="12" fill="#6a6e73">225</text>
-                <text x="10" y="30" fontSize="12" fill="#6a6e73">250</text>
-                <text x="10" y="5" fontSize="12" fill="#6a6e73">275</text>
-                <text x="10" y="155" fontSize="12" fill="#6a6e73">300</text>
-                <text x="10" y="130" fontSize="12" fill="#6a6e73">325</text>
+                <text x="10" y="180" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">100</text>
+                <text x="10" y="155" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">125</text>
+                <text x="10" y="130" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">150</text>
+                <text x="10" y="105" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">175</text>
+                <text x="10" y="80" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">200</text>
+                <text x="10" y="55" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">225</text>
+                <text x="10" y="30" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">250</text>
+                <text x="10" y="5" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">275</text>
+                <text x="10" y="155" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">300</text>
+                <text x="10" y="130" fontSize="12" fill="var(--pf-t--global--text--color--subtle)">325</text>
                 
                 {/* Token usage lines */}
                 <polyline points="30,160 70,30 110,170 150,120 190,125 230,100 270,85 310,55 350,60 390,75" 
-                          fill="none" stroke="#ff6b35" strokeWidth="2"/>
+                          fill="none" stroke="var(--pf-t--global--color--status--warning--200)" strokeWidth="2"/>
                 <polyline points="30,180 70,50 110,190 150,140 190,145 230,120 270,105 310,75 350,80 390,95" 
-                          fill="none" stroke="#0066cc" strokeWidth="2"/>
+                          fill="none" stroke="var(--pf-t--global--text--color--link--default)" strokeWidth="2"/>
                 <polyline points="30,200 70,70 110,210 150,160 190,165 230,140 270,125 310,95 350,100 390,115" 
-                          fill="none" stroke="#17a2b8" strokeWidth="2"/>
+                          fill="none" stroke="var(--pf-t--global--color--status--info--100)" strokeWidth="2"/>
                 <polyline points="30,220 70,90 110,230 150,180 190,185 230,160 270,145 310,115 350,120 390,135" 
-                          fill="none" stroke="#ffc107" strokeWidth="2"/>
+                          fill="none" stroke="var(--pf-t--global--color--gold--300)" strokeWidth="2"/>
                 <polyline points="30,240 70,110 110,250 150,200 190,205 230,180 270,165 310,135 350,140 390,155" 
-                          fill="none" stroke="#28a745" strokeWidth="2"/>
+                          fill="none" stroke="var(--pf-t--global--color--status--success--100)" strokeWidth="2"/>
                 <polyline points="30,260 70,130 110,270 150,220 190,225 230,200 270,185 310,155 350,160 390,175" 
-                          fill="none" stroke="#6c757d" strokeWidth="2"/>
+                          fill="none" stroke="var(--pf-t--global--color--nonstatus--gray--default)" strokeWidth="2"/>
                 
                 {/* Hover tooltip */}
-                <rect x="240" y="120" width="130" height="80" fill="#2d3748" rx="4" opacity="0.95"/>
-                <text x="250" y="140" fontSize="12" fill="#ff6b35">⚫ Azure</text>
-                <text x="250" y="155" fontSize="11" fill="white">Request rate    25.5/s</text>
-                <text x="250" y="170" fontSize="11" fill="white">Cost per request   0.82</text>
-                <text x="250" y="185" fontSize="11" fill="white">Total cost        300$</text>
+                <rect x="240" y="120" width="130" height="80" fill="var(--pf-t--global--background--color--dark--100)" rx="4" opacity="0.95"/>
+                <text x="250" y="140" fontSize="12" fill="var(--pf-t--global--color--status--warning--200)">⚫ Azure</text>
+                <text x="250" y="155" fontSize="11" fill="var(--pf-t--global--text--color--inverse)">Request rate    25.5/s</text>
+                <text x="250" y="170" fontSize="11" fill="var(--pf-t--global--text--color--inverse)">Cost per request   0.82</text>
+                <text x="250" y="185" fontSize="11" fill="var(--pf-t--global--text--color--inverse)">Total cost        300$</text>
               </svg>
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '16px', fontSize: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#ff6b35' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--status--warning--200)' }}></div>
                 <span>Azure</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#0066cc' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--text--color--link--default)' }}></div>
                 <span>OpenAI</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#17a2b8' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--status--info--100)' }}></div>
                 <span>Gemini</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#ffc107' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--gold--300)' }}></div>
                 <span>Waston</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#28a745' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--status--success--100)' }}></div>
                 <span>DeepSeek</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#6c757d' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--nonstatus--gray--default)' }}></div>
                 <span>Avg token usage</span>
               </div>
             </div>
@@ -1599,9 +1602,9 @@ status:
 
           {/* Token consumption trend */}
           <div style={{ 
-            backgroundColor: 'white', 
-            border: '1px solid #d7d7d7', 
-            borderRadius: '8px', 
+            backgroundColor: 'var(--pf-t--global--background--color--primary--default)', 
+            border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+            borderRadius: 'var(--pf-t--global--border--radius--medium)', 
             padding: '24px' 
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
@@ -1610,7 +1613,7 @@ status:
                 <Icon><CogIcon /></Icon>
               </Button>
             </div>
-            <div style={{ fontSize: '12px', color: '#6a6e73', marginBottom: '24px' }}>From last 12 hours</div>
+            <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)', marginBottom: '24px' }}>From last 12 hours</div>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div>
@@ -1620,7 +1623,7 @@ status:
                     <Icon><ArrowUpIcon color="var(--pf-t--global--color--status--success--100)" /></Icon>
                     <span style={{ fontSize: '20px', fontWeight: '600' }}>15%</span>
                   </div>
-                  <span style={{ fontSize: '14px', color: '#6a6e73' }}>21.9K → 24.1K</span>
+                  <span style={{ fontSize: '14px', color: 'var(--pf-t--global--text--color--subtle)' }}>21.9K → 24.1K</span>
                 </div>
               </div>
               
@@ -1631,7 +1634,7 @@ status:
                     <Icon><ArrowDownIcon color="var(--pf-t--global--color--status--success--100)" /></Icon>
                     <span style={{ fontSize: '20px', fontWeight: '600' }}>9%</span>
                   </div>
-                  <span style={{ fontSize: '14px', color: '#6a6e73' }}>35.9K → 33.7K</span>
+                  <span style={{ fontSize: '14px', color: 'var(--pf-t--global--text--color--subtle)' }}>35.9K → 33.7K</span>
                 </div>
               </div>
               
@@ -1642,7 +1645,7 @@ status:
                     <Icon><ArrowUpIcon color="var(--pf-t--global--color--status--success--100)" /></Icon>
                     <span style={{ fontSize: '20px', fontWeight: '600' }}>1%</span>
                   </div>
-                  <span style={{ fontSize: '14px', color: '#6a6e73' }}>57.8K → 58.4K</span>
+                  <span style={{ fontSize: '14px', color: 'var(--pf-t--global--text--color--subtle)' }}>57.8K → 58.4K</span>
                 </div>
               </div>
             </div>
@@ -1650,9 +1653,9 @@ status:
 
           {/* Tokens consumption statistics */}
           <div style={{ 
-            backgroundColor: 'white', 
-            border: '1px solid #d7d7d7', 
-            borderRadius: '8px', 
+            backgroundColor: 'var(--pf-t--global--background--color--primary--default)', 
+            border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+            borderRadius: 'var(--pf-t--global--border--radius--medium)', 
             padding: '24px' 
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
@@ -1661,40 +1664,40 @@ status:
                 <Icon><CogIcon /></Icon>
               </Button>
             </div>
-            <div style={{ height: '200px', position: 'relative', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
+            <div style={{ height: '200px', position: 'relative', backgroundColor: 'var(--pf-t--global--background--color--secondary--default)', borderRadius: 'var(--pf-t--global--border--radius--small)' }}>
               <svg width="100%" height="100%" viewBox="0 0 400 200">
                 {/* Stacked area chart */}
                 <defs>
                   <linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#0066cc" stopOpacity="0.8"/>
-                    <stop offset="100%" stopColor="#0066cc" stopOpacity="0.3"/>
+                    <stop offset="0%" stopColor="var(--pf-t--global--text--color--link--default)" stopOpacity="0.8"/>
+                    <stop offset="100%" stopColor="var(--pf-t--global--text--color--link--default)" stopOpacity="0.3"/>
                   </linearGradient>
                   <linearGradient id="tealGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#17a2b8" stopOpacity="0.8"/>
-                    <stop offset="100%" stopColor="#17a2b8" stopOpacity="0.3"/>
+                    <stop offset="0%" stopColor="var(--pf-t--global--color--status--info--100)" stopOpacity="0.8"/>
+                    <stop offset="100%" stopColor="var(--pf-t--global--color--status--info--100)" stopOpacity="0.3"/>
                   </linearGradient>
                   <linearGradient id="orangeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#ff6b35" stopOpacity="0.8"/>
-                    <stop offset="100%" stopColor="#ff6b35" stopOpacity="0.3"/>
+                    <stop offset="0%" stopColor="var(--pf-t--global--color--status--warning--200)" stopOpacity="0.8"/>
+                    <stop offset="100%" stopColor="var(--pf-t--global--color--status--warning--200)" stopOpacity="0.3"/>
                   </linearGradient>
                 </defs>
                 
                 {/* OpenAI area */}
                 <path d="M 50 150 Q 120 120 200 140 Q 280 160 350 150 L 350 180 L 50 180 Z" 
-                      fill="url(#blueGradient)" stroke="#0066cc" strokeWidth="1"/>
+                      fill="url(#blueGradient)" stroke="var(--pf-t--global--text--color--link--default)" strokeWidth="1"/>
                 
                 {/* Gemini area */}
                 <path d="M 50 120 Q 120 90 200 110 Q 280 130 350 120 Q 320 135 280 140 Q 200 130 120 110 Q 80 105 50 120 Z" 
-                      fill="url(#tealGradient)" stroke="#17a2b8" strokeWidth="1"/>
+                      fill="url(#tealGradient)" stroke="var(--pf-t--global--color--status--info--100)" strokeWidth="1"/>
                 
                 {/* Azure area */}
                 <path d="M 50 80 Q 120 50 200 70 Q 280 90 350 80 Q 320 95 280 100 Q 200 90 120 70 Q 80 65 50 80 Z" 
-                      fill="url(#orangeGradient)" stroke="#ff6b35" strokeWidth="1"/>
+                      fill="url(#orangeGradient)" stroke="var(--pf-t--global--color--status--warning--200)" strokeWidth="1"/>
                 
                 {/* Labels */}
-                <text x="60" y="170" fontSize="12" fill="#0066cc">OpenAI</text>
-                <text x="60" y="110" fontSize="12" fill="#17a2b8">Gemini</text>
-                <text x="60" y="70" fontSize="12" fill="#ff6b35">Azure</text>
+                <text x="60" y="170" fontSize="12" fill="var(--pf-t--global--text--color--link--default)">OpenAI</text>
+                <text x="60" y="110" fontSize="12" fill="var(--pf-t--global--color--status--info--100)">Gemini</text>
+                <text x="60" y="70" fontSize="12" fill="var(--pf-t--global--color--status--warning--200)">Azure</text>
               </svg>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' }}>
@@ -1724,9 +1727,9 @@ status:
 
           {/* Consumer token usage */}
           <div style={{ 
-            backgroundColor: 'white', 
-            border: '1px solid #d7d7d7', 
-            borderRadius: '8px', 
+            backgroundColor: 'var(--pf-t--global--background--color--primary--default)', 
+            border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+            borderRadius: 'var(--pf-t--global--border--radius--medium)', 
             padding: '24px' 
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
@@ -1735,21 +1738,21 @@ status:
                 <Icon><CogIcon /></Icon>
               </Button>
             </div>
-            <div style={{ fontSize: '12px', color: '#6a6e73', marginBottom: '16px' }}>Top 5 consumers</div>
+            <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)', marginBottom: '16px' }}>Top 5 consumers</div>
             
             <div style={{ height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
               <svg width="160" height="160" viewBox="0 0 160 160">
-                <circle cx="80" cy="80" r="70" fill="#0066cc" stroke="white" strokeWidth="2"/>
-                <path d="M 80 10 A 70 70 0 0 1 95 25 L 80 80 Z" fill="#17a2b8" stroke="white" strokeWidth="2"/>
-                <path d="M 95 25 A 70 70 0 0 1 110 40 L 80 80 Z" fill="#b19cd9" stroke="white" strokeWidth="2"/>
-                <path d="M 110 40 A 70 70 0 0 1 125 55 L 80 80 Z" fill="#ffc107" stroke="white" strokeWidth="2"/>
-                <path d="M 125 55 A 70 70 0 0 1 140 70 L 80 80 Z" fill="#90ee90" stroke="white" strokeWidth="2"/>
+                <circle cx="80" cy="80" r="70" fill="var(--pf-t--global--text--color--link--default)" stroke="var(--pf-t--global--background--color--primary--default)" strokeWidth="2"/>
+                <path d="M 80 10 A 70 70 0 0 1 95 25 L 80 80 Z" fill="var(--pf-t--global--color--status--info--100)" stroke="var(--pf-t--global--background--color--primary--default)" strokeWidth="2"/>
+                <path d="M 95 25 A 70 70 0 0 1 110 40 L 80 80 Z" fill="var(--pf-t--global--color--purple--300)" stroke="var(--pf-t--global--background--color--primary--default)" strokeWidth="2"/>
+                <path d="M 110 40 A 70 70 0 0 1 125 55 L 80 80 Z" fill="var(--pf-t--global--color--gold--300)" stroke="var(--pf-t--global--background--color--primary--default)" strokeWidth="2"/>
+                <path d="M 125 55 A 70 70 0 0 1 140 70 L 80 80 Z" fill="var(--pf-t--global--color--status--success--200)" stroke="var(--pf-t--global--background--color--primary--default)" strokeWidth="2"/>
                 
                 {/* Percentage labels */}
-                <text x="90" y="20" textAnchor="middle" fontSize="12" fill="white">9%</text>
-                <text x="102" y="32" textAnchor="middle" fontSize="12" fill="white">9%</text>
-                <text x="118" y="47" textAnchor="middle" fontSize="12" fill="white">10%</text>
-                <text x="60" y="130" textAnchor="middle" fontSize="12" fill="white">72%</text>
+                <text x="90" y="20" textAnchor="middle" fontSize="12" fill="var(--pf-t--global--text--color--inverse)">9%</text>
+                <text x="102" y="32" textAnchor="middle" fontSize="12" fill="var(--pf-t--global--text--color--inverse)">9%</text>
+                <text x="118" y="47" textAnchor="middle" fontSize="12" fill="var(--pf-t--global--text--color--inverse)">10%</text>
+                <text x="60" y="130" textAnchor="middle" fontSize="12" fill="var(--pf-t--global--text--color--inverse)">72%</text>
               </svg>
               
               {/* Tooltip */}
@@ -1757,10 +1760,10 @@ status:
                 position: 'absolute', 
                 top: '20px', 
                 right: '20px',
-                backgroundColor: '#2d3748',
-                color: 'white',
+                backgroundColor: 'var(--pf-t--global--background--color--dark--100)',
+                color: 'var(--pf-t--global--text--color--inverse)',
                 padding: '12px',
-                borderRadius: '4px',
+                borderRadius: 'var(--pf-t--global--border--radius--small)',
                 fontSize: '12px',
                 opacity: '0.95'
               }}>
@@ -1773,23 +1776,23 @@ status:
             
             <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', fontSize: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#0066cc' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--text--color--link--default)' }}></div>
                 <span>AI consumer_1</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#17a2b8' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--status--info--100)' }}></div>
                 <span>AI consumer_2</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#b19cd9' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--purple--300)' }}></div>
                 <span>AI consumer_3</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#ffc107' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--gold--300)' }}></div>
                 <span>AI consumer_4</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#90ee90' }}></div>
+                <div style={{ width: '8px', height: '8px', backgroundColor: 'var(--pf-t--global--color--status--success--200)' }}></div>
                 <span>AI consumer_5</span>
               </div>
             </div>
@@ -2427,7 +2430,7 @@ status:
           </Table>
 
           {connections.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '20px', color: '#6a6e73' }}>
+            <div style={{ textAlign: 'center', padding: '20px', color: 'var(--pf-t--global--text--color--subtle)' }}>
               {searchValue ? 'No connections found matching your search.' : 'No connections found.'}
             </div>
           )}
@@ -2438,14 +2441,14 @@ status:
     const renderConnectionCards = (connections, type) => {
       const getServerIcon = (serverType) => {
         const iconMap = {
-          'Desktop': { icon: 'DC', color: '#17a2b8' },
-          'GitHub': { icon: 'GH', color: '#28a745' },
-          'Kubernetes': { icon: 'K8', color: '#326ce5' },
-          'Database': { icon: 'DB', color: '#ff6b35' },
-          'AI': { icon: 'AI', color: '#10a37f' },
-          'Custom': { icon: 'CA', color: '#6f42c1' }
+          'Desktop': { icon: 'DC', color: 'var(--pf-t--global--color--status--info--100)' },
+          'GitHub': { icon: 'GH', color: 'var(--pf-t--global--color--status--success--100)' },
+          'Kubernetes': { icon: 'K8', color: 'var(--pf-t--global--color--brand--200)' },
+          'Database': { icon: 'DB', color: 'var(--pf-t--global--color--status--warning--200)' },
+          'AI': { icon: 'AI', color: 'var(--pf-t--global--color--status--success--200)' },
+          'Custom': { icon: 'CA', color: 'var(--pf-t--global--color--purple--300)' }
         };
-        return iconMap[serverType] || { icon: 'SV', color: '#6a6e73' };
+        return iconMap[serverType] || { icon: 'SV', color: 'var(--pf-t--global--text--color--subtle)' };
       };
 
       const renderCard = (connection) => {
@@ -2453,11 +2456,11 @@ status:
         
         return (
           <div key={connection.name} style={{ 
-            border: '1px solid #d7d7d7', 
-            borderRadius: '8px', 
+            border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+            borderRadius: 'var(--pf-t--global--border--radius--medium)', 
             padding: '20px',
-            backgroundColor: 'white',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+            backgroundColor: 'var(--pf-t--global--background--color--primary--default)',
+            boxShadow: 'var(--pf-t--global--box-shadow--sm)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -2472,12 +2475,12 @@ status:
                     justifyContent: 'center',
                     marginRight: '12px'
                   }}>
-                    <span style={{ color: 'white', fontWeight: 'bold', fontSize: '14px' }}>{serverIcon.icon}</span>
+                    <span style={{ color: 'var(--pf-t--global--text--color--inverse)', fontWeight: 'bold', fontSize: '14px' }}>{serverIcon.icon}</span>
                   </div>
                 )}
                 <div>
                   <div style={{ fontSize: '16px', fontWeight: '500' }}>{connection.name}</div>
-                  <div style={{ fontSize: '12px', color: '#6a6e73' }}>{connection.type}</div>
+                  <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)' }}>{connection.type}</div>
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -2508,13 +2511,13 @@ status:
               {type === 'mcpServers' && connection.endpoint && (
                 <>
                   <div style={{ fontSize: '14px', fontWeight: '500', marginBottom: '8px' }}>Endpoint</div>
-                  <div style={{ fontSize: '13px', color: '#6a6e73', fontFamily: 'monospace' }}>{connection.endpoint}</div>
+                  <div style={{ fontSize: '13px', color: 'var(--pf-t--global--text--color--subtle)', fontFamily: 'monospace' }}>{connection.endpoint}</div>
                 </>
               )}
             </div>
             
-            <div style={{ borderTop: '1px solid #d7d7d7', paddingTop: '12px' }}>
-              <div style={{ fontSize: '12px', color: '#6a6e73', marginBottom: '8px' }}>Last Updated</div>
+            <div style={{ borderTop: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', paddingTop: '12px' }}>
+              <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)', marginBottom: '8px' }}>Last Updated</div>
               <div style={{ fontSize: '12px' }}>{connection.lastUpdated}</div>
             </div>
             
@@ -2546,7 +2549,7 @@ status:
           </div>
 
           {connections.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '20px', color: '#6a6e73' }}>
+            <div style={{ textAlign: 'center', padding: '20px', color: 'var(--pf-t--global--text--color--subtle)' }}>
               {searchValue ? 'No connections found matching your search.' : 'No connections found.'}
             </div>
           )}
@@ -2583,21 +2586,21 @@ status:
         {/* Tab-specific description */}
         {activeResourceTab === 'routes' && (
           <div style={{ marginBottom: '16px' }}>
-            <p style={{ color: '#6a6e73', margin: 0 }}>
+            <p style={{ color: 'var(--pf-t--global--text--color--subtle)', margin: 0 }}>
               These routes are directly associated with this Gateway through explicit references.
             </p>
           </div>
         )}
         {activeResourceTab === 'policies' && (
           <div style={{ marginBottom: '16px' }}>
-            <p style={{ color: '#6a6e73', margin: 0 }}>
+            <p style={{ color: 'var(--pf-t--global--text--color--subtle)', margin: 0 }}>
               These policies are directly associated with this Gateway through explicit references.
             </p>
           </div>
         )}
         {activeResourceTab === 'mcpServers' && (
           <div style={{ marginBottom: '16px' }}>
-            <p style={{ color: '#6a6e73', margin: 0 }}>
+            <p style={{ color: 'var(--pf-t--global--text--color--subtle)', margin: 0 }}>
               These MCP servers are directly connected to this Gateway for enhanced functionality.
             </p>
           </div>
@@ -2605,9 +2608,9 @@ status:
 
         {/* Content Area with Card - including toolbar */}
         <div style={{ 
-          border: '1px solid #d7d7d7', 
-          borderRadius: '8px', 
-          backgroundColor: 'white',
+          border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+          borderRadius: 'var(--pf-t--global--border--radius--medium)', 
+          backgroundColor: 'var(--pf-t--global--background--color--primary--default)',
           padding: '16px'
         }}>
           {/* Toolbar with Filter, Search, and Pagination */}
@@ -2706,10 +2709,10 @@ status:
                             position: 'absolute',
                             top: '100%',
                             left: '0',
-                            backgroundColor: 'white',
-                            border: '1px solid #ccc',
-                            borderRadius: '4px',
-                            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                            backgroundColor: 'var(--pf-t--global--background--color--primary--default)',
+                            border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)',
+                            borderRadius: 'var(--pf-t--global--border--radius--small)',
+                            boxShadow: 'var(--pf-t--global--box-shadow--md)',
                             zIndex: 1000,
                             minWidth: '200px'
                           }}>
@@ -2717,7 +2720,7 @@ status:
                               style={{
                                 padding: '8px 12px',
                                 cursor: 'pointer',
-                                borderBottom: '1px solid #eee',
+                                borderBottom: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--nonstatus--gray--default)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '8px'
@@ -2734,7 +2737,7 @@ status:
                               style={{
                                 padding: '8px 12px',
                                 cursor: 'pointer',
-                                borderBottom: '1px solid #eee',
+                                borderBottom: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--nonstatus--gray--default)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '8px'
@@ -2781,7 +2784,7 @@ status:
           {/* View Mode Toggle */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <span style={{ fontSize: '14px', color: '#6a6e73' }}>Table view</span>
+              <span style={{ fontSize: '14px', color: 'var(--pf-t--global--text--color--subtle)' }}>Table view</span>
               <Switch
                 id="view-mode-switch"
                 label=""
@@ -2789,7 +2792,7 @@ status:
                 isChecked={viewMode === 'card'}
                 onChange={(checked) => setViewMode(checked ? 'card' : 'table')}
               />
-              <span style={{ fontSize: '14px', color: '#6a6e73' }}>Card view</span>
+              <span style={{ fontSize: '14px', color: 'var(--pf-t--global--text--color--subtle)' }}>Card view</span>
             </div>
           </div>
 
@@ -2805,7 +2808,7 @@ status:
         {getConnectionCount('routes') === 0 && 
          getConnectionCount('policies') === 0 && 
          getConnectionCount('mcpServers') === 0 && (
-          <div style={{ textAlign: 'center', padding: '40px', color: '#6a6e73' }}>
+          <div style={{ textAlign: 'center', padding: '40px', color: 'var(--pf-t--global--text--color--subtle)' }}>
             <div style={{ fontSize: '16px', marginBottom: '8px' }}>No connections found</div>
             <div style={{ fontSize: '14px' }}>This gateway is not currently connected to any resources.</div>
           </div>
@@ -2823,7 +2826,7 @@ status:
       name: 'Desktop Commander',
       type: 'Desktop',
       icon: 'DC',
-      color: '#17a2b8',
+      color: 'var(--pf-t--global--color--status--info--100)',
       status: 'Connected',
       tools: 24,
       toolCategories: [
@@ -2842,7 +2845,7 @@ status:
       name: 'Kubernetes API',
       type: 'Kubernetes',
       icon: 'K8',
-      color: '#326ce5',
+      color: 'var(--pf-t--global--color--brand--200)',
       status: 'Connected',
       tools: 18,
       toolCategories: [
@@ -2861,7 +2864,7 @@ status:
       name: 'Database Server',
       type: 'Database',
       icon: 'DB',
-      color: '#ff6b35',
+      color: 'var(--pf-t--global--color--status--warning--200)',
       status: 'Connected',
       tools: 12,
       toolCategories: [
@@ -2883,7 +2886,7 @@ status:
       name: 'GitHub Server',
       type: 'GitHub',
       icon: 'GH',
-      color: '#28a745',
+      color: 'var(--pf-t--global--color--status--success--100)',
       status: 'Connected',
       tools: 8,
       toolCategories: [
@@ -2901,7 +2904,7 @@ status:
       name: 'OpenAI API',
       type: 'AI',
       icon: 'AI',
-      color: '#10a37f',
+      color: 'var(--pf-t--global--color--status--success--200)',
       status: 'Connected',
       tools: 15,
       toolCategories: [
@@ -2923,7 +2926,7 @@ status:
       name: 'Custom API Server',
       type: 'Custom',
       icon: 'CA',
-      color: '#6f42c1',
+      color: 'var(--pf-t--global--color--purple--300)',
       status: 'Connected',
       tools: 6,
       toolCategories: [
@@ -2941,11 +2944,11 @@ status:
     const renderMCPServersTab = () => {
     const renderServerCard = (server) => (
       <div key={server.id} style={{ 
-        border: '1px solid #d7d7d7', 
-        borderRadius: '8px', 
+        border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+        borderRadius: 'var(--pf-t--global--border--radius--medium)', 
         padding: '20px',
-        backgroundColor: 'white',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+        backgroundColor: 'var(--pf-t--global--background--color--primary--default)',
+        boxShadow: 'var(--pf-t--global--box-shadow--sm)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -2959,11 +2962,11 @@ status:
               justifyContent: 'center',
               marginRight: '12px'
             }}>
-              <span style={{ color: 'white', fontWeight: 'bold', fontSize: '14px' }}>{server.icon}</span>
+              <span style={{ color: 'var(--pf-t--global--text--color--inverse)', fontWeight: 'bold', fontSize: '14px' }}>{server.icon}</span>
             </div>
             <div>
               <div style={{ fontSize: '16px', fontWeight: '500' }}>{server.name}</div>
-              <div style={{ fontSize: '12px', color: '#6a6e73' }}>{server.type}</div>
+              <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)' }}>{server.type}</div>
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -2986,13 +2989,13 @@ status:
           </div>
         </div>
         
-        <div style={{ borderTop: '1px solid #d7d7d7', paddingTop: '12px' }}>
-          <div style={{ fontSize: '12px', color: '#6a6e73', marginBottom: '8px' }}>Most Used Tools</div>
+        <div style={{ borderTop: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', paddingTop: '12px' }}>
+          <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)', marginBottom: '8px' }}>Most Used Tools</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             {server.mostUsed.map((tool, index) => (
               <div key={index} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>
                 <span>{tool.name}</span>
-                <span style={{ color: '#6a6e73' }}>{tool.uses} uses</span>
+                <span style={{ color: 'var(--pf-t--global--text--color--subtle)' }}>{tool.uses} uses</span>
               </div>
             ))}
           </div>
@@ -3142,18 +3145,21 @@ status:
         <Title headingLevel="h3" size="lg" style={{ marginBottom: '16px' }}>
           Select Server Type
         </Title>
-        <p style={{ color: '#6a6e73', marginBottom: '24px' }}>
+        <p style={{ color: 'var(--pf-t--global--text--color--subtle)', marginBottom: '24px' }}>
           Choose the type of MCP server you want to connect to this gateway.
         </p>
         
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
           <div 
             style={{ 
-              border: selectedServerType === 'desktop' ? '2px solid #0066cc' : '1px solid #d7d7d7',
-              borderRadius: '8px',
+              border: selectedServerType === 'desktop' ? '2px solid var(--pf-t--global--text--color--link--default)' : '1px solid var(--pf-t--global--border--color--default)',
+              borderRadius: 'var(--pf-t--global--border--radius--medium)',
               padding: '20px',
               cursor: 'pointer',
-              backgroundColor: selectedServerType === 'desktop' ? '#f0f8ff' : 'white'
+              backgroundColor:
+                selectedServerType === 'desktop'
+                  ? 'var(--pf-t--global--palette--blue--50)'
+                  : 'var(--pf-t--global--background--color--primary--default)'
             }}
             onClick={() => setSelectedServerType('desktop')}
           >
@@ -3162,31 +3168,34 @@ status:
                 width: '32px', 
                 height: '32px', 
                 borderRadius: '50%', 
-                backgroundColor: '#17a2b8', 
+                backgroundColor: 'var(--pf-t--global--color--status--info--100)', 
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'center',
                 marginRight: '12px'
               }}>
-                <span style={{ color: 'white', fontWeight: 'bold', fontSize: '14px' }}>DC</span>
+                <span style={{ color: 'var(--pf-t--global--text--color--inverse)', fontWeight: 'bold', fontSize: '14px' }}>DC</span>
               </div>
               <div>
                 <div style={{ fontSize: '16px', fontWeight: '500' }}>Desktop Commander</div>
-                <div style={{ fontSize: '12px', color: '#6a6e73' }}>Local file system access</div>
+                <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)' }}>Local file system access</div>
               </div>
             </div>
-            <div style={{ fontSize: '13px', color: '#6a6e73' }}>
+            <div style={{ fontSize: '13px', color: 'var(--pf-t--global--text--color--subtle)' }}>
               Provides tools for file operations, process management, and system information.
             </div>
           </div>
 
           <div 
             style={{ 
-              border: selectedServerType === 'github' ? '2px solid #0066cc' : '1px solid #d7d7d7',
-              borderRadius: '8px',
+              border: selectedServerType === 'github' ? '2px solid var(--pf-t--global--text--color--link--default)' : '1px solid var(--pf-t--global--border--color--default)',
+              borderRadius: 'var(--pf-t--global--border--radius--medium)',
               padding: '20px',
               cursor: 'pointer',
-              backgroundColor: selectedServerType === 'github' ? '#f0f8ff' : 'white'
+              backgroundColor:
+                selectedServerType === 'github'
+                  ? 'var(--pf-t--global--palette--blue--50)'
+                  : 'var(--pf-t--global--background--color--primary--default)'
             }}
             onClick={() => setSelectedServerType('github')}
           >
@@ -3195,31 +3204,34 @@ status:
                 width: '32px', 
                 height: '32px', 
                 borderRadius: '50%', 
-                backgroundColor: '#28a745', 
+                backgroundColor: 'var(--pf-t--global--color--status--success--100)', 
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'center',
                 marginRight: '12px'
               }}>
-                <span style={{ color: 'white', fontWeight: 'bold', fontSize: '14px' }}>GH</span>
+                <span style={{ color: 'var(--pf-t--global--text--color--inverse)', fontWeight: 'bold', fontSize: '14px' }}>GH</span>
               </div>
               <div>
                 <div style={{ fontSize: '16px', fontWeight: '500' }}>GitHub Server</div>
-                <div style={{ fontSize: '12px', color: '#6a6e73' }}>Repository and issue management</div>
+                <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)' }}>Repository and issue management</div>
               </div>
             </div>
-            <div style={{ fontSize: '13px', color: '#6a6e73' }}>
+            <div style={{ fontSize: '13px', color: 'var(--pf-t--global--text--color--subtle)' }}>
               Provides tools for repository access, code search, and issue management.
             </div>
           </div>
 
           <div 
             style={{ 
-              border: selectedServerType === 'custom' ? '2px solid #0066cc' : '1px solid #d7d7d7',
-              borderRadius: '8px',
+              border: selectedServerType === 'custom' ? '2px solid var(--pf-t--global--text--color--link--default)' : '1px solid var(--pf-t--global--border--color--default)',
+              borderRadius: 'var(--pf-t--global--border--radius--medium)',
               padding: '20px',
               cursor: 'pointer',
-              backgroundColor: selectedServerType === 'custom' ? '#f0f8ff' : 'white'
+              backgroundColor:
+                selectedServerType === 'custom'
+                  ? 'var(--pf-t--global--palette--blue--50)'
+                  : 'var(--pf-t--global--background--color--primary--default)'
             }}
             onClick={() => setSelectedServerType('custom')}
           >
@@ -3228,20 +3240,20 @@ status:
                 width: '32px', 
                 height: '32px', 
                 borderRadius: '50%', 
-                backgroundColor: '#6c757d', 
+                backgroundColor: 'var(--pf-t--global--color--nonstatus--gray--default)', 
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'center',
                 marginRight: '12px'
               }}>
-                <span style={{ color: 'white', fontWeight: 'bold', fontSize: '14px' }}>C</span>
+                <span style={{ color: 'var(--pf-t--global--text--color--inverse)', fontWeight: 'bold', fontSize: '14px' }}>C</span>
               </div>
               <div>
                 <div style={{ fontSize: '16px', fontWeight: '500' }}>Custom Server</div>
-                <div style={{ fontSize: '12px', color: '#6a6e73' }}>Custom MCP implementation</div>
+                <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)' }}>Custom MCP implementation</div>
               </div>
             </div>
-            <div style={{ fontSize: '13px', color: '#6a6e73' }}>
+            <div style={{ fontSize: '13px', color: 'var(--pf-t--global--text--color--subtle)' }}>
               Connect to a custom MCP server with your own tools and capabilities.
             </div>
           </div>
@@ -3254,7 +3266,7 @@ status:
         <Title headingLevel="h3" size="lg" style={{ marginBottom: '16px' }}>
           Configure Connection
         </Title>
-        <p style={{ color: '#6a6e73', marginBottom: '24px' }}>
+        <p style={{ color: 'var(--pf-t--global--text--color--subtle)', marginBottom: '24px' }}>
           Configure the connection details for your {selectedServerType === 'desktop' ? 'Desktop Commander' : 
           selectedServerType === 'github' ? 'GitHub' : 'Custom'} server.
         </p>
@@ -3321,36 +3333,40 @@ status:
         <Title headingLevel="h3" size="lg" style={{ marginBottom: '16px' }}>
           Review Configuration
         </Title>
-        <p style={{ color: '#6a6e73', marginBottom: '24px' }}>
+        <p style={{ color: 'var(--pf-t--global--text--color--subtle)', marginBottom: '24px' }}>
           Review your server configuration before connecting.
         </p>
         
         <div style={{ 
-          border: '1px solid #d7d7d7', 
-          borderRadius: '8px', 
+          border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+          borderRadius: 'var(--pf-t--global--border--radius--medium)', 
           padding: '20px',
-          backgroundColor: '#f8f9fa'
+          backgroundColor: 'var(--pf-t--global--background--color--secondary--default)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
             <div style={{ 
               width: '32px', 
               height: '32px', 
               borderRadius: '50%', 
-              backgroundColor: selectedServerType === 'desktop' ? '#17a2b8' : 
-              selectedServerType === 'github' ? '#28a745' : '#6c757d', 
+              backgroundColor:
+                selectedServerType === 'desktop'
+                  ? 'var(--pf-t--global--color--status--info--100)'
+                  : selectedServerType === 'github'
+                    ? 'var(--pf-t--global--color--status--success--100)'
+                    : 'var(--pf-t--global--color--nonstatus--gray--default)',
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'center',
               marginRight: '12px'
             }}>
-              <span style={{ color: 'white', fontWeight: 'bold', fontSize: '14px' }}>
+              <span style={{ color: 'var(--pf-t--global--text--color--inverse)', fontWeight: 'bold', fontSize: '14px' }}>
                 {selectedServerType === 'desktop' ? 'DC' : 
                 selectedServerType === 'github' ? 'GH' : 'C'}
               </span>
             </div>
             <div>
               <div style={{ fontSize: '16px', fontWeight: '500' }}>{serverConfig.name}</div>
-              <div style={{ fontSize: '12px', color: '#6a6e73' }}>
+              <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)' }}>
                 {selectedServerType === 'desktop' ? 'Desktop Commander' : 
                 selectedServerType === 'github' ? 'GitHub Server' : 'Custom Server'}
               </div>
@@ -3359,11 +3375,11 @@ status:
           
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             <div>
-              <div style={{ fontSize: '12px', color: '#6a6e73', marginBottom: '4px' }}>Endpoint</div>
+              <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)', marginBottom: '4px' }}>Endpoint</div>
               <div style={{ fontSize: '14px' }}>{serverConfig.endpoint}</div>
             </div>
             <div>
-              <div style={{ fontSize: '12px', color: '#6a6e73', marginBottom: '4px' }}>Credentials</div>
+              <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)', marginBottom: '4px' }}>Credentials</div>
               <div style={{ fontSize: '14px' }}>
                 {serverConfig.credentials ? 'Configured' : 'Not configured'}
               </div>
@@ -3372,7 +3388,7 @@ status:
           
           {serverConfig.description && (
             <div style={{ marginTop: '16px' }}>
-              <div style={{ fontSize: '12px', color: '#6a6e73', marginBottom: '4px' }}>Description</div>
+              <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)', marginBottom: '4px' }}>Description</div>
               <div style={{ fontSize: '14px' }}>{serverConfig.description}</div>
             </div>
           )}
@@ -3636,19 +3652,22 @@ status:
               width: '40px', 
               height: '40px', 
               borderRadius: '50%', 
-              backgroundColor: selectedServer === 'GitHub Server' ? '#28a745' : '#17a2b8', 
+              backgroundColor:
+                selectedServer === 'GitHub Server'
+                  ? 'var(--pf-t--global--color--status--success--100)'
+                  : 'var(--pf-t--global--color--status--info--100)', 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'center',
               marginRight: '16px'
             }}>
-              <span style={{ color: 'white', fontWeight: 'bold', fontSize: '18px' }}>
+              <span style={{ color: 'var(--pf-t--global--text--color--inverse)', fontWeight: 'bold', fontSize: '18px' }}>
                 {selectedServer === 'GitHub Server' ? 'GH' : 'DC'}
               </span>
             </div>
             <div>
               <Title headingLevel="h2" size="xl">{serverDetails.name}</Title>
-              <div style={{ fontSize: '14px', color: '#6a6e73' }}>
+              <div style={{ fontSize: '14px', color: 'var(--pf-t--global--text--color--subtle)' }}>
                 {serverDetails.type} • {serverDetails.status}
               </div>
             </div>
@@ -3665,7 +3684,7 @@ status:
                 <DescriptionListGroup>
                   <DescriptionListTerm>Endpoint</DescriptionListTerm>
                   <DescriptionListDescription>
-                    <code style={{ backgroundColor: '#f8f9fa', padding: '4px 8px', borderRadius: '4px' }}>
+                    <code style={{ backgroundColor: 'var(--pf-t--global--background--color--secondary--default)', padding: '4px 8px', borderRadius: 'var(--pf-t--global--border--radius--small)' }}>
                       {serverDetails.endpoint}
                     </code>
                   </DescriptionListDescription>
@@ -3692,48 +3711,66 @@ status:
               </Title>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <div style={{ 
-                  border: '1px solid #d7d7d7', 
-                  borderRadius: '8px', 
+                  border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+                  borderRadius: 'var(--pf-t--global--border--radius--medium)', 
                   padding: '16px',
                   textAlign: 'center'
                 }}>
-                  <div style={{ fontSize: '24px', fontWeight: '600', color: '#0066cc' }}>
+                  <div style={{ fontSize: '24px', fontWeight: '600', color: 'var(--pf-t--global--text--color--link--default)' }}>
                     {serverDetails.performance.totalRequests}
                   </div>
-                  <div style={{ fontSize: '12px', color: '#6a6e73' }}>Total Requests</div>
+                  <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)' }}>Total Requests</div>
                 </div>
                 <div style={{ 
-                  border: '1px solid #d7d7d7', 
-                  borderRadius: '8px', 
+                  border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+                  borderRadius: 'var(--pf-t--global--border--radius--medium)', 
                   padding: '16px',
                   textAlign: 'center'
                 }}>
-                  <div style={{ fontSize: '24px', fontWeight: '600', color: '#28a745' }}>
+                  <div
+                    style={{
+                      fontSize: 'var(--pf-t--global--font--size--heading--h3)',
+                      fontWeight: 'var(--pf-t--global--font--weight--body--bold)',
+                      color: 'var(--pf-t--global--color--status--success--100)'
+                    }}
+                  >
                     {serverDetails.performance.successRate}%
                   </div>
-                  <div style={{ fontSize: '12px', color: '#6a6e73' }}>Success Rate</div>
+                  <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)' }}>Success Rate</div>
                 </div>
                 <div style={{ 
-                  border: '1px solid #d7d7d7', 
-                  borderRadius: '8px', 
+                  border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+                  borderRadius: 'var(--pf-t--global--border--radius--medium)', 
                   padding: '16px',
                   textAlign: 'center'
                 }}>
-                  <div style={{ fontSize: '24px', fontWeight: '600', color: '#ffc107' }}>
+                  <div
+                    style={{
+                      fontSize: 'var(--pf-t--global--font--size--heading--h3)',
+                      fontWeight: 'var(--pf-t--global--font--weight--body--bold)',
+                      color: 'var(--pf-t--global--color--gold--300)'
+                    }}
+                  >
                     {serverDetails.performance.averageResponseTime}ms
                   </div>
-                  <div style={{ fontSize: '12px', color: '#6a6e73' }}>Avg Response</div>
+                  <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)' }}>Avg Response</div>
                 </div>
                 <div style={{ 
-                  border: '1px solid #d7d7d7', 
-                  borderRadius: '8px', 
+                  border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
+                  borderRadius: 'var(--pf-t--global--border--radius--medium)', 
                   padding: '16px',
                   textAlign: 'center'
                 }}>
-                  <div style={{ fontSize: '24px', fontWeight: '600', color: '#dc3545' }}>
+                  <div
+                    style={{
+                      fontSize: 'var(--pf-t--global--font--size--heading--h3)',
+                      fontWeight: 'var(--pf-t--global--font--weight--body--bold)',
+                      color: 'var(--pf-t--global--color--status--danger--100)'
+                    }}
+                  >
                     {serverDetails.performance.errors}
                   </div>
-                  <div style={{ fontSize: '12px', color: '#6a6e73' }}>Errors</div>
+                  <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)' }}>Errors</div>
                 </div>
               </div>
             </div>
@@ -3749,7 +3786,7 @@ status:
           {serverDetails.tools.map((category, catIndex) => (
             <div key={catIndex} style={{ marginBottom: '24px' }}>
               <div style={{ 
-                backgroundColor: '#f8f9fa', 
+                backgroundColor: 'var(--pf-t--global--background--color--secondary--default)', 
                 padding: '12px 16px', 
                 borderRadius: '6px',
                 marginBottom: '12px'
@@ -3763,19 +3800,19 @@ status:
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '12px' }}>
                 {category.tools.map((tool, toolIndex) => (
                   <div key={toolIndex} style={{ 
-                    border: '1px solid #d7d7d7', 
+                    border: 'var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default)', 
                     borderRadius: '6px', 
                     padding: '12px',
-                    backgroundColor: 'white'
+                    backgroundColor: 'var(--pf-t--global--background--color--primary--default)'
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                       <code style={{ fontSize: '14px', fontWeight: '500' }}>{tool.name}</code>
                       <Label color="green" variant="filled" isCompact>{tool.status}</Label>
                     </div>
-                    <div style={{ fontSize: '13px', color: '#6a6e73', marginBottom: '8px' }}>
+                    <div style={{ fontSize: '13px', color: 'var(--pf-t--global--text--color--subtle)', marginBottom: '8px' }}>
                       {tool.description}
                     </div>
-                    <div style={{ fontSize: '12px', color: '#6a6e73' }}>
+                    <div style={{ fontSize: '12px', color: 'var(--pf-t--global--text--color--subtle)' }}>
                       Used {tool.usage} times
                     </div>
                   </div>
@@ -3835,13 +3872,13 @@ status:
                   width: '32px', 
                   height: '32px', 
                   borderRadius: '50%', 
-                  backgroundColor: '#0066cc', 
+                  backgroundColor: 'var(--pf-t--global--text--color--link--default)', 
                   display: 'flex', 
                   alignItems: 'center', 
                   justifyContent: 'center',
                   marginRight: '12px'
                 }}>
-                  <span style={{ color: 'white', fontWeight: 'bold', fontSize: '14px' }}>G</span>
+                  <span style={{ color: 'var(--pf-t--global--text--color--inverse)', fontWeight: 'bold', fontSize: '14px' }}>G</span>
                 </div>
                 <Title headingLevel="h1" size="2xl">
                   {gatewayName}

@@ -73,18 +73,25 @@ npm run build
 
 ## Design Guidelines
 
-This application follows PatternFly 6 design principles:
+This application follows **PatternFly 6** design principles and aims to align with the **OpenShift console** (RH console plugin patterns):
 
-- **Consistent spacing**: Uses PatternFly's spacing tokens and grid system
-- **Typography**: Follows PatternFly's typography scale and hierarchy
-- **Colors**: Uses PatternFly's color palette for status indicators and semantic colors
-- **Components**: Leverages PatternFly's pre-built components for consistency
-- **Accessibility**: Maintains WCAG 2.1 AA compliance through PatternFly components
+- **No ad-hoc hex / RGB in UI**: Prefer `--pf-t--*` CSS variables for color, spacing, typography, borders, and shadows (see [PatternFly design tokens](https://www.patternfly.org/tokens/all-tokens)).
+- **Shared helpers**: `src/styles/pf6Tokens.js` exports a small `pf` object (semantic colors, `space`, `font`) for inline styles and mock charts.
+- **Components first**: Use `@patternfly/react-core` / `react-table` / `react-icons` instead of custom controls where possible.
+- **Consistent spacing**: `var(--pf-t--global--spacer--*)` instead of raw `px` for margins/padding/gaps.
+- **Typography**: `var(--pf-t--global--font--size--body--default|sm|…)` and `var(--pf-t--global--font--weight--body--bold)` instead of hardcoded `px` / `bold`.
+- **Semantic color**: Text (`text--color--regular|subtle|link--default`), status (`color--status--success|warning|danger|info--*`), borders (`border--color--default`), backgrounds (`background--color--primary--default|secondary--default|100`).
+
+> **Note:** Some large wizard pages still contain legacy hex values; new UI should use tokens or `pf` from `pf6Tokens.js`.
+
+- **Accessibility**: Prefer PatternFly components to inherit WCAG-oriented behavior from the design system.
 
 ## Project Structure
 
 ```
 src/
+├── styles/
+│   └── pf6Tokens.js           # PF6 semantic tokens helper (inline styles / charts)
 ├── components/
 │   ├── KuadrantOverview.js    # Main overview page
 │   ├── GatewayMetrics.js      # Gateway metrics cards

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   PageSection,
   Title,
@@ -23,115 +23,71 @@ import {
   DropdownItem,
   DropdownList,
   MenuToggle,
-  Divider
+  Divider,
+  Card,
+  CardBody,
+  CardTitle,
+  Alert,
+  AlertVariant
 } from '@patternfly/react-core';
 import {
   Table,
   Thead,
-  Tbody,
   Tr,
   Th,
+  Tbody,
   Td
 } from '@patternfly/react-table';
+import { getCatalogProductByName } from '../data/apiCatalogModel';
+import { buildCatalogDetailsApiKeysDemo } from '../data/apiCredentialsModel';
+import CatalogApiKeysTabPanel from './CatalogApiKeysTabPanel';
 
-const API_DETAILS = {
-  'Order Service': {
-    description: 'Manages order lifecycle including creation, updates, and fulfillment. Supports cart operations, checkout, and order history for e-commerce and internal order flows.',
-    url: 'https://xx.com/order_service/v1',
-    version: 'v1.1',
-    inputLabel: 'Accepts JSON payloads with order items, shipping address, and payment reference. Required fields: customerId, items[].productId, items[].quantity.'
-  },
-  'User Authentication': {
-    description: 'Handles user sign-in, sign-out, token refresh, and session management. Integrates with identity providers and supports OAuth2 and API key authentication.',
-    url: 'https://xx.com/auth/v2',
-    version: 'v2.0',
-    inputLabel: 'Expects credentials (username/password or token). Optional scope parameter for OAuth. Returns JWT or session cookie.'
-  },
-  'Payment Gateway': {
-    description: 'Processes payments, refunds, and payouts. Supports multiple payment methods and currencies. Provides idempotent transaction handling and webhook notifications.',
-    url: 'https://xx.com/payments/v1',
-    version: 'v1.3',
-    inputLabel: 'Request body: amount, currency, method (card, bank, etc.), idempotencyKey. Returns transaction id and status.'
-  },
-  'Product Catalog': {
-    description: 'Serves product information, pricing, availability, and search. Used by storefronts and internal tools for catalog browsing and product lookup.',
-    url: 'https://xx.com/catalog/v1',
-    version: 'v1.2',
-    inputLabel: 'Query params: category, search, page, limit. Optional filters for price range and attributes.'
-  },
-  'Inventory Management': {
-    description: 'Tracks stock levels, reservations, and movements across warehouses. Supports real-time availability checks and low-stock alerts.',
-    url: 'https://xx.com/inventory/v1',
-    version: 'v1.0',
-    inputLabel: 'POST body: sku, quantity, locationId, operation (reserve, release, adjust). Returns updated stock and reservation id.'
-  },
-  'Notification Service': {
-    description: 'Sends email, SMS, and in-app notifications. Supports templates, scheduling, and delivery status callbacks.',
-    url: 'https://xx.com/notifications/v1',
-    version: 'v1.1',
-    inputLabel: 'JSON: channel (email|sms|push), recipient, templateId or body, optional metadata and schedule.'
-  },
-  'Analytics Events': {
-    description: 'Ingests and queries analytics events for dashboards and reporting. Supports custom dimensions and real-time streaming.',
-    url: 'https://xx.com/analytics/v1',
-    version: 'v1.0',
-    inputLabel: 'Event payload: eventName, timestamp, properties (key-value). Optional userId and sessionId for attribution.'
-  },
-  'Customer Profile': {
-    description: 'CRUD for customer profiles, preferences, and segments. Used by marketing and support systems for personalization.',
-    url: 'https://xx.com/customers/v1',
-    version: 'v1.2',
-    inputLabel: 'GET by id or query. POST/PATCH: name, email, attributes, preferences. Returns profile with computed segment.'
-  },
-  'Shipping & Fulfillment': {
-    description: 'Calculates shipping rates, creates shipments, and tracks delivery status. Integrates with carriers and returns management.',
-    url: 'https://xx.com/shipping/v1',
-    version: 'v1.0',
-    inputLabel: 'Input: origin/destination, weight, dimensions, service level. Returns rates and label or tracking number.'
-  },
-  'Billing & Invoicing': {
-    description: 'Generates invoices, applies taxes, and records payments. Supports recurring billing and multi-currency.',
-    url: 'https://xx.com/billing/v1',
-    version: 'v1.1',
-    inputLabel: 'Request: accountId, lineItems, dueDate, currency. Optional taxCode and paymentTerms. Returns invoice id and PDF link.'
+function renderCatalogStatusLabel(status) {
+  switch (status) {
+    case 'Published':
+    case 'Active':
+      return (
+        <Label color="green" variant="filled" isCompact>
+          {status}
+        </Label>
+      );
+    case 'Draft':
+      return (
+        <Label color="blue" variant="filled" isCompact>
+          {status}
+        </Label>
+      );
+    case 'Retired':
+      return (
+        <Label color="grey" variant="outline" isCompact>
+          {status}
+        </Label>
+      );
+    case 'Deprecated':
+      return (
+        <Label color="orange" variant="outline" isCompact>
+          {status}
+        </Label>
+      );
+    default:
+      return (
+        <Label variant="outline" isCompact>
+          {status}
+        </Label>
+      );
   }
-};
+}
 
-// API product tab: product name, description, core details, tiers, contact, docs
-const getApiProductDetails = (apiName) => {
-  const slug = apiName.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and');
-  const baseDetails = API_DETAILS[apiName];
-  return {
-    productName: apiName,
-    description: baseDetails?.description || `API for ${apiName}. Use this service to integrate with related capabilities.`,
-    lifecycle: 'production',
-    api: slug + '-api',
-    version: 'v1',
-    route: slug + '-route',
-    namespace: 'default',
-    tags: ['ecommerce', 'retail'],
-    tiers: [
-      { tier: 'gold', rateLimit: '1000 per daily' },
-      { tier: 'silver', rateLimit: '500 per daily' },
-      { tier: 'bronze', rateLimit: '100 per daily' }
-    ],
-    contactTeam: 'platform-team',
-    contactEmail: 'api@example.com',
-    docsUrl: '#',
-    specUrl: '#'
-  };
-};
+function tagLabelColor(tag) {
+  if (tag === 'Business') return 'blue';
+  if (tag === 'People') return 'purple';
+  if (tag === 'Airport') return 'cyan';
+  return 'grey';
+}
 
-const getDetails = (apiName) =>
-  API_DETAILS[apiName] || {
-    description: 'API for ' + apiName + '. Use this service to integrate with related capabilities.',
-    url: 'https://xx.com/' + apiName.toLowerCase().replace(/\s+/g, '_') + '/v1',
-    version: 'v1.0',
-    inputLabel: 'See API documentation for request and response schemas.'
-  };
-
-const getSwaggerDefinition = (apiName) => {
-  const basePath = '/' + apiName.toLowerCase().replace(/\s+/g, '_').replace(/&/g, 'and') + '/v1';
+const getSwaggerDefinition = (apiName, slug) => {
+  const pathSlug = slug || apiName.toLowerCase().replace(/\s+/g, '_').replace(/&/g, 'and');
+  const basePath = `/${pathSlug}/v1`;
   return `openapi: 3.0.3
 info:
   title: ${apiName} API
@@ -142,11 +98,11 @@ info:
     email: api@example.com
 
 servers:
-  - url: https://xx.com${basePath}
+  - url: https://api.example.com${basePath}
     description: Production
 
 paths:
-  /orders:
+  /resources:
     get:
       summary: List resources
       operationId: listItems
@@ -191,7 +147,7 @@ paths:
         '400':
           description: Bad request
 
-  /orders/{id}:
+  /resources/{id}:
     get:
       summary: Get by ID
       operationId: getItem
@@ -210,27 +166,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ItemResponse'
-        '404':
-          description: Not found
-    put:
-      summary: Update resource
-      operationId: updateItem
-      tags:
-        - ${apiName}
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateRequest'
-      responses:
-        '200':
-          description: OK
         '404':
           description: Not found
 
@@ -269,24 +204,35 @@ components:
           type: string
         metadata:
           type: object
-    UpdateRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        metadata:
-          type: object
 `;
 };
 
-const APIDetailsPage = ({ apiName, onBack, breadcrumbParent = 'API catalog' }) => {
+const dtStyle = {
+  fontWeight: 'var(--pf-t--global--font--weight--body--bold)',
+  color: 'var(--pf-t--global--text--color--subtle)'
+};
+
+const APIDetailsPage = ({
+  apiName,
+  onBack,
+  breadcrumbParent = 'API catalog',
+  onRequestApiKey
+}) => {
   const [activeTabKey, setActiveTabKey] = useState('overview');
   const [projectOpen, setProjectOpen] = useState(false);
-  const details = getDetails(apiName);
 
-  const handleTabClick = (event, tabIndex) => {
+  const product = getCatalogProductByName(apiName);
+
+  const catalogApiKeysRows = useMemo(
+    () => (product ? buildCatalogDetailsApiKeysDemo(apiName) : []),
+    [product, apiName]
+  );
+
+  const handleTabClick = (_event, tabIndex) => {
     setActiveTabKey(tabIndex);
   };
+
+  const linkStyle = { color: 'var(--pf-t--global--text--color--link--default)' };
 
   return (
     <>
@@ -313,171 +259,234 @@ const APIDetailsPage = ({ apiName, onBack, breadcrumbParent = 'API catalog' }) =
           </DropdownList>
         </Dropdown>
         <div style={{ width: '100%' }}>
-          <Divider style={{ marginTop: '16px', marginBottom: '16px' }} />
+          <Divider
+            style={{
+              marginTop: 'var(--pf-t--global--spacer--md)',
+              marginBottom: 'var(--pf-t--global--spacer--md)'
+            }}
+          />
         </div>
-        <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }} alignItems={{ default: 'alignItemsFlexStart' }}>
-          <FlexItem>
-            <Breadcrumb style={{ marginBottom: '16px' }}>
+        <Flex
+          justifyContent={{ default: 'justifyContentSpaceBetween' }}
+          alignItems={{ default: 'alignItemsFlexStart' }}
+          flexWrap={{ default: 'wrap' }}
+          gap={{ default: 'gapMd' }}
+        >
+          <FlexItem grow={{ default: 'grow' }}>
+            <Breadcrumb style={{ marginBottom: 'var(--pf-t--global--spacer--md)' }}>
               <BreadcrumbItem
                 onClick={onBack}
                 isLink
-                style={{ color: '#0066cc', cursor: 'pointer', textDecoration: 'underline' }}
+                style={{
+                  color: 'var(--pf-t--global--text--color--link--default)',
+                  cursor: 'pointer',
+                  textDecoration: 'underline'
+                }}
               >
                 {breadcrumbParent}
               </BreadcrumbItem>
               <BreadcrumbItem isActive>{apiName}</BreadcrumbItem>
             </Breadcrumb>
-            <Title headingLevel="h1" size="2xl">{apiName}</Title>
+            <Flex
+              alignItems={{ default: 'alignItemsCenter' }}
+              gap={{ default: 'gapMd' }}
+              flexWrap={{ default: 'wrap' }}
+            >
+              <Title headingLevel="h1" size="2xl">
+                {apiName}
+              </Title>
+              {product ? renderCatalogStatusLabel(product.catalogStatus) : null}
+            </Flex>
           </FlexItem>
           <FlexItem>
-            <Button variant="primary">Request API keys</Button>
+            <Button variant="primary" onClick={() => onRequestApiKey?.()}>
+              Request API key
+            </Button>
           </FlexItem>
         </Flex>
         <Tabs
           activeKey={activeTabKey}
           onSelect={handleTabClick}
-          style={{ marginTop: '24px' }}
+          style={{ marginTop: 'var(--pf-t--global--spacer--lg)' }}
         >
           <Tab eventKey="overview" title={<TabTitleText>Overview</TabTitleText>} />
-          <Tab eventKey="api-product" title={<TabTitleText>API product</TabTitleText>} />
           <Tab eventKey="definition" title={<TabTitleText>Definition</TabTitleText>} />
+          <Tab eventKey="api-keys" title={<TabTitleText>API keys</TabTitleText>} />
         </Tabs>
       </PageSection>
 
       <PageSection
         style={{
-          height: 'calc(100vh - 280px)',
-          overflowY: 'auto',
           backgroundColor: 'var(--pf-t--global--background--color--100)'
         }}
       >
-        {activeTabKey === 'api-product' && (() => {
-          const product = getApiProductDetails(apiName);
-          const labelStyle = { fontSize: '12px', fontWeight: 600, color: 'var(--pf-t--global--text--color--subtle)', textTransform: 'uppercase' };
-          const sectionTitleStyle = { marginBottom: '12px', fontSize: '12px', fontWeight: 600, color: 'var(--pf-t--global--text--color--subtle)', textTransform: 'uppercase' };
-          return (
-            <Grid hasGutter>
-              <GridItem md={6}>
-                <DescriptionList isCompact style={{ marginBottom: '24px' }}>
-                  <DescriptionListGroup>
-                    <DescriptionListTerm style={labelStyle}>Product name</DescriptionListTerm>
-                    <DescriptionListDescription style={{ fontSize: '16px', fontWeight: 600 }}>{product.productName}</DescriptionListDescription>
-                  </DescriptionListGroup>
-                  <DescriptionListGroup>
-                    <DescriptionListTerm style={labelStyle}>Description</DescriptionListTerm>
-                    <DescriptionListDescription>{product.description}</DescriptionListDescription>
-                  </DescriptionListGroup>
-                </DescriptionList>
-                <DescriptionList isCompact style={{ marginBottom: '24px' }}>
-                  <DescriptionListGroup>
-                    <DescriptionListTerm style={labelStyle}>Lifecycle</DescriptionListTerm>
-                    <DescriptionListDescription><Label color="blue">{product.lifecycle}</Label></DescriptionListDescription>
-                  </DescriptionListGroup>
-                  <DescriptionListGroup>
-                    <DescriptionListTerm style={labelStyle}>API</DescriptionListTerm>
-                    <DescriptionListDescription>{product.api}</DescriptionListDescription>
-                  </DescriptionListGroup>
-                  <DescriptionListGroup>
-                    <DescriptionListTerm style={labelStyle}>Version</DescriptionListTerm>
-                    <DescriptionListDescription>{product.version}</DescriptionListDescription>
-                  </DescriptionListGroup>
-                  <DescriptionListGroup>
-                    <DescriptionListTerm style={labelStyle}>Route</DescriptionListTerm>
-                    <DescriptionListDescription>{product.route}</DescriptionListDescription>
-                  </DescriptionListGroup>
-                  <DescriptionListGroup>
-                    <DescriptionListTerm style={labelStyle}>Namespace</DescriptionListTerm>
-                    <DescriptionListDescription>{product.namespace}</DescriptionListDescription>
-                  </DescriptionListGroup>
-                  <DescriptionListGroup>
-                    <DescriptionListTerm style={labelStyle}>Tags</DescriptionListTerm>
-                    <DescriptionListDescription>
-                      <Flex gap={{ default: 'gapSm' }} wrap="wrap">
-                        {product.tags.map((t) => (
-                          <Label key={t} variant="outline" isCompact>{t}</Label>
-                        ))}
-                      </Flex>
-                    </DescriptionListDescription>
-                  </DescriptionListGroup>
-                </DescriptionList>
-                <Title headingLevel="h3" size="md" style={sectionTitleStyle}>Contact information</Title>
-                <DescriptionList isCompact>
-                  <DescriptionListGroup>
-                    <DescriptionListTerm>Team</DescriptionListTerm>
-                    <DescriptionListDescription>{product.contactTeam}</DescriptionListDescription>
-                  </DescriptionListGroup>
-                  <DescriptionListGroup>
-                    <DescriptionListTerm>Email</DescriptionListTerm>
-                    <DescriptionListDescription>
-                      <a href={`mailto:${product.contactEmail}`} style={{ color: 'var(--pf-t--global--text--color--link--default)' }}>{product.contactEmail}</a>
-                    </DescriptionListDescription>
-                  </DescriptionListGroup>
-                </DescriptionList>
-              </GridItem>
-              <GridItem md={6}>
-                <Title headingLevel="h3" size="md" style={sectionTitleStyle}>Available tiers</Title>
-                <Table aria-label="Available tiers" style={{ marginBottom: '24px' }}>
-                  <Thead>
-                    <Tr>
-                      <Th>Tier</Th>
-                      <Th>Rate limits</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {product.tiers.map((row) => (
-                      <Tr key={row.tier}>
-                        <Td><Label variant="outline" isCompact>{row.tier}</Label></Td>
-                        <Td>{row.rateLimit}</Td>
-                      </Tr>
-                    ))}
-                  </Tbody>
-                </Table>
-                <Title headingLevel="h3" size="md" style={sectionTitleStyle}>Documentation</Title>
-                <DescriptionList isCompact>
-                  <DescriptionListGroup>
-                    <DescriptionListTerm>Docs</DescriptionListTerm>
-                    <DescriptionListDescription><a href={product.docsUrl} style={{ color: 'var(--pf-t--global--text--color--link--default)' }}>View Documentation</a></DescriptionListDescription>
-                  </DescriptionListGroup>
-                  <DescriptionListGroup>
-                    <DescriptionListTerm>OpenAPI Spec</DescriptionListTerm>
-                    <DescriptionListDescription><a href={product.specUrl} style={{ color: 'var(--pf-t--global--text--color--link--default)' }}>View Spec</a></DescriptionListDescription>
-                  </DescriptionListGroup>
-                </DescriptionList>
-              </GridItem>
-            </Grid>
-          );
-        })()}
         {activeTabKey === 'overview' && (
-          <DescriptionList isCompact>
-            <DescriptionListGroup>
-              <DescriptionListTerm>API name</DescriptionListTerm>
-              <DescriptionListDescription>{apiName}</DescriptionListDescription>
-            </DescriptionListGroup>
-            <DescriptionListGroup>
-              <DescriptionListTerm>Description</DescriptionListTerm>
-              <DescriptionListDescription>{details.description}</DescriptionListDescription>
-            </DescriptionListGroup>
-            <DescriptionListGroup>
-              <DescriptionListTerm>URL</DescriptionListTerm>
-              <DescriptionListDescription>{details.url}</DescriptionListDescription>
-            </DescriptionListGroup>
-            <DescriptionListGroup>
-              <DescriptionListTerm>Version</DescriptionListTerm>
-              <DescriptionListDescription>{details.version}</DescriptionListDescription>
-            </DescriptionListGroup>
-            <DescriptionListGroup>
-              <DescriptionListTerm>Input label</DescriptionListTerm>
-              <DescriptionListDescription>{details.inputLabel}</DescriptionListDescription>
-            </DescriptionListGroup>
-          </DescriptionList>
+          <>
+            {!product && (
+              <Alert
+                variant={AlertVariant.warning}
+                isInline
+                title="Catalog entry not found"
+                style={{ marginBottom: 'var(--pf-t--global--spacer--md)' }}
+              >
+                No metadata is defined for &quot;{apiName}&quot; in the API catalog model.
+              </Alert>
+            )}
+            {product && (
+              <Grid hasGutter>
+                <GridItem span={12}>
+                  <Card isCompact>
+                    <CardBody>
+                      <CardTitle>
+                        <Title headingLevel="h2" size="lg">
+                          About
+                        </Title>
+                      </CardTitle>
+                      <Grid hasGutter style={{ marginTop: 'var(--pf-t--global--spacer--md)' }}>
+                        <GridItem md={6}>
+                          <DescriptionList isCompact>
+                            <DescriptionListGroup>
+                              <DescriptionListTerm style={dtStyle}>API product name</DescriptionListTerm>
+                              <DescriptionListDescription>
+                                {product.productDisplayName}
+                              </DescriptionListDescription>
+                            </DescriptionListGroup>
+                            <DescriptionListGroup>
+                              <DescriptionListTerm style={dtStyle}>Description</DescriptionListTerm>
+                              <DescriptionListDescription>{product.description}</DescriptionListDescription>
+                            </DescriptionListGroup>
+                            <DescriptionListGroup>
+                              <DescriptionListTerm style={dtStyle}>Version</DescriptionListTerm>
+                              <DescriptionListDescription>{product.version}</DescriptionListDescription>
+                            </DescriptionListGroup>
+                            <DescriptionListGroup>
+                              <DescriptionListTerm style={dtStyle}>Lifecycle status</DescriptionListTerm>
+                              <DescriptionListDescription>
+                                {renderCatalogStatusLabel(product.catalogStatus)}
+                              </DescriptionListDescription>
+                            </DescriptionListGroup>
+                            <DescriptionListGroup>
+                              <DescriptionListTerm style={dtStyle}>Owner</DescriptionListTerm>
+                              <DescriptionListDescription>{product.owner}</DescriptionListDescription>
+                            </DescriptionListGroup>
+                            <DescriptionListGroup>
+                              <DescriptionListTerm style={dtStyle}>URL</DescriptionListTerm>
+                              <DescriptionListDescription>
+                                <a href={product.baseUrl} style={linkStyle} target="_blank" rel="noopener noreferrer">
+                                  {product.baseUrl}
+                                </a>
+                              </DescriptionListDescription>
+                            </DescriptionListGroup>
+                          </DescriptionList>
+                        </GridItem>
+                        <GridItem md={6}>
+                          <DescriptionList isCompact>
+                            <DescriptionListGroup>
+                              <DescriptionListTerm style={dtStyle}>API spec</DescriptionListTerm>
+                              <DescriptionListDescription>
+                                <a href={product.specUrl} style={linkStyle} target="_blank" rel="noopener noreferrer">
+                                  {product.specUrl}
+                                </a>
+                              </DescriptionListDescription>
+                            </DescriptionListGroup>
+                            <DescriptionListGroup>
+                              <DescriptionListTerm style={dtStyle}>API document</DescriptionListTerm>
+                              <DescriptionListDescription>
+                                <a href={product.docUrl} style={linkStyle} target="_blank" rel="noopener noreferrer">
+                                  {product.docUrl}
+                                </a>
+                              </DescriptionListDescription>
+                            </DescriptionListGroup>
+                            <DescriptionListGroup>
+                              <DescriptionListTerm style={dtStyle}>Tag</DescriptionListTerm>
+                              <DescriptionListDescription>
+                                <Label color={tagLabelColor(product.tag)} variant="outline" isCompact>
+                                  {product.tag}
+                                </Label>
+                              </DescriptionListDescription>
+                            </DescriptionListGroup>
+                            <DescriptionListGroup>
+                              <DescriptionListTerm style={dtStyle}>Lifecycle</DescriptionListTerm>
+                              <DescriptionListDescription>{product.lifecycle}</DescriptionListDescription>
+                            </DescriptionListGroup>
+                            <DescriptionListGroup>
+                              <DescriptionListTerm style={dtStyle}>Approval</DescriptionListTerm>
+                              <DescriptionListDescription>{product.approval}</DescriptionListDescription>
+                            </DescriptionListGroup>
+                            <DescriptionListGroup>
+                              <DescriptionListTerm style={dtStyle}>Created</DescriptionListTerm>
+                              <DescriptionListDescription>{product.created}</DescriptionListDescription>
+                            </DescriptionListGroup>
+                          </DescriptionList>
+                        </GridItem>
+                      </Grid>
+                    </CardBody>
+                  </Card>
+                </GridItem>
+                <GridItem span={12}>
+                  <Card isCompact>
+                    <CardBody>
+                      <CardTitle>
+                        <Title headingLevel="h2" size="lg">
+                          Plan
+                        </Title>
+                      </CardTitle>
+                      <Table
+                        aria-label="API product tiers"
+                        style={{ marginTop: 'var(--pf-t--global--spacer--md)' }}
+                      >
+                        <Thead>
+                          <Tr>
+                            <Th>Tiers</Th>
+                            <Th>Rate limit</Th>
+                          </Tr>
+                        </Thead>
+                        <Tbody>
+                          {product.planTiers.map((row) => (
+                            <Tr key={`${row.tier}-${row.rateLimit}`}>
+                              <Td>
+                                <Label variant="outline" isCompact>
+                                  {row.tier}
+                                </Label>
+                              </Td>
+                              <Td>{row.rateLimit}</Td>
+                            </Tr>
+                          ))}
+                        </Tbody>
+                      </Table>
+                    </CardBody>
+                  </Card>
+                </GridItem>
+              </Grid>
+            )}
+          </>
         )}
+
         {activeTabKey === 'definition' && (
           <div>
-            <Title headingLevel="h2" size="lg" style={{ marginBottom: '16px' }}>OpenAPI 3.0 Definition</Title>
+            <Title headingLevel="h2" size="lg" style={{ marginBottom: 'var(--pf-t--global--spacer--md)' }}>
+              OpenAPI 3.0 Definition
+            </Title>
             <CodeBlock>
-              <CodeBlockCode>{getSwaggerDefinition(apiName)}</CodeBlockCode>
+              <CodeBlockCode>{getSwaggerDefinition(apiName, product?.slug)}</CodeBlockCode>
             </CodeBlock>
           </div>
+        )}
+
+        {activeTabKey === 'api-keys' && (
+          <>
+            {!product && (
+              <Alert
+                variant={AlertVariant.warning}
+                isInline
+                title="Catalog entry not found"
+                style={{ marginBottom: 'var(--pf-t--global--spacer--md)' }}
+              >
+                No API keys can be listed for &quot;{apiName}&quot; until it exists in the API catalog model.
+              </Alert>
+            )}
+            {product && <CatalogApiKeysTabPanel rows={catalogApiKeysRows} />}
+          </>
         )}
       </PageSection>
     </>

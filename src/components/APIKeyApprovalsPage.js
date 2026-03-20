@@ -37,6 +37,7 @@ import {
   CheckCircleIcon,
   PendingIcon,
   ExclamationCircleIcon,
+  ExclamationTriangleIcon,
   AngleRightIcon,
   AngleDownIcon,
   CaretDownIcon
@@ -52,11 +53,12 @@ import {
   TierSortableColumnHeader,
   TIER_TABLE_COLUMN_MIN_WIDTH,
 } from './TierSortableColumnHeader';
+import { TruncatedTableLink, TruncatedTableText } from './ApiKeyNameText';
 
 const STATUS_OPTIONS = ['Active', 'Pending', 'Rejected', 'Revoked', 'Expired'];
 const STATUS_RANK = { Active: 4, Pending: 3, Rejected: 2, Revoked: 1, Expired: 0 };
 
-const APIKeyApprovalsPage = () => {
+const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
   const credentialsData = useMemo(() => buildCredentialsData(), []);
 
   const [projectOpen, setProjectOpen] = useState(false);
@@ -104,7 +106,8 @@ const APIKeyApprovalsPage = () => {
     const matchesSearch =
       !searchValue ||
       row.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-      row.api.toLowerCase().includes(searchValue.toLowerCase());
+      row.api.toLowerCase().includes(searchValue.toLowerCase()) ||
+      row.owner.toLowerCase().includes(searchValue.toLowerCase());
     const matchesStatus = statusFilters.length === 0 || statusFilters.includes(row.status);
     const matchesTier = tierFilters.length === 0 || tierFilters.includes(row.tier);
     return matchesSearch && matchesStatus && matchesTier;
@@ -171,10 +174,23 @@ const APIKeyApprovalsPage = () => {
   const renderStatus = (status) => {
     const isActive = status === 'Active';
     const isPending = status === 'Pending';
-    const iconStatus = isActive ? 'success' : isPending ? 'info' : 'danger';
-    const StatusIcon = isActive ? CheckCircleIcon : isPending ? PendingIcon : ExclamationCircleIcon;
+    const isRejected = status === 'Rejected';
+    const iconStatus = isActive ? 'success' : isPending ? 'info' : isRejected ? 'warning' : 'danger';
+    const StatusIcon = isActive
+      ? CheckCircleIcon
+      : isPending
+        ? PendingIcon
+        : isRejected
+          ? ExclamationTriangleIcon
+          : ExclamationCircleIcon;
     return (
-      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+      <span
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 'var(--pf-t--global--spacer--sm)'
+        }}
+      >
         <Icon size="sm" status={iconStatus} style={{ flexShrink: 0 }}>
           <StatusIcon />
         </Icon>
@@ -244,12 +260,22 @@ const APIKeyApprovalsPage = () => {
           </DropdownList>
         </Dropdown>
         <div style={{ width: '100%' }}>
-          <Divider style={{ marginTop: '16px', marginBottom: '16px' }} />
+          <Divider
+            style={{
+              marginTop: 'var(--pf-t--global--spacer--md)',
+              marginBottom: 'var(--pf-t--global--spacer--md)'
+            }}
+          />
         </div>
         <Title headingLevel="h1" size="2xl">
           API key approval
         </Title>
-        <p style={{ marginTop: '8px', color: 'var(--pf-t--global--text--color--subtle)' }}>
+        <p
+          style={{
+            marginTop: 'var(--pf-t--global--spacer--sm)',
+            color: 'var(--pf-t--global--text--color--subtle)'
+          }}
+        >
           Manage keys issued to requesters for accessing APIs.
         </p>
 
@@ -314,7 +340,7 @@ const APIKeyApprovalsPage = () => {
                       isExpanded={statusFilterOpen}
                       variant="default"
                     >
-                      <Icon style={{ marginRight: '8px' }}>
+                      <Icon style={{ marginRight: 'var(--pf-t--global--spacer--sm)' }}>
                         <FilterIcon />
                       </Icon>
                       Status
@@ -354,7 +380,7 @@ const APIKeyApprovalsPage = () => {
                       isExpanded={tierFilterOpen}
                       variant="default"
                     >
-                      <Icon style={{ marginRight: '8px' }}>
+                      <Icon style={{ marginRight: 'var(--pf-t--global--spacer--sm)' }}>
                         <FilterIcon />
                       </Icon>
                       Tier
@@ -394,7 +420,13 @@ const APIKeyApprovalsPage = () => {
           <Table aria-label="API key approval table">
           <Thead>
             <Tr>
-              <Th style={{ width: '24px', paddingLeft: '8px', paddingRight: '4px' }} />
+              <Th
+                style={{
+                  width: 'var(--pf-t--global--spacer--2xl)',
+                  paddingLeft: 'var(--pf-t--global--spacer--sm)',
+                  paddingRight: 'var(--pf-t--global--spacer--xs)'
+                }}
+              />
               <Th screenReaderText="Row selection" />
               <Th sort={{ columnIndex: 2, sortBy: sortState, onSort: handleSort }}>API</Th>
               <Th sort={{ columnIndex: 3, sortBy: sortState, onSort: handleSort }}>Status</Th>
@@ -413,7 +445,14 @@ const APIKeyApprovalsPage = () => {
             {sortedCredentials.map((row) => (
               <React.Fragment key={row.id}>
                 <Tr style={expandedRows[row.id] ? { borderBottom: 'none' } : undefined}>
-                  <Td style={{ width: '24px', paddingLeft: '8px', paddingRight: '4px', verticalAlign: 'middle' }}>
+                  <Td
+                    style={{
+                      width: 'var(--pf-t--global--spacer--2xl)',
+                      paddingLeft: 'var(--pf-t--global--spacer--sm)',
+                      paddingRight: 'var(--pf-t--global--spacer--xs)',
+                      verticalAlign: 'middle'
+                    }}
+                  >
                     <Button
                       variant="plain"
                       aria-label={expandedRows[row.id] ? 'Collapse' : 'Expand'}
@@ -423,7 +462,12 @@ const APIKeyApprovalsPage = () => {
                       {expandedRows[row.id] ? <AngleDownIcon /> : <AngleRightIcon />}
                     </Button>
                   </Td>
-                  <Td style={{ verticalAlign: 'middle', width: '40px' }}>
+                  <Td
+                    style={{
+                      verticalAlign: 'middle',
+                      width: 'var(--pf-t--global--spacer--2xl)'
+                    }}
+                  >
                     <Checkbox
                       id={`approvals-row-${row.id}`}
                       isChecked={selectedIds.has(row.id)}
@@ -432,9 +476,14 @@ const APIKeyApprovalsPage = () => {
                     />
                   </Td>
                   <Td style={{ verticalAlign: 'middle' }}>
-                    <Button variant="link" isInline component="a" href="#">
-                      {row.api}
-                    </Button>
+                    <TruncatedTableLink
+                      text={row.api}
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onNavigateToApiCatalog?.(row.api);
+                      }}
+                    />
                   </Td>
                   <Td style={{ verticalAlign: 'middle' }}>{renderStatus(row.status)}</Td>
                   <Td style={{ verticalAlign: 'middle', minWidth: TIER_TABLE_COLUMN_MIN_WIDTH }}>
@@ -446,7 +495,9 @@ const APIKeyApprovalsPage = () => {
                       </span>
                     </Tooltip>
                   </Td>
-                  <Td style={{ verticalAlign: 'middle' }}>{row.owner}</Td>
+                  <Td style={{ verticalAlign: 'middle' }}>
+                    <TruncatedTableText text={row.owner} />
+                  </Td>
                   <Td style={{ verticalAlign: 'middle' }}>{row.requestedTime}</Td>
                   <Td style={{ verticalAlign: 'middle' }}>
                     <Dropdown
@@ -483,30 +534,49 @@ const APIKeyApprovalsPage = () => {
                       style={{
                         borderTop: 'none',
                         paddingTop: 0,
-                        paddingBottom: '16px',
+                        paddingBottom: 'var(--pf-t--global--spacer--md)',
                         verticalAlign: 'top',
                         boxShadow: 'none'
                       }}
                     >
                       <div
                         style={{
-                          paddingLeft: '52px',
-                          paddingTop: '16px',
+                          paddingLeft: 'var(--pf-t--global--spacer--3xl)',
+                          paddingTop: 'var(--pf-t--global--spacer--md)',
                           paddingBottom: 0,
                           backgroundColor: 'var(--pf-t--global--background--color--100)'
                         }}
                       >
-                        <div style={{ fontWeight: 'bold', marginBottom: '8px' }}>API key name</div>
-                        <div style={{ marginBottom: '16px', color: 'var(--pf-t--global--text--color--regular)' }}>
+                        <div
+                          style={{
+                            fontWeight: 'var(--pf-t--global--font--weight--body--bold)',
+                            marginBottom: 'var(--pf-t--global--spacer--sm)'
+                          }}
+                        >
+                          API key name
+                        </div>
+                        <div
+                          style={{
+                            marginBottom: 'var(--pf-t--global--spacer--md)',
+                            color: 'var(--pf-t--global--text--color--regular)'
+                          }}
+                        >
                           {row.name}
                         </div>
-                        <div style={{ fontWeight: 'bold', marginBottom: '8px' }}>Use case</div>
+                        <div
+                          style={{
+                            fontWeight: 'var(--pf-t--global--font--weight--body--bold)',
+                            marginBottom: 'var(--pf-t--global--spacer--sm)'
+                          }}
+                        >
+                          Use case
+                        </div>
                         <div style={{ color: 'var(--pf-t--global--text--color--subtle)' }}>
                           {row.useCase || USE_CASE_EXPANDED_TEXT}
                         </div>
                         {row.status === 'Rejected' && (
                           <Alert
-                            variant={AlertVariant.danger}
+                            variant={AlertVariant.warning}
                             isInline
                             title={
                               <>
@@ -521,7 +591,7 @@ const APIKeyApprovalsPage = () => {
                                 Request a new API key
                               </AlertActionLink>
                             }
-                            style={{ marginTop: '16px' }}
+                            style={{ marginTop: 'var(--pf-t--global--spacer--md)' }}
                           />
                         )}
                       </div>

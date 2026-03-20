@@ -49,7 +49,12 @@ const CreateMCPServerPage = ({ onBack, onCancel, onMCPServerPage }) => {
               <CardHeader>
                 <CardTitle>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <PlusIcon style={{ marginRight: '8px', color: '#0066cc' }} />
+                    <PlusIcon
+                      style={{
+                        marginRight: 'var(--pf-t--global--spacer--sm)',
+                        color: 'var(--pf-t--global--text--color--link--default)'
+                      }}
+                    />
                     Connect via Template
                   </div>
                 </CardTitle>
@@ -70,7 +75,12 @@ const CreateMCPServerPage = ({ onBack, onCancel, onMCPServerPage }) => {
               <CardHeader>
                 <CardTitle>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <UploadIcon style={{ marginRight: '8px', color: '#0066cc' }} />
+                    <UploadIcon
+                      style={{
+                        marginRight: 'var(--pf-t--global--spacer--sm)',
+                        color: 'var(--pf-t--global--text--color--link--default)'
+                      }}
+                    />
                     Connect via Config File
                   </div>
                 </CardTitle>
@@ -91,7 +101,12 @@ const CreateMCPServerPage = ({ onBack, onCancel, onMCPServerPage }) => {
               <CardHeader>
                 <CardTitle>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <SearchIcon style={{ marginRight: '8px', color: '#0066cc' }} />
+                    <SearchIcon
+                      style={{
+                        marginRight: 'var(--pf-t--global--spacer--sm)',
+                        color: 'var(--pf-t--global--text--color--link--default)'
+                      }}
+                    />
                     Connect via Discovery
                   </div>
                 </CardTitle>
