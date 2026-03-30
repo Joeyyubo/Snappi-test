@@ -5,9 +5,7 @@ import { Popover } from '@patternfly/react-core';
 import { SortColumn, SortByDirection } from '@patternfly/react-table';
 import { QuestionCircleHelpTrigger } from './QuestionCircleHelpTrigger';
 
-const TIER_POPOVER_BODY = (
-  <p style={{ margin: 0 }}>A Tier is a set of rate limits defined within the PlanPolicy.</p>
-);
+const TIER_POPOVER_BODY = <p style={{ margin: 0 }}>API product limit tiers.</p>;
 
 /** Min width for Tier header (label + sort + help). Keep modest so the column does not look oversized. */
 export const TIER_TABLE_COLUMN_MIN_WIDTH = '7.5rem';
@@ -61,7 +59,7 @@ export function TierSortableColumnHeader({ columnIndex, sortBy, onSort }) {
           showClose
           closeBtnAriaLabel="Close"
           position="top"
-          aria-label="Tier"
+          aria-label="API product limit tiers"
           bodyContent={TIER_POPOVER_BODY}
         >
           <QuestionCircleHelpTrigger aria-label="More information about Tier" />
