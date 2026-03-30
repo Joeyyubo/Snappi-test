@@ -180,8 +180,29 @@ export function getTierTooltipText(tier) {
   return TIER_TOOLTIPS[tier] || `${tier} tier`;
 }
 
-/** Requested time string — identical in table and detail (no extra suffix) */
-export const REQUESTED_TIME_DISPLAY = '2026/3/12';
+const REQUESTED_TIME_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+/** Format: Jan 24, 2026 10:15 (short month, day, year, 24h HH:MM, UTC components). */
+export function formatRequestedTimeUtc(year, monthIndex0, day, hour, minute) {
+  const mo = REQUESTED_TIME_MONTHS[monthIndex0];
+  const hh = String(hour).padStart(2, '0');
+  const mm = String(minute).padStart(2, '0');
+  return `${mo} ${day}, ${year} ${hh}:${mm}`;
+}
+
+function formatRequestedTimeFromUtcMs(ms) {
+  const d = new Date(ms);
+  return formatRequestedTimeUtc(
+    d.getUTCFullYear(),
+    d.getUTCMonth(),
+    d.getUTCDate(),
+    d.getUTCHours(),
+    d.getUTCMinutes()
+  );
+}
+
+/** Canonical “requested” stamp for new keys and tables (matches column format). */
+export const REQUESTED_TIME_DISPLAY = formatRequestedTimeUtc(2026, 0, 24, 10, 15);
 
 /** Non-empty API key names: letters (any case), digits, and hyphen only (Request API key / validation UX). */
 export const API_KEY_NAME_PATTERN = /^[a-zA-Z0-9-]+$/;
@@ -204,7 +225,7 @@ export function buildCredentialsData() {
     status: STATUSES[i],
     tier: TIERS[i],
     apiKeyState: API_KEY_STATES[i],
-    requestedTime: REQUESTED_TIME_DISPLAY,
+    requestedTime: formatRequestedTimeFromUtcMs(Date.UTC(2026, 0, 24, 10, 15) - i * 45 * 60 * 1000),
     rejectionReason: REJECTION_REASONS[i] || undefined,
     useCase: USE_CASE_MOCK_SAMPLES[i % USE_CASE_MOCK_SAMPLES.length]
   };
@@ -225,7 +246,7 @@ export function buildCatalogDetailsApiKeysDemo(catalogApiName) {
       status: 'Active',
       tier: 'Low',
       apiKeyState: 'viewed',
-      requestedTime: 'Jan 24, 2026 10:15',
+      requestedTime: REQUESTED_TIME_DISPLAY,
       useCase: USE_CASE_EXPANDED_TEXT
     },
     {
@@ -235,7 +256,7 @@ export function buildCatalogDetailsApiKeysDemo(catalogApiName) {
       status: 'Active',
       tier: 'High',
       apiKeyState: 'viewed',
-      requestedTime: 'Jan 24, 2026 10:15',
+      requestedTime: formatRequestedTimeFromUtcMs(Date.UTC(2026, 0, 24, 10, 15) - 45 * 60 * 1000),
       useCase: USE_CASE_EXPANDED_TEXT
     },
     {
@@ -245,7 +266,7 @@ export function buildCatalogDetailsApiKeysDemo(catalogApiName) {
       status: 'Pending',
       tier: 'Low',
       apiKeyState: 'masked',
-      requestedTime: 'Jan 24, 2026 10:15',
+      requestedTime: formatRequestedTimeFromUtcMs(Date.UTC(2026, 0, 24, 10, 15) - 90 * 60 * 1000),
       useCase: USE_CASE_EXPANDED_TEXT
     }
   ];
