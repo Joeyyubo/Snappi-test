@@ -166,10 +166,11 @@ const PortalPage = ({ onApiNameClick, onBack }) => {
             </Button>
           </FlexItem>
         </Flex>
-      </PageSection>
 
-      <PageSection>
-        <Toolbar ouiaId="api-catalog-toolbar">
+        <Toolbar
+          ouiaId="api-catalog-toolbar"
+          style={{ marginTop: 'var(--pf-t--global--spacer--md)' }}
+        >
           <ToolbarContent>
             <ToolbarGroup variant="filter-group" gap={{ default: 'gapMd' }}>
               <ToolbarItem>
@@ -244,7 +245,7 @@ const PortalPage = ({ onApiNameClick, onBack }) => {
           </ToolbarContent>
         </Toolbar>
 
-        <div style={{ marginTop: 'var(--pf-t--global--spacer--md)' }}>
+        <div style={{ marginTop: 'var(--pf-t--global--spacer--sm)' }}>
           <Table aria-label="APIs table" ouiaId="api-catalog-table">
             <Thead>
               <Tr>
