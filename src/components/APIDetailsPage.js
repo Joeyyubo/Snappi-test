@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useLayoutEffect, useRef } from 'react';
 import {
   PageSection,
   Title,
@@ -215,16 +215,30 @@ const dtStyle = {
 const APIDetailsPage = ({
   apiName,
   onBack,
-  breadcrumbParent = 'API key approval',
+  breadcrumbParent = 'APIs',
   onRequestApiKey,
   /** When set (e.g. from App credentialsList), catalog API keys tab uses live data and delete works. */
   apiKeysRows: apiKeysRowsProp,
-  onOpenDelete
+  onOpenDelete,
+  onOpenEdit,
+  /** Open API key details (same app shell; breadcrumb handled in APIKeyDetailPage). */
+  onOpenApiKeyDetail,
+  /** When true once after returning from key detail, select API keys tab. */
+  resumeApiKeysTab,
+  onResumeApiKeysTabConsumed
 }) => {
   const [activeTabKey, setActiveTabKey] = useState('overview');
   const [projectOpen, setProjectOpen] = useState(false);
+  const prevApiNameRef = useRef(null);
 
   const product = getCatalogProductByName(apiName);
+
+  useLayoutEffect(() => {
+    if (resumeApiKeysTab) {
+      setActiveTabKey('api-keys');
+      onResumeApiKeysTabConsumed?.();
+    }
+  }, [resumeApiKeysTab, onResumeApiKeysTabConsumed]);
 
   const catalogApiKeysRows = useMemo(() => {
     if (Array.isArray(apiKeysRowsProp)) {
@@ -233,8 +247,12 @@ const APIDetailsPage = ({
     return product ? buildCatalogDetailsApiKeysDemo(apiName) : [];
   }, [apiKeysRowsProp, product, apiName]);
 
+  /** Reset tab only when switching to a different API product (not on first mount — allows resumeApiKeysTab). */
   useEffect(() => {
-    setActiveTabKey('overview');
+    if (prevApiNameRef.current !== null && prevApiNameRef.current !== apiName) {
+      setActiveTabKey('overview');
+    }
+    prevApiNameRef.current = apiName;
   }, [apiName]);
 
   const handleTabClick = (_event, tabIndex) => {
@@ -495,7 +513,13 @@ const APIDetailsPage = ({
               </Alert>
             )}
             {product && (
-              <CatalogApiKeysTabPanel rows={catalogApiKeysRows} onOpenDelete={onOpenDelete} />
+              <CatalogApiKeysTabPanel
+                rows={catalogApiKeysRows}
+                onOpenDelete={onOpenDelete}
+                onOpenEdit={onOpenEdit}
+                onRequestApiKey={onRequestApiKey}
+                onApiKeyNameClick={onOpenApiKeyDetail}
+              />
             )}
           </>
         )}

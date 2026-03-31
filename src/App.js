@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
   Page,
   PageSection,
@@ -7,12 +7,15 @@ import {
   Nav,
   NavItem,
   NavList,
+  NavExpandable,
   Masthead,
   MastheadToggle,
   MastheadContent,
   PageToggleButton,
   Button,
-  Flex
+  Flex,
+  FlexItem,
+  Title
 } from '@patternfly/react-core';
 import {
   BarsIcon,
@@ -33,7 +36,10 @@ import MCPServerDiscoveryPage from './components/MCPServerDiscoveryPage';
 import MCPServerTestConnectionPage from './components/MCPServerTestConnectionPage';
 import MCPServerLogsPage from './components/MCPServerLogsPage';
 import APIKeyApprovalsPage from './components/APIKeyApprovalsPage';
+import PortalPage from './components/PortalPage';
 import APIDetailsPage from './components/APIDetailsPage';
+import APICredentialsPage from './components/APICredentialsPage';
+import APIKeyDetailPage from './components/APIKeyDetailPage';
 import RevealApiKeyModal from './components/RevealApiKeyModal';
 import EditApiKeyModal from './components/EditApiKeyModal';
 import DeleteApiKeyModal from './components/DeleteApiKeyModal';
@@ -50,6 +56,7 @@ import {
 const App = () => {
   const [isNavOpen, setIsNavOpen] = useState(true);
   const [activeItem, setActiveItem] = useState('api-key-approvals');
+  const [isInternalPortalExpanded, setIsInternalPortalExpanded] = useState(true);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isAppsDropdownOpen, setIsAppsDropdownOpen] = useState(false);
   const [isGatewayDetailsOpen, setIsGatewayDetailsOpen] = useState(false);
@@ -60,7 +67,9 @@ const App = () => {
   const [mcpServerPageType, setMcpServerPageType] = useState(null); // 'template', 'config', 'discovery'
   const [mcpServerAction, setMcpServerAction] = useState(null); // 'test-connection', 'view-logs'
   const [selectedMCPServer, setSelectedMCPServer] = useState(null);
-  const [selectedApiDetails, setSelectedApiDetails] = useState(null); // API name when viewing API details (e.g. from approvals)
+  const [selectedApiDetails, setSelectedApiDetails] = useState(null); // API name when viewing API details from Portal
+  const [selectedPortal, setSelectedPortal] = useState(null); // portal name when API owner clicks a portal card
+  const [selectedApiKey, setSelectedApiKey] = useState(null); // credential row when opening API key details (Active / Pending / Rejected)
   const [revealedKeyIds, setRevealedKeyIds] = useState(() => new Set());
   const [revealModalRowId, setRevealModalRowId] = useState(null);
   const [credentialsList, setCredentialsList] = useState(() => buildCredentialsData());
@@ -74,6 +83,17 @@ const App = () => {
   const [requestKeySuccessToast, setRequestKeySuccessToast] = useState(null);
   const [editKeySuccessToast, setEditKeySuccessToast] = useState(null);
   const [deleteKeySuccessToast, setDeleteKeySuccessToast] = useState(null);
+  /** After closing API key detail opened from catalog API keys tab, reopen API details on API keys tab. */
+  const [resumeApiDetailsKeysTab, setResumeApiDetailsKeysTab] = useState(false);
+  /** Inline success on API key details after Request API key from that page (no nav away). */
+  const [keyDetailRequestSuccessAlert, setKeyDetailRequestSuccessAlert] = useState(false);
+  const requestModalOpenedFromKeyDetailRef = useRef(false);
+  /** True when request modal opened from API catalog → API key detail (rejected); success uses toast + View details → new key. */
+  const requestModalFromCatalogKeyDetailRef = useRef(false);
+  /** True when opened from API catalog → API product details (keys tab), not key detail; View details stays in catalog. */
+  const requestModalFromCatalogApiDetailsRef = useRef(false);
+  /** True when opened from API key approval → API product details; success toast returns here. */
+  const requestModalFromApprovalRef = useRef(false);
 
   const editingCredential = editCredentialId ? credentialsList.find((c) => c.id === editCredentialId) : null;
   const deletingCredential = deleteCredentialId ? credentialsList.find((c) => c.id === deleteCredentialId) : null;
@@ -98,6 +118,9 @@ const App = () => {
       }
       return prev.map((r) => (r.id === id ? { ...r, name, tier, useCase, status: 'Pending' } : r));
     });
+    setSelectedApiKey((prev) =>
+      prev && prev.id === id ? { ...prev, name, tier, useCase, status: 'Pending' } : prev
+    );
     setRequestKeySuccessToast(null);
     setDeleteKeySuccessToast(null);
     setEditKeySuccessToast({
@@ -113,6 +136,59 @@ const App = () => {
     setEditKeySuccessToast(null);
     setDeleteKeySuccessToast(null);
     setRequestApiKeyOpen(true);
+  }, []);
+
+  /** My API keys list — Request API key (clear modal source refs so success toast targets My API keys). */
+  const openRequestFromMyKeysList = useCallback(() => {
+    requestModalOpenedFromKeyDetailRef.current = false;
+    requestModalFromCatalogKeyDetailRef.current = false;
+    requestModalFromCatalogApiDetailsRef.current = false;
+    requestModalFromApprovalRef.current = false;
+    openRequestApiKeyModal();
+  }, [openRequestApiKeyModal]);
+
+  /** From Rejected API key details (My API keys): open request modal on current page; inline success alert after submit. */
+  const openRequestModalFromKeyDetail = useCallback(() => {
+    requestModalOpenedFromKeyDetailRef.current = true;
+    requestModalFromCatalogKeyDetailRef.current = false;
+    requestModalFromCatalogApiDetailsRef.current = false;
+    requestModalFromApprovalRef.current = false;
+    openRequestApiKeyModal();
+  }, [openRequestApiKeyModal]);
+
+  /** From Rejected API key details (API catalog → API details → keys tab): same modal; toast + navigate to new key on View details. */
+  const openRequestModalFromCatalogKeyDetail = useCallback(() => {
+    requestModalOpenedFromKeyDetailRef.current = true;
+    requestModalFromCatalogKeyDetailRef.current = true;
+    requestModalFromCatalogApiDetailsRef.current = false;
+    requestModalFromApprovalRef.current = false;
+    openRequestApiKeyModal();
+  }, [openRequestApiKeyModal]);
+
+  /** From API catalog product details page (API keys tab / Request API key); View details opens new key under same API. */
+  const openRequestModalFromCatalogApiDetails = useCallback(() => {
+    requestModalOpenedFromKeyDetailRef.current = false;
+    requestModalFromCatalogKeyDetailRef.current = false;
+    requestModalFromCatalogApiDetailsRef.current = true;
+    requestModalFromApprovalRef.current = false;
+    openRequestApiKeyModal();
+  }, [openRequestApiKeyModal]);
+
+  /** From API key approval flow → API product details (Request API key). */
+  const openRequestModalFromApproval = useCallback(() => {
+    requestModalOpenedFromKeyDetailRef.current = false;
+    requestModalFromCatalogKeyDetailRef.current = false;
+    requestModalFromCatalogApiDetailsRef.current = false;
+    requestModalFromApprovalRef.current = true;
+    openRequestApiKeyModal();
+  }, [openRequestApiKeyModal]);
+
+  const closeRequestApiKeyModal = useCallback(() => {
+    requestModalOpenedFromKeyDetailRef.current = false;
+    requestModalFromCatalogKeyDetailRef.current = false;
+    requestModalFromCatalogApiDetailsRef.current = false;
+    requestModalFromApprovalRef.current = false;
+    setRequestApiKeyOpen(false);
   }, []);
 
   const handleRequestApiKeySubmit = ({ api: apiName, tier, name, useCase }) => {
@@ -137,11 +213,51 @@ const App = () => {
     });
     setEditKeySuccessToast(null);
     setDeleteKeySuccessToast(null);
-    setRequestKeySuccessToast({
-      api: apiName,
-      keyName: createdName,
-      credentialId: id
-    });
+    const fromKeyDetail = requestModalOpenedFromKeyDetailRef.current;
+    const fromCatalogKeyDetail = requestModalFromCatalogKeyDetailRef.current;
+    const fromCatalogApiDetails = requestModalFromCatalogApiDetailsRef.current;
+    const fromApprovalDetail = requestModalFromApprovalRef.current;
+    requestModalOpenedFromKeyDetailRef.current = false;
+    requestModalFromCatalogKeyDetailRef.current = false;
+    requestModalFromCatalogApiDetailsRef.current = false;
+    requestModalFromApprovalRef.current = false;
+    if (fromKeyDetail) {
+      if (fromCatalogKeyDetail) {
+        setKeyDetailRequestSuccessAlert(false);
+        setRequestKeySuccessToast({
+          api: apiName,
+          keyName: createdName,
+          credentialId: id,
+          viewDetailsTarget: 'catalog'
+        });
+      } else {
+        setRequestKeySuccessToast(null);
+        setKeyDetailRequestSuccessAlert(true);
+      }
+    } else if (fromCatalogApiDetails) {
+      setKeyDetailRequestSuccessAlert(false);
+      setRequestKeySuccessToast({
+        api: apiName,
+        keyName: createdName,
+        credentialId: id,
+        viewDetailsTarget: 'catalog'
+      });
+    } else if (fromApprovalDetail) {
+      setKeyDetailRequestSuccessAlert(false);
+      setRequestKeySuccessToast({
+        api: apiName,
+        keyName: createdName,
+        credentialId: id,
+        viewDetailsTarget: 'approval'
+      });
+    } else {
+      setRequestKeySuccessToast({
+        api: apiName,
+        keyName: createdName,
+        credentialId: id,
+        viewDetailsTarget: 'my-keys'
+      });
+    }
   };
 
   const dismissRequestKeyToast = useCallback(() => setRequestKeySuccessToast(null), []);
@@ -150,12 +266,35 @@ const App = () => {
     if (!requestKeySuccessToast?.credentialId) return;
     const id = requestKeySuccessToast.credentialId;
     const row = credentialsList.find((c) => c.id === id);
+    const target = requestKeySuccessToast.viewDetailsTarget;
     setRequestKeySuccessToast(null);
-    if (row?.api) {
+    if (!row) return;
+    if (target === 'approval') {
+      setActiveItem('api-key-approvals');
       setSelectedApiDetails(row.api);
-      setActiveItem('internal-portals');
+      setSelectedApiKey(null);
+      return;
     }
-  }, [requestKeySuccessToast, credentialsList]);
+    const openKeyInCatalog =
+      target === 'catalog' ||
+      (target !== 'my-keys' &&
+        activeItem === 'internal-portals' &&
+        selectedApiDetails &&
+        row.api === selectedApiDetails);
+    if (target === 'my-keys') {
+      setActiveItem('api-access');
+      setSelectedApiDetails(null);
+      setSelectedApiKey(row);
+    } else if (openKeyInCatalog) {
+      setActiveItem('internal-portals');
+      setSelectedApiDetails(row.api);
+      setSelectedApiKey(row);
+    } else {
+      setActiveItem('api-access');
+      setSelectedApiDetails(null);
+      setSelectedApiKey(row);
+    }
+  }, [requestKeySuccessToast, credentialsList, activeItem, selectedApiDetails]);
 
   const dismissEditKeyToast = useCallback(() => setEditKeySuccessToast(null), []);
 
@@ -164,13 +303,21 @@ const App = () => {
     const id = editKeySuccessToast.credentialId;
     const row = credentialsList.find((c) => c.id === id);
     setEditKeySuccessToast(null);
-    if (row?.api) {
-      setSelectedApiDetails(row.api);
-      setActiveItem('internal-portals');
+    if (!row) return;
+    setSelectedApiKey(row);
+    if (activeItem === 'internal-portals' && selectedApiDetails && row.api === selectedApiDetails) {
+      return;
     }
-  }, [editKeySuccessToast, credentialsList]);
+    if (activeItem === 'api-key-approvals' && selectedApiDetails && row.api === selectedApiDetails) {
+      return;
+    }
+    setActiveItem('api-access');
+    setSelectedApiDetails(null);
+  }, [editKeySuccessToast, credentialsList, activeItem, selectedApiDetails]);
 
   const dismissDeleteKeyToast = useCallback(() => setDeleteKeySuccessToast(null), []);
+
+  const consumeResumeApiDetailsKeysTab = useCallback(() => setResumeApiDetailsKeysTab(false), []);
 
   const handleDeleteApiKeyConfirm = (id) => {
     const row = credentialsList.find((c) => c.id === id);
@@ -178,6 +325,7 @@ const App = () => {
     const keyName = row?.name ?? '';
 
     setCredentialsList((prev) => prev.filter((r) => r.id !== id));
+    setSelectedApiKey((prev) => (prev?.id === id ? null : prev));
     setRevealedKeyIds((prev) => {
       const next = new Set(prev);
       next.delete(id);
@@ -192,14 +340,32 @@ const App = () => {
     setDeleteKeySuccessToast({ api: apiName, keyName });
   };
 
-  /** Open API product details for the same API name (e.g. from approvals). */
+  /** Jump to API catalog details for the same API name shown in My API keys. */
   const navigateToApiCatalogDetail = (apiName) => {
+    setSelectedApiKey(null);
     setRevealModalRowId(null);
     setEditCredentialId(null);
     setDeleteCredentialId(null);
+    setResumeApiDetailsKeysTab(false);
     setSelectedApiDetails(apiName);
     setActiveItem('internal-portals');
   };
+
+  /** From API key approval list into the same API product details (approval context). */
+  const navigateToApiCatalogFromApproval = useCallback((apiName) => {
+    setSelectedApiKey(null);
+    setRevealModalRowId(null);
+    setEditCredentialId(null);
+    setDeleteCredentialId(null);
+    setResumeApiDetailsKeysTab(false);
+    setSelectedApiDetails(apiName);
+    setActiveItem('api-key-approvals');
+  }, []);
+
+  const openCatalogApiDetails = useCallback((apiName) => {
+    setResumeApiDetailsKeysTab(false);
+    setSelectedApiDetails(apiName);
+  }, []);
 
   const onNavToggle = () => {
     setIsNavOpen(!isNavOpen);
@@ -213,17 +379,36 @@ const App = () => {
     }
   };
 
+  // Auto-expand API catalog when any of its child items are active
+  useEffect(() => {
+    if (['internal-portals', 'api-access'].includes(activeItem)) {
+      setIsInternalPortalExpanded(true);
+    }
+  }, [activeItem]);
+
+  useEffect(() => {
+    setKeyDetailRequestSuccessAlert(false);
+  }, [selectedApiKey?.id]);
+
+  const dismissKeyDetailRequestSuccessAlert = useCallback(() => setKeyDetailRequestSuccessAlert(false), []);
+
   useEffect(() => {
     if (!requestKeySuccessToast) return;
-    const eligible = activeItem === 'internal-portals' && selectedApiDetails;
+    const eligible =
+      (activeItem === 'api-access' && !selectedApiKey) ||
+      (activeItem === 'internal-portals' && selectedApiDetails) ||
+      (activeItem === 'api-key-approvals' && selectedApiDetails);
     if (!eligible) {
       setRequestKeySuccessToast(null);
     }
-  }, [activeItem, selectedApiDetails, requestKeySuccessToast]);
+  }, [activeItem, selectedApiDetails, selectedApiKey, requestKeySuccessToast]);
 
   useEffect(() => {
     if (!editKeySuccessToast) return;
-    const eligible = activeItem === 'internal-portals' && selectedApiDetails;
+    const eligible =
+      activeItem === 'api-access' ||
+      (activeItem === 'internal-portals' && selectedApiDetails) ||
+      (activeItem === 'api-key-approvals' && selectedApiDetails);
     if (!eligible) {
       setEditKeySuccessToast(null);
     }
@@ -231,7 +416,10 @@ const App = () => {
 
   useEffect(() => {
     if (!deleteKeySuccessToast) return;
-    const eligible = activeItem === 'internal-portals' && selectedApiDetails;
+    const eligible =
+      activeItem === 'api-access' ||
+      (activeItem === 'internal-portals' && selectedApiDetails) ||
+      (activeItem === 'api-key-approvals' && selectedApiDetails);
     if (!eligible) {
       setDeleteKeySuccessToast(null);
     }
@@ -360,7 +548,7 @@ const App = () => {
       <NavList>
         <NavItem
           itemId="api-key-approvals"
-          isActive={activeItem === 'api-key-approvals' || activeItem === 'internal-portals'}
+          isActive={activeItem === 'api-key-approvals'}
           onClick={() => {
             setActiveItem('api-key-approvals');
             setSelectedApiDetails(null);
@@ -368,6 +556,34 @@ const App = () => {
         >
           API key approval
         </NavItem>
+        <NavExpandable
+          title="API catalog"
+          isExpanded={isInternalPortalExpanded}
+          onExpand={() => setIsInternalPortalExpanded(!isInternalPortalExpanded)}
+          isActive={['internal-portals', 'api-access'].includes(activeItem)}
+        >
+          <NavItem
+            itemId="internal-portals"
+            isActive={activeItem === 'internal-portals'}
+            onClick={() => {
+              setActiveItem('internal-portals');
+              setSelectedPortal(null);
+              setSelectedApiDetails(null);
+            }}
+          >
+            APIs
+          </NavItem>
+          <NavItem
+            itemId="api-access"
+            isActive={activeItem === 'api-access'}
+            onClick={() => {
+              setActiveItem('api-access');
+              setSelectedApiKey(null);
+            }}
+          >
+            My API keys
+          </NavItem>
+        </NavExpandable>
       </NavList>
     </Nav>
   );
@@ -431,44 +647,130 @@ const App = () => {
         return <GatewaysPage onGatewayNameClick={handleGatewayNameClick} onCreateGateway={handleCreateGateway} />;
       case 'routes':
         return <RoutesPage onCreateHTTPRoute={handleCreateHTTPRouteFromRoutes} />;
-      case 'internal-portals':
+      case 'api-key-approvals':
         if (selectedApiDetails) {
           return (
             <APIDetailsPage
               apiName={selectedApiDetails}
               onBack={() => {
                 setSelectedApiDetails(null);
-                setActiveItem('api-key-approvals');
               }}
               breadcrumbParent="API key approval"
-              onRequestApiKey={openRequestApiKeyModal}
+              onRequestApiKey={openRequestModalFromApproval}
               apiKeysRows={credentialsList.filter((c) => c.api === selectedApiDetails)}
+              onOpenEdit={(row) => setEditCredentialId(row.id)}
               onOpenDelete={(row) => setDeleteCredentialId(row.id)}
             />
           );
         }
-        return <APIKeyApprovalsPage onNavigateToApiCatalog={navigateToApiCatalogDetail} />;
-      case 'api-key-approvals':
-        return <APIKeyApprovalsPage onNavigateToApiCatalog={navigateToApiCatalogDetail} />;
+        return <APIKeyApprovalsPage onNavigateToApiCatalog={navigateToApiCatalogFromApproval} />;
+      case 'internal-portals':
+        if (selectedApiDetails) {
+          if (selectedApiKey && selectedApiKey.api === selectedApiDetails) {
+            return (
+              <APIKeyDetailPage
+                credential={selectedApiKey}
+                breadcrumbSource="api-catalog"
+                catalogApiName={selectedApiDetails}
+                onNavigateToApiCatalog={() => {
+                  setSelectedApiKey(null);
+                  setSelectedApiDetails(null);
+                  setResumeApiDetailsKeysTab(false);
+                }}
+                onNavigateToParentApi={() => {
+                  setSelectedApiKey(null);
+                  setResumeApiDetailsKeysTab(true);
+                }}
+                revealedKeyIds={revealedKeyIds}
+                onOpenRevealModal={setRevealModalRowId}
+                onOpenEdit={(row) => setEditCredentialId(row.id)}
+                onOpenDelete={(row) => setDeleteCredentialId(row.id)}
+                onRequestNewApiKey={openRequestModalFromCatalogKeyDetail}
+                requestSubmitSuccessAlert={keyDetailRequestSuccessAlert}
+                onDismissRequestSubmitSuccessAlert={dismissKeyDetailRequestSuccessAlert}
+              />
+            );
+          }
+          return (
+            <APIDetailsPage
+              apiName={selectedApiDetails}
+              onBack={() => {
+                setSelectedApiDetails(null);
+                setResumeApiDetailsKeysTab(false);
+              }}
+              breadcrumbParent="APIs"
+              onRequestApiKey={openRequestModalFromCatalogApiDetails}
+              apiKeysRows={credentialsList.filter((c) => c.api === selectedApiDetails)}
+              onOpenEdit={(row) => setEditCredentialId(row.id)}
+              onOpenDelete={(row) => setDeleteCredentialId(row.id)}
+              onOpenApiKeyDetail={(row) => {
+                setResumeApiDetailsKeysTab(true);
+                setSelectedApiKey(row);
+              }}
+              resumeApiKeysTab={resumeApiDetailsKeysTab}
+              onResumeApiKeysTabConsumed={consumeResumeApiDetailsKeysTab}
+            />
+          );
+        }
+        return <PortalPage onApiNameClick={openCatalogApiDetails} />;
+      case 'api-access':
+        if (selectedApiKey) {
+        return (
+          <APIKeyDetailPage
+              credential={selectedApiKey}
+              onBack={() => setSelectedApiKey(null)}
+              revealedKeyIds={revealedKeyIds}
+              onOpenRevealModal={setRevealModalRowId}
+              onOpenEdit={(row) => setEditCredentialId(row.id)}
+              onOpenDelete={(row) => setDeleteCredentialId(row.id)}
+              onRequestNewApiKey={openRequestModalFromKeyDetail}
+              requestSubmitSuccessAlert={keyDetailRequestSuccessAlert}
+              onDismissRequestSubmitSuccessAlert={dismissKeyDetailRequestSuccessAlert}
+            />
+          );
+        }
+        return (
+          <APICredentialsPage
+            credentialsData={credentialsList}
+            onApiKeyNameClick={setSelectedApiKey}
+            revealedKeyIds={revealedKeyIds}
+            onOpenRevealModal={setRevealModalRowId}
+            onOpenEdit={(row) => setEditCredentialId(row.id)}
+            onOpenDelete={(row) => setDeleteCredentialId(row.id)}
+            onOpenRequestApiKey={openRequestFromMyKeysList}
+            onNavigateToApiCatalog={navigateToApiCatalogDetail}
+          />
+        );
       default:
-        return <APIKeyApprovalsPage onNavigateToApiCatalog={navigateToApiCatalogDetail} />;
+        return <APIKeyApprovalsPage onNavigateToApiCatalog={navigateToApiCatalogFromApproval} />;
     }
   };
 
+  /* My API keys (list only) + API catalog product details (incl. API keys tab) */
   const showRequestKeySuccessToast = Boolean(
-    requestKeySuccessToast && activeItem === 'internal-portals' && selectedApiDetails
+    requestKeySuccessToast &&
+      ((activeItem === 'api-access' && !selectedApiKey) ||
+        (activeItem === 'internal-portals' && selectedApiDetails) ||
+        (activeItem === 'api-key-approvals' && selectedApiDetails))
   );
 
+  /* My API keys (list or detail) + API catalog product details */
   const showEditKeySuccessToast = Boolean(
-    editKeySuccessToast && activeItem === 'internal-portals' && selectedApiDetails
+    editKeySuccessToast &&
+      (activeItem === 'api-access' ||
+        (activeItem === 'internal-portals' && selectedApiDetails) ||
+        (activeItem === 'api-key-approvals' && selectedApiDetails))
   );
 
   const showDeleteKeySuccessToast = Boolean(
-    deleteKeySuccessToast && activeItem === 'internal-portals' && selectedApiDetails
+    deleteKeySuccessToast &&
+      (activeItem === 'api-access' ||
+        (activeItem === 'internal-portals' && selectedApiDetails) ||
+        (activeItem === 'api-key-approvals' && selectedApiDetails))
   );
 
   return (
-    <Page masthead={masthead} sidebar={sidebar}>
+    <Page masthead={masthead} sidebar={sidebar} isContentFilled>
       {renderContent()}
       {showRequestKeySuccessToast && requestKeySuccessToast && (
         <RequestApiKeySuccessToast
@@ -513,7 +815,7 @@ const App = () => {
       />
       <RequestApiKeyModal
         isOpen={requestApiKeyOpen}
-        onClose={() => setRequestApiKeyOpen(false)}
+        onClose={closeRequestApiKeyModal}
         onSubmit={handleRequestApiKeySubmit}
         existingKeyNames={credentialNamesForRequestModal}
       />

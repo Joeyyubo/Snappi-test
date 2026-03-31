@@ -1,0 +1,15 @@
+/**
+ * Dev portal: main content “curtain” fills viewport below masthead and scrolls inside.
+ * Complements PatternFly Page (isContentFilled + grid 1fr row).
+ */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+/* Let the scrollable main column shrink inside the flex/grid chain (default min-height: auto prevents this). */
+.pf-v6-c-page__main {
+  min-height: 0;
+}
