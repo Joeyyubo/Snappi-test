@@ -381,7 +381,7 @@ const App = () => {
 
   // Auto-expand API catalog when any of its child items are active
   useEffect(() => {
-    if (['internal-portals', 'api-access'].includes(activeItem)) {
+    if (['internal-portals', 'api-access', 'api-key-approvals'].includes(activeItem)) {
       setIsInternalPortalExpanded(true);
     }
   }, [activeItem]);
@@ -546,21 +546,11 @@ const App = () => {
   const navigation = (
     <Nav onSelect={onNavSelect} aria-label="Navigation">
       <NavList>
-        <NavItem
-          itemId="api-key-approvals"
-          isActive={activeItem === 'api-key-approvals'}
-          onClick={() => {
-            setActiveItem('api-key-approvals');
-            setSelectedApiDetails(null);
-          }}
-        >
-          API key approval
-        </NavItem>
         <NavExpandable
           title="API catalog"
           isExpanded={isInternalPortalExpanded}
           onExpand={() => setIsInternalPortalExpanded(!isInternalPortalExpanded)}
-          isActive={['internal-portals', 'api-access'].includes(activeItem)}
+          isActive={['internal-portals', 'api-access', 'api-key-approvals'].includes(activeItem)}
         >
           <NavItem
             itemId="internal-portals"
@@ -582,6 +572,16 @@ const App = () => {
             }}
           >
             My API keys
+          </NavItem>
+          <NavItem
+            itemId="api-key-approvals"
+            isActive={activeItem === 'api-key-approvals'}
+            onClick={() => {
+              setActiveItem('api-key-approvals');
+              setSelectedApiDetails(null);
+            }}
+          >
+            API key approval
           </NavItem>
         </NavExpandable>
       </NavList>
