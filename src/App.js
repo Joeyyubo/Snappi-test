@@ -36,6 +36,7 @@ import MCPServerDiscoveryPage from './components/MCPServerDiscoveryPage';
 import MCPServerTestConnectionPage from './components/MCPServerTestConnectionPage';
 import MCPServerLogsPage from './components/MCPServerLogsPage';
 import APIKeyApprovalsPage from './components/APIKeyApprovalsPage';
+import ConnectivityLinkOverviewPage from './components/ConnectivityLinkOverviewPage';
 import PortalPage from './components/PortalPage';
 import APIDetailsPage from './components/APIDetailsPage';
 import APICredentialsPage from './components/APICredentialsPage';
@@ -57,6 +58,7 @@ const App = () => {
   const [isNavOpen, setIsNavOpen] = useState(true);
   const [activeItem, setActiveItem] = useState('api-key-approvals');
   const [isInternalPortalExpanded, setIsInternalPortalExpanded] = useState(true);
+  const [isConnectivityLinkExpanded, setIsConnectivityLinkExpanded] = useState(true);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isAppsDropdownOpen, setIsAppsDropdownOpen] = useState(false);
   const [isGatewayDetailsOpen, setIsGatewayDetailsOpen] = useState(false);
@@ -387,6 +389,12 @@ const App = () => {
   }, [activeItem]);
 
   useEffect(() => {
+    if (activeItem === 'connectivity-link-overview') {
+      setIsConnectivityLinkExpanded(true);
+    }
+  }, [activeItem]);
+
+  useEffect(() => {
     setKeyDetailRequestSuccessAlert(false);
   }, [selectedApiKey?.id]);
 
@@ -547,6 +555,20 @@ const App = () => {
     <Nav onSelect={onNavSelect} aria-label="Navigation">
       <NavList>
         <NavExpandable
+          title="Connectivity Link"
+          isExpanded={isConnectivityLinkExpanded}
+          onExpand={() => setIsConnectivityLinkExpanded(!isConnectivityLinkExpanded)}
+          isActive={activeItem === 'connectivity-link-overview'}
+        >
+          <NavItem
+            itemId="connectivity-link-overview"
+            isActive={activeItem === 'connectivity-link-overview'}
+            onClick={() => setActiveItem('connectivity-link-overview')}
+          >
+            Overview
+          </NavItem>
+        </NavExpandable>
+        <NavExpandable
           title="API catalog"
           isExpanded={isInternalPortalExpanded}
           onExpand={() => setIsInternalPortalExpanded(!isInternalPortalExpanded)}
@@ -643,6 +665,8 @@ const App = () => {
     }
     
     switch (activeItem) {
+      case 'connectivity-link-overview':
+        return <ConnectivityLinkOverviewPage />;
       case 'gateways':
         return <GatewaysPage onGatewayNameClick={handleGatewayNameClick} onCreateGateway={handleCreateGateway} />;
       case 'routes':
