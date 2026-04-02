@@ -36,6 +36,7 @@ import MCPServerDiscoveryPage from './components/MCPServerDiscoveryPage';
 import MCPServerTestConnectionPage from './components/MCPServerTestConnectionPage';
 import MCPServerLogsPage from './components/MCPServerLogsPage';
 import APIKeyApprovalsPage from './components/APIKeyApprovalsPage';
+import ServiceMeshPage from './components/ServiceMeshPage';
 import PortalPage from './components/PortalPage';
 import APIDetailsPage from './components/APIDetailsPage';
 import APICredentialsPage from './components/APICredentialsPage';
@@ -546,6 +547,13 @@ const App = () => {
   const navigation = (
     <Nav onSelect={onNavSelect} aria-label="Navigation">
       <NavList>
+        <NavItem
+          itemId="service-mesh"
+          isActive={activeItem === 'service-mesh'}
+          onClick={() => setActiveItem('service-mesh')}
+        >
+          Service mesh
+        </NavItem>
         <NavExpandable
           title="API catalog"
           isExpanded={isInternalPortalExpanded}
@@ -643,6 +651,8 @@ const App = () => {
     }
     
     switch (activeItem) {
+      case 'service-mesh':
+        return <ServiceMeshPage />;
       case 'gateways':
         return <GatewaysPage onGatewayNameClick={handleGatewayNameClick} onCreateGateway={handleCreateGateway} />;
       case 'routes':
