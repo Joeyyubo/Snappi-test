@@ -13,11 +13,11 @@ import ApiKeyToastFrame from './ApiKeyToastFrame';
  * Renders below masthead; auto-dismisses after PatternFly-style interval.
  */
 const APIKeyUpdatedToast = ({ api, keyName, updates, onClose, onViewDetails }) => (
-  <ApiKeyToastFrame aria-label="API key updated" onClose={onClose}>
+  <ApiKeyToastFrame aria-label="Toki updated" onClose={onClose}>
     <Alert
       variant={AlertVariant.info}
       isLiveRegion
-      title="API key updated"
+      title="Toki updated"
       actionClose={
         <Button variant="plain" onClick={onClose} aria-label="Dismiss notification" icon={<TimesIcon />} />
       }
@@ -28,11 +28,11 @@ const APIKeyUpdatedToast = ({ api, keyName, updates, onClose, onViewDetails }) =
       }
     >
       <div style={{ marginBottom: 'var(--pf-t--global--spacer--xs)' }}>
-        <span style={{ fontWeight: 'var(--pf-t--global--font--weight--body--bold)' }}>API: </span>
+        <span style={{ fontWeight: 'var(--pf-t--global--font--weight--body--bold)' }}>Roni: </span>
         {api}
       </div>
       <div style={{ marginBottom: 'var(--pf-t--global--spacer--xs)' }}>
-        <span style={{ fontWeight: 'var(--pf-t--global--font--weight--body--bold)' }}>API key name: </span>
+        <span style={{ fontWeight: 'var(--pf-t--global--font--weight--body--bold)' }}>Toki name: </span>
         {keyName}
       </div>
       <div

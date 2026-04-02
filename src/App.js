@@ -7,7 +7,6 @@ import {
   Nav,
   NavItem,
   NavList,
-  NavExpandable,
   Masthead,
   MastheadToggle,
   MastheadContent,
@@ -36,8 +35,7 @@ import MCPServerDiscoveryPage from './components/MCPServerDiscoveryPage';
 import MCPServerTestConnectionPage from './components/MCPServerTestConnectionPage';
 import MCPServerLogsPage from './components/MCPServerLogsPage';
 import APIKeyApprovalsPage from './components/APIKeyApprovalsPage';
-import ServiceMeshPage from './components/ServiceMeshPage';
-import PortalPage from './components/PortalPage';
+import ObservabilityPage from './components/ObservabilityPage';
 import APIDetailsPage from './components/APIDetailsPage';
 import APICredentialsPage from './components/APICredentialsPage';
 import APIKeyDetailPage from './components/APIKeyDetailPage';
@@ -57,7 +55,6 @@ import {
 const App = () => {
   const [isNavOpen, setIsNavOpen] = useState(true);
   const [activeItem, setActiveItem] = useState('api-key-approvals');
-  const [isInternalPortalExpanded, setIsInternalPortalExpanded] = useState(true);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isAppsDropdownOpen, setIsAppsDropdownOpen] = useState(false);
   const [isGatewayDetailsOpen, setIsGatewayDetailsOpen] = useState(false);
@@ -68,8 +65,9 @@ const App = () => {
   const [mcpServerPageType, setMcpServerPageType] = useState(null); // 'template', 'config', 'discovery'
   const [mcpServerAction, setMcpServerAction] = useState(null); // 'test-connection', 'view-logs'
   const [selectedMCPServer, setSelectedMCPServer] = useState(null);
-  const [selectedApiDetails, setSelectedApiDetails] = useState(null); // API name when viewing API details from Portal
-  const [selectedPortal, setSelectedPortal] = useState(null); // portal name when API owner clicks a portal card
+  const [selectedApiDetails, setSelectedApiDetails] = useState(null); // Roni name when viewing product details from Toki approval / My Toki link
+  /** Where Roni product details was opened from (drives Request Toki modal + toast routing). */
+  const [productDetailSource, setProductDetailSource] = useState(null); // 'approval-list' | 'my-toki'
   const [selectedApiKey, setSelectedApiKey] = useState(null); // credential row when opening API key details (Active / Pending / Rejected)
   const [revealedKeyIds, setRevealedKeyIds] = useState(() => new Set());
   const [revealModalRowId, setRevealModalRowId] = useState(null);
@@ -107,7 +105,7 @@ const App = () => {
       if (prevRow) {
         apiName = prevRow.api;
         const lines = [];
-        if (prevRow.name !== name) lines.push(`API key name updated to "${name}".`);
+        if (prevRow.name !== name) lines.push(`Toki name updated to "${name}".`);
         if (prevRow.tier !== tier) lines.push(`Tier updated to ${tier}.`);
         const prevUc = (prevRow.useCase || '').trim();
         const nextUc = (useCase || '').trim();
@@ -115,7 +113,7 @@ const App = () => {
           lines.push(nextUc || 'Use case cleared.');
         }
         updatesSummary =
-          lines.length > 0 ? lines.join(' ') : 'Changes saved. The API key is pending approval.';
+          lines.length > 0 ? lines.join(' ') : 'Changes saved. The Toki is pending approval.';
       }
       return prev.map((r) => (r.id === id ? { ...r, name, tier, useCase, status: 'Pending' } : r));
     });
@@ -196,7 +194,7 @@ const App = () => {
     const id = `cred-${Date.now()}`;
     let createdName = '';
     setCredentialsList((prev) => {
-      createdName = (name && name.trim()) || `API key ${prev.length + 1}`;
+      createdName = (name && name.trim()) || `Toki-${prev.length + 1}`;
       return [
         {
           id,
@@ -276,18 +274,18 @@ const App = () => {
       setSelectedApiKey(null);
       return;
     }
-    const openKeyInCatalog =
+    const openKeyInApprovalContext =
       target === 'catalog' ||
       (target !== 'my-keys' &&
-        activeItem === 'internal-portals' &&
+        activeItem === 'api-key-approvals' &&
         selectedApiDetails &&
         row.api === selectedApiDetails);
     if (target === 'my-keys') {
       setActiveItem('api-access');
       setSelectedApiDetails(null);
       setSelectedApiKey(row);
-    } else if (openKeyInCatalog) {
-      setActiveItem('internal-portals');
+    } else if (openKeyInApprovalContext) {
+      setActiveItem('api-key-approvals');
       setSelectedApiDetails(row.api);
       setSelectedApiKey(row);
     } else {
@@ -306,9 +304,6 @@ const App = () => {
     setEditKeySuccessToast(null);
     if (!row) return;
     setSelectedApiKey(row);
-    if (activeItem === 'internal-portals' && selectedApiDetails && row.api === selectedApiDetails) {
-      return;
-    }
     if (activeItem === 'api-key-approvals' && selectedApiDetails && row.api === selectedApiDetails) {
       return;
     }
@@ -341,15 +336,16 @@ const App = () => {
     setDeleteKeySuccessToast({ api: apiName, keyName });
   };
 
-  /** Jump to API catalog details for the same API name shown in My API keys. */
+  /** Jump to Roni product details (Toki approval context) from My Toki. */
   const navigateToApiCatalogDetail = (apiName) => {
     setSelectedApiKey(null);
     setRevealModalRowId(null);
     setEditCredentialId(null);
     setDeleteCredentialId(null);
     setResumeApiDetailsKeysTab(false);
+    setProductDetailSource('my-toki');
     setSelectedApiDetails(apiName);
-    setActiveItem('internal-portals');
+    setActiveItem('api-key-approvals');
   };
 
   /** From API key approval list into the same API product details (approval context). */
@@ -359,13 +355,9 @@ const App = () => {
     setEditCredentialId(null);
     setDeleteCredentialId(null);
     setResumeApiDetailsKeysTab(false);
+    setProductDetailSource('approval-list');
     setSelectedApiDetails(apiName);
     setActiveItem('api-key-approvals');
-  }, []);
-
-  const openCatalogApiDetails = useCallback((apiName) => {
-    setResumeApiDetailsKeysTab(false);
-    setSelectedApiDetails(apiName);
   }, []);
 
   const onNavToggle = () => {
@@ -380,13 +372,6 @@ const App = () => {
     }
   };
 
-  // Auto-expand API catalog when any of its child items are active
-  useEffect(() => {
-    if (['internal-portals', 'api-access', 'api-key-approvals'].includes(activeItem)) {
-      setIsInternalPortalExpanded(true);
-    }
-  }, [activeItem]);
-
   useEffect(() => {
     setKeyDetailRequestSuccessAlert(false);
   }, [selectedApiKey?.id]);
@@ -397,7 +382,6 @@ const App = () => {
     if (!requestKeySuccessToast) return;
     const eligible =
       (activeItem === 'api-access' && !selectedApiKey) ||
-      (activeItem === 'internal-portals' && selectedApiDetails) ||
       (activeItem === 'api-key-approvals' && selectedApiDetails);
     if (!eligible) {
       setRequestKeySuccessToast(null);
@@ -408,7 +392,6 @@ const App = () => {
     if (!editKeySuccessToast) return;
     const eligible =
       activeItem === 'api-access' ||
-      (activeItem === 'internal-portals' && selectedApiDetails) ||
       (activeItem === 'api-key-approvals' && selectedApiDetails);
     if (!eligible) {
       setEditKeySuccessToast(null);
@@ -419,7 +402,6 @@ const App = () => {
     if (!deleteKeySuccessToast) return;
     const eligible =
       activeItem === 'api-access' ||
-      (activeItem === 'internal-portals' && selectedApiDetails) ||
       (activeItem === 'api-key-approvals' && selectedApiDetails);
     if (!eligible) {
       setDeleteKeySuccessToast(null);
@@ -548,50 +530,32 @@ const App = () => {
     <Nav onSelect={onNavSelect} aria-label="Navigation">
       <NavList>
         <NavItem
-          itemId="service-mesh"
-          isActive={activeItem === 'service-mesh'}
-          onClick={() => setActiveItem('service-mesh')}
+          itemId="api-access"
+          isActive={activeItem === 'api-access'}
+          onClick={() => {
+            setActiveItem('api-access');
+            setSelectedApiKey(null);
+          }}
         >
-          Service mesh
+            My Toki
         </NavItem>
-        <NavExpandable
-          title="API catalog"
-          isExpanded={isInternalPortalExpanded}
-          onExpand={() => setIsInternalPortalExpanded(!isInternalPortalExpanded)}
-          isActive={['internal-portals', 'api-access', 'api-key-approvals'].includes(activeItem)}
+        <NavItem
+          itemId="api-key-approvals"
+          isActive={activeItem === 'api-key-approvals'}
+          onClick={() => {
+            setActiveItem('api-key-approvals');
+            setSelectedApiDetails(null);
+          }}
         >
-          <NavItem
-            itemId="internal-portals"
-            isActive={activeItem === 'internal-portals'}
-            onClick={() => {
-              setActiveItem('internal-portals');
-              setSelectedPortal(null);
-              setSelectedApiDetails(null);
-            }}
-          >
-            APIs
-          </NavItem>
-          <NavItem
-            itemId="api-access"
-            isActive={activeItem === 'api-access'}
-            onClick={() => {
-              setActiveItem('api-access');
-              setSelectedApiKey(null);
-            }}
-          >
-            My API keys
-          </NavItem>
-          <NavItem
-            itemId="api-key-approvals"
-            isActive={activeItem === 'api-key-approvals'}
-            onClick={() => {
-              setActiveItem('api-key-approvals');
-              setSelectedApiDetails(null);
-            }}
-          >
-            API key approval
-          </NavItem>
-        </NavExpandable>
+            Toki approval
+        </NavItem>
+        <NavItem
+          itemId="observability"
+          isActive={activeItem === 'observability'}
+          onClick={() => setActiveItem('observability')}
+        >
+          Observability
+        </NavItem>
       </NavList>
     </Nav>
   );
@@ -651,30 +615,13 @@ const App = () => {
     }
     
     switch (activeItem) {
-      case 'service-mesh':
-        return <ServiceMeshPage />;
+      case 'observability':
+        return <ObservabilityPage />;
       case 'gateways':
         return <GatewaysPage onGatewayNameClick={handleGatewayNameClick} onCreateGateway={handleCreateGateway} />;
       case 'routes':
         return <RoutesPage onCreateHTTPRoute={handleCreateHTTPRouteFromRoutes} />;
       case 'api-key-approvals':
-        if (selectedApiDetails) {
-          return (
-            <APIDetailsPage
-              apiName={selectedApiDetails}
-              onBack={() => {
-                setSelectedApiDetails(null);
-              }}
-              breadcrumbParent="API key approval"
-              onRequestApiKey={openRequestModalFromApproval}
-              apiKeysRows={credentialsList.filter((c) => c.api === selectedApiDetails)}
-              onOpenEdit={(row) => setEditCredentialId(row.id)}
-              onOpenDelete={(row) => setDeleteCredentialId(row.id)}
-            />
-          );
-        }
-        return <APIKeyApprovalsPage onNavigateToApiCatalog={navigateToApiCatalogFromApproval} />;
-      case 'internal-portals':
         if (selectedApiDetails) {
           if (selectedApiKey && selectedApiKey.api === selectedApiDetails) {
             return (
@@ -685,6 +632,7 @@ const App = () => {
                 onNavigateToApiCatalog={() => {
                   setSelectedApiKey(null);
                   setSelectedApiDetails(null);
+                  setProductDetailSource(null);
                   setResumeApiDetailsKeysTab(false);
                 }}
                 onNavigateToParentApi={() => {
@@ -706,10 +654,15 @@ const App = () => {
               apiName={selectedApiDetails}
               onBack={() => {
                 setSelectedApiDetails(null);
+                setProductDetailSource(null);
                 setResumeApiDetailsKeysTab(false);
               }}
-              breadcrumbParent="APIs"
-              onRequestApiKey={openRequestModalFromCatalogApiDetails}
+              breadcrumbParent="Toki approval"
+              onRequestApiKey={
+                productDetailSource === 'my-toki'
+                  ? openRequestModalFromCatalogApiDetails
+                  : openRequestModalFromApproval
+              }
               apiKeysRows={credentialsList.filter((c) => c.api === selectedApiDetails)}
               onOpenEdit={(row) => setEditCredentialId(row.id)}
               onOpenDelete={(row) => setDeleteCredentialId(row.id)}
@@ -722,7 +675,7 @@ const App = () => {
             />
           );
         }
-        return <PortalPage onApiNameClick={openCatalogApiDetails} />;
+        return <APIKeyApprovalsPage onNavigateToApiCatalog={navigateToApiCatalogFromApproval} />;
       case 'api-access':
         if (selectedApiKey) {
         return (
@@ -756,26 +709,21 @@ const App = () => {
     }
   };
 
-  /* My API keys (list only) + API catalog product details (incl. API keys tab) */
   const showRequestKeySuccessToast = Boolean(
     requestKeySuccessToast &&
       ((activeItem === 'api-access' && !selectedApiKey) ||
-        (activeItem === 'internal-portals' && selectedApiDetails) ||
         (activeItem === 'api-key-approvals' && selectedApiDetails))
   );
 
-  /* My API keys (list or detail) + API catalog product details */
   const showEditKeySuccessToast = Boolean(
     editKeySuccessToast &&
       (activeItem === 'api-access' ||
-        (activeItem === 'internal-portals' && selectedApiDetails) ||
         (activeItem === 'api-key-approvals' && selectedApiDetails))
   );
 
   const showDeleteKeySuccessToast = Boolean(
     deleteKeySuccessToast &&
       (activeItem === 'api-access' ||
-        (activeItem === 'internal-portals' && selectedApiDetails) ||
         (activeItem === 'api-key-approvals' && selectedApiDetails))
   );
 

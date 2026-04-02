@@ -34,7 +34,11 @@ function RequestSummaryBody({ row }) {
         <DescriptionListDescription>{row.owner}</DescriptionListDescription>
       </DescriptionListGroup>
       <DescriptionListGroup>
-        <DescriptionListTerm style={dtStyle}>API</DescriptionListTerm>
+        <DescriptionListTerm style={dtStyle}>Toki name</DescriptionListTerm>
+        <DescriptionListDescription>{row.name}</DescriptionListDescription>
+      </DescriptionListGroup>
+      <DescriptionListGroup>
+        <DescriptionListTerm style={dtStyle}>Roni</DescriptionListTerm>
         <DescriptionListDescription>{row.api}</DescriptionListDescription>
       </DescriptionListGroup>
       <DescriptionListGroup>
@@ -77,7 +81,7 @@ export function ApproveApiKeyModal({ isOpen, onClose, row, onApprove }) {
       variant="small"
       aria-labelledby="approve-api-key-title"
     >
-      <ModalHeader title="Approve API key" labelId="approve-api-key-title" />
+      <ModalHeader title="Approve Toki" labelId="approve-api-key-title" />
       <ModalBody>{row ? <RequestSummaryBody row={row} /> : null}</ModalBody>
       <ModalFooter>
         <Button
@@ -116,7 +120,7 @@ export function RejectApiKeyModal({ isOpen, onClose, row, onReject }) {
       <Icon size="md" status="danger" style={{ flexShrink: 0 }}>
         <ExclamationCircleIcon />
       </Icon>
-      <span id="reject-api-key-title">Reject API key</span>
+      <span id="reject-api-key-title">Reject Toki</span>
     </Flex>
   );
 

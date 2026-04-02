@@ -42,11 +42,11 @@ const DeleteApiKeyModal = ({ credential, isOpen, onClose, onConfirm }) => {
   };
 
   return (
-    <Modal title="Delete API key" isOpen={isOpen} onClose={onClose} variant="small" aria-labelledby="delete-api-key-title">
-      <ModalHeader title="Delete API key" titleIconVariant="danger" labelId="delete-api-key-title" />
+    <Modal title="Delete Toki" isOpen={isOpen} onClose={onClose} variant="small" aria-labelledby="delete-api-key-title">
+      <ModalHeader title="Delete Toki" titleIconVariant="danger" labelId="delete-api-key-title" />
       <ModalBody>
         <p style={{ marginBottom: 'var(--pf-t--global--spacer--lg)', color: 'var(--pf-t--global--text--color--regular)' }}>
-          The API key will be deleted and removed. The deletion will immediately disable access for all applications
+          The Toki will be deleted and removed. The deletion will immediately disable access for all applications
           currently using it.
         </p>
         <Form id="delete-api-key-form" onSubmit={(e) => e.preventDefault()}>
@@ -67,7 +67,7 @@ const DeleteApiKeyModal = ({ credential, isOpen, onClose, onConfirm }) => {
               value={confirmInput}
               onChange={(_e, v) => setConfirmInput(v)}
               validated={validated}
-              aria-label="Type API key name to confirm deletion"
+              aria-label="Type Toki name to confirm deletion"
               autoComplete="off"
             />
           </FormGroup>

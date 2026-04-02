@@ -18,11 +18,11 @@ const ApiKeyApprovalResultToast = ({ kind, count, api, requester, onClose }) => 
   const title =
     count === 1
       ? isApprove
-        ? 'API key request approved'
-        : 'API key request rejected'
+        ? 'Toki request approved'
+        : 'Toki request rejected'
       : isApprove
-        ? `Approved ${count} API key requests`
-        : `Rejected ${count} API key requests`;
+        ? `Approved ${count} Toki requests`
+        : `Rejected ${count} Toki requests`;
 
   return (
     <ApiKeyToastFrame aria-label={title} onClose={onClose}>
@@ -36,7 +36,7 @@ const ApiKeyApprovalResultToast = ({ kind, count, api, requester, onClose }) => 
       >
         {api ? (
           <div style={requester ? detailLineStyle : undefined}>
-            <span style={labelStyle}>API: </span>
+            <span style={labelStyle}>Roni: </span>
             {api}
           </div>
         ) : null}

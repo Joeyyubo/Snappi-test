@@ -57,16 +57,16 @@ const RevealApiKeyModal = ({ rowId, onClose, onRevealed }) => {
 
   return (
     <Modal
-      title="Reveal API key"
+      title="Reveal Toki"
       isOpen={!!rowId}
       onClose={() => canCloseRevealModal && closeRevealModal()}
       variant="small"
     >
-      <ModalHeader title="Reveal API key" titleIconVariant="warning" />
+      <ModalHeader title="Reveal Toki" titleIconVariant="warning" />
       <ModalBody>
         {revealStep === 1 && (
           <p>
-            The API key can only be viewed <strong>once</strong>. After you reveal it, you will not be able to retrieve it
+            The Toki can only be viewed <strong>once</strong>. After you reveal it, you will not be able to retrieve it
             again.
           </p>
         )}
@@ -80,7 +80,7 @@ const RevealApiKeyModal = ({ rowId, onClose, onRevealed }) => {
                 htmlFor="reveal-api-key-input"
                 style={{ display: 'block', fontWeight: 700, marginBottom: 'var(--pf-t--global--spacer--xs)' }}
               >
-                API key
+                Toki
               </label>
               <InputGroup>
                 <Tooltip content={REVEALED_API_KEY}>
@@ -90,7 +90,7 @@ const RevealApiKeyModal = ({ rowId, onClose, onRevealed }) => {
                       type="text"
                       value={REVEALED_API_KEY}
                       isReadOnly
-                      aria-label="API key"
+                      aria-label="Toki"
                       style={{ width: '100%', textOverflow: 'ellipsis' }}
                     />
                   </span>
@@ -104,7 +104,7 @@ const RevealApiKeyModal = ({ rowId, onClose, onRevealed }) => {
               id="reveal-acknowledge"
               isChecked={revealAcknowledged}
               onChange={(_, checked) => setRevealAcknowledged(checked)}
-              label="I've copied the key and I'm aware that it's only shown once."
+              label="I've copied the Toki and I'm aware that it's only shown once."
             />
           </>
         )}

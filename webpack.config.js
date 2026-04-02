@@ -38,7 +38,10 @@ module.exports = {
   devServer: {
     static: path.join(__dirname, 'dist'),
     compress: true,
-    port: 12128,
+    port: 13131,
+    // Listen on all interfaces so localhost, 127.0.0.1, and LAN IP all work (avoids some IPv6/loopback issues).
+    host: '0.0.0.0',
+    allowedHosts: 'all',
     historyApiFallback: true,
     open: true
   }

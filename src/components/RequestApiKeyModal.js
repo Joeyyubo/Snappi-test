@@ -145,13 +145,13 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit, existingKeyNames = [] }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} variant="small" aria-labelledby="request-api-key-title">
-      <ModalHeader title="Request API key" labelId="request-api-key-title" />
+      <ModalHeader title="Request Toki" labelId="request-api-key-title" />
       <ModalBody>
         <Content
           component={ContentVariants.p}
           style={{ marginBottom: 'var(--pf-t--global--spacer--lg)', color: 'var(--pf-t--global--text--color--subtle)' }}
         >
-          Provide details to request a new API key for accessing APIs.
+          Provide details to request a new Toki for accessing Roni.
         </Content>
         <Form
           id="request-api-key-form"
@@ -160,7 +160,7 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit, existingKeyNames = [] }
             handleRequest();
           }}
         >
-          <FormGroup role="group" label="API" isRequired fieldId="request-api-key-api">
+          <FormGroup role="group" label="Roni" isRequired fieldId="request-api-key-api">
             <div style={{ width: '100%' }}>
               <Dropdown
                 isOpen={apiSelectOpen}
@@ -177,7 +177,7 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit, existingKeyNames = [] }
                     isExpanded={apiSelectOpen}
                     variant="default"
                     id="request-api-key-api-toggle"
-                    aria-label="API"
+                    aria-label="Roni"
                     isFullWidth
                     isPlaceholder={!api}
                   >
@@ -224,11 +224,11 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit, existingKeyNames = [] }
               >
                 <SearchInput
                   id="request-api-key-api-search"
-                  placeholder="Find by API"
+                  placeholder="Find by Roni"
                   value={apiSearchQuery}
                   onChange={(_e, v) => setApiSearchQuery(v)}
                   onClear={() => setApiSearchQuery('')}
-                  aria-label="Find by API"
+                  aria-label="Find by Roni"
                   style={{ width: '100%' }}
                 />
               </div>
@@ -265,7 +265,7 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit, existingKeyNames = [] }
             {!api ? (
               <FormHelperText>
                 <HelperText>
-                  <HelperTextItem>Select an API. Submit a separate request for each additional API.</HelperTextItem>
+                  <HelperTextItem>Select a Roni. Submit a separate request for each additional Roni.</HelperTextItem>
                 </HelperText>
               </FormHelperText>
             ) : null}
@@ -325,7 +325,7 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit, existingKeyNames = [] }
                       </div>
                     ) : (
                       <span style={{ display: 'block', textAlign: 'start', width: '100%' }}>
-                        Select an API first...
+                        Select a Roni first...
                       </span>
                     )}
                   </MenuToggle>
@@ -361,7 +361,7 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit, existingKeyNames = [] }
               <FormHelperText>
                 <HelperText>
                   <HelperTextItem>
-                    Select a tier to define the usage limits for this API key.
+                    Select a tier to define the usage limits for this Toki.
                   </HelperTextItem>
                 </HelperText>
               </FormHelperText>
@@ -370,7 +370,7 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit, existingKeyNames = [] }
 
           <FormGroup
             role="group"
-            label="API key name"
+            label="Toki name"
             fieldId="request-api-key-name"
             validated={nameValidationError ? 'error' : 'default'}
           >
@@ -378,7 +378,7 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit, existingKeyNames = [] }
               id="request-api-key-name"
               value={name}
               onChange={(_e, v) => setName(v)}
-              aria-label="API key name"
+              aria-label="Toki name"
               aria-invalid={nameValidationError ? true : undefined}
               validated={nameValidationError ? 'error' : 'default'}
               style={{ width: '100%' }}
@@ -401,7 +401,7 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit, existingKeyNames = [] }
               <FormHelperText>
                 <HelperText>
                   <HelperTextItem>
-                    A unique name to identify this key. If left blank, a name is automatically generated.
+                    A unique name to identify this Toki. If left blank, a name is automatically generated.
                   </HelperTextItem>
                 </HelperText>
               </FormHelperText>
@@ -421,7 +421,7 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit, existingKeyNames = [] }
             {!useCase.trim() ? (
               <FormHelperText>
                 <HelperText>
-                  <HelperTextItem>A brief description of how you intend to use this API key.</HelperTextItem>
+                  <HelperTextItem>A brief description of how you intend to use this Toki.</HelperTextItem>
                 </HelperText>
               </FormHelperText>
             ) : null}

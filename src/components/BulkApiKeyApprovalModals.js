@@ -46,21 +46,23 @@ function SelectedRowsTable({ rows, onRemoveRow, onNavigateToApiCatalog }) {
 
   const table = (
     <Table
-      aria-label="Selected API key requests"
+      aria-label="Selected Toki requests"
       variant="compact"
       gridBreakPoint={TableGridBreakpoint.none}
       style={{ tableLayout: 'fixed', width: '100%' }}
     >
       <colgroup>
-        <col style={{ width: '26%' }} />
-        <col style={{ width: '42%' }} />
-        <col style={{ width: '28%' }} />
+        <col style={{ width: '20%' }} />
+        <col style={{ width: '20%' }} />
+        <col style={{ width: '36%' }} />
+        <col style={{ width: '14%' }} />
         <col style={{ width: '2.75rem' }} />
       </colgroup>
       <Thead>
         <Tr>
           <Th style={thStyle}>Requester</Th>
-          <Th style={thStyle}>API</Th>
+          <Th style={thStyle}>Toki name</Th>
+          <Th style={thStyle}>Roni</Th>
           <Th style={thStyle}>Tier</Th>
           <Th screenReaderText="Remove from list" style={{ ...thStyle, width: '2.75rem' }} />
         </Tr>
@@ -69,6 +71,7 @@ function SelectedRowsTable({ rows, onRemoveRow, onNavigateToApiCatalog }) {
         {rows.map((row) => (
           <Tr key={row.id}>
             <Td style={{ verticalAlign: 'middle' }}>{row.owner}</Td>
+            <Td style={{ verticalAlign: 'middle' }}>{row.name}</Td>
             <Td style={{ verticalAlign: 'middle' }}>
               <Button
                 variant="link"
@@ -115,7 +118,7 @@ function SelectedRowsTable({ rows, onRemoveRow, onNavigateToApiCatalog }) {
     <div style={BULK_SUMMARY_TABLE_OUTER_STYLE}>
       <div
         role="region"
-        aria-label="Selected API key requests"
+        aria-label="Selected Toki requests"
         style={{
           overflowY: 'auto',
           overflowX: 'hidden',
@@ -162,7 +165,7 @@ export function BulkApproveApiKeysModal({ onClose, initialRows, onConfirm, onNav
 
   return (
     <Modal isOpen onClose={onClose} variant="small" aria-labelledby="bulk-approve-api-keys-title">
-      <ModalHeader title={`Approve ${n} API keys`} labelId="bulk-approve-api-keys-title" />
+      <ModalHeader title={`Approve ${n} Toki`} labelId="bulk-approve-api-keys-title" />
       <ModalBody>
         <Content
           component={ContentVariants.p}
@@ -171,7 +174,7 @@ export function BulkApproveApiKeysModal({ onClose, initialRows, onConfirm, onNav
             color: 'var(--pf-t--global--text--color--regular)'
           }}
         >
-          You are about to approve the following API keys:
+          You are about to approve the following Toki:
         </Content>
         <SelectedRowsTable
           rows={rows}
@@ -183,7 +186,7 @@ export function BulkApproveApiKeysModal({ onClose, initialRows, onConfirm, onNav
             id="bulk-approve-confirm"
             isChecked={confirmed}
             onChange={(_e, checked) => setConfirmed(checked)}
-            label={`Yes, I confirm that I want to approve these ${n} API keys.`}
+            label={`Yes, I confirm that I want to approve these ${n} Toki.`}
           />
         </div>
       </ModalBody>
@@ -243,7 +246,7 @@ export function BulkRejectApiKeysModal({ onClose, initialRows, onConfirm, onNavi
       <Icon size="md" status="danger" style={{ flexShrink: 0 }}>
         <ExclamationCircleIcon />
       </Icon>
-      <span id="bulk-reject-api-keys-title">Reject {n} API keys</span>
+      <span id="bulk-reject-api-keys-title">Reject {n} Toki</span>
     </Flex>
   );
 
@@ -258,7 +261,7 @@ export function BulkRejectApiKeysModal({ onClose, initialRows, onConfirm, onNavi
             color: 'var(--pf-t--global--text--color--regular)'
           }}
         >
-          You are about to reject the following API keys:
+          You are about to reject the following Toki:
         </Content>
         <SelectedRowsTable
           rows={rows}
@@ -292,7 +295,7 @@ export function BulkRejectApiKeysModal({ onClose, initialRows, onConfirm, onNavi
             id="bulk-reject-confirm"
             isChecked={confirmed}
             onChange={(_e, checked) => setConfirmed(checked)}
-            label={`Yes, I confirm that I want to reject these ${n} API keys.`}
+            label={`Yes, I confirm that I want to reject these ${n} Toki.`}
           />
         </div>
       </ModalBody>

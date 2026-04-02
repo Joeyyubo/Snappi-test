@@ -3,7 +3,7 @@ import { Icon, Spinner, Tooltip } from '@patternfly/react-core';
 import { EyeIcon, EyeSlashIcon } from '@patternfly/react-icons';
 
 /**
- * Renders the API key column / detail field to match My API keys table behavior.
+ * Renders the Toki column / detail field to match My Toki table behavior.
  */
 export function renderApiKeyField({
   status,
@@ -20,7 +20,7 @@ export function renderApiKeyField({
   if (apiKeyState === 'viewed' || isRevealed) {
     const disabledColor = 'var(--pf-t--global--color--disabled--200)';
     return (
-      <Tooltip content="The API key has already been viewed and can not be retrieved again.">
+      <Tooltip content="The Toki has already been viewed and can not be retrieved again.">
         <span
           style={{
             color: disabledColor,
@@ -73,7 +73,7 @@ export function renderApiKeyField({
       </span>
     );
     return (
-      <Tooltip content="Reveal API key (one-time only)">
+      <Tooltip content="Reveal Toki (one-time only)">
         {inner}
       </Tooltip>
     );

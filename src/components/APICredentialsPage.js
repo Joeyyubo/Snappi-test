@@ -60,7 +60,7 @@ const STATUS_OPTIONS = ['Active', 'Pending', 'Rejected', 'Revoked', 'Expired'];
 const STATUS_RANK = { Active: 3, Pending: 2, Rejected: 1 };
 
 const REJECTION_REASON_FALLBACK =
-  'ion test.em ipsum dolor sit amururururtur at.';
+  'Rejection detail is not shown in this external demo view.';
 
 function apiKeyColumnRank(row, revealedKeyIds) {
   if (row.status === 'Active' && row.apiKeyState === 'masked') return 4;
@@ -222,7 +222,7 @@ const APICredentialsPage = ({
               onOpenRequestApiKey?.();
             }}
           >
-            Request a new API key
+            Request a new Toki
           </Button>
         )}
         showClose
@@ -238,7 +238,7 @@ const APICredentialsPage = ({
         <Button
           variant="link"
           isInline
-          aria-label={`Rejected — view rejection reason for ${row.name || 'API key'}`}
+          aria-label={`Rejected — view rejection reason for ${row.name || 'Toki'}`}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -410,19 +410,19 @@ const APICredentialsPage = ({
         </div>
         <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }} alignItems={{ default: 'alignItemsFlexStart' }}>
           <FlexItem>
-            <Title headingLevel="h1" size="2xl">My API keys</Title>
+            <Title headingLevel="h1" size="2xl">My Toki</Title>
             <p
               style={{
                 marginTop: 'var(--pf-t--global--spacer--sm)',
                 color: 'var(--pf-t--global--text--color--subtle)'
               }}
             >
-              View and manage your API keys.
+              View and manage your Toki.
             </p>
           </FlexItem>
           <FlexItem>
             <Button variant="primary" onClick={() => onOpenRequestApiKey?.()}>
-              Request API key
+              Request Toki
             </Button>
           </FlexItem>
         </Flex>
@@ -511,8 +511,8 @@ const APICredentialsPage = ({
               </ToolbarFilter>
               <ToolbarItem>
                 <SearchInput
-                  placeholder="Find by API or name"
-                  aria-label="Find by API or name"
+                  placeholder="Find by Roni or Toki name"
+                  aria-label="Find by Roni or Toki name"
                   value={searchValue}
                   onChange={(_, value) => setSearchValue(value)}
                   onClear={() => setSearchValue('')}
@@ -524,7 +524,7 @@ const APICredentialsPage = ({
         </Toolbar>
 
         <div style={{ marginTop: 'var(--pf-t--global--spacer--sm)' }}>
-          <Table aria-label="My API keys table" className="my-api-keys-table" isExpandable>
+          <Table aria-label="My Toki table" className="my-api-keys-table" isExpandable>
           <Thead>
             <Tr>
               <Th
@@ -533,9 +533,9 @@ const APICredentialsPage = ({
                   paddingRight: 'var(--pf-t--global--spacer--xs)'
                 }}
               />
-              <Th sort={{ columnIndex: 1, sortBy: sortState, onSort: handleSort }}>API key name</Th>
+              <Th sort={{ columnIndex: 1, sortBy: sortState, onSort: handleSort }}>Toki name</Th>
               <Th sort={{ columnIndex: 2, sortBy: sortState, onSort: handleSort }}>Owner</Th>
-              <Th sort={{ columnIndex: 3, sortBy: sortState, onSort: handleSort }}>API</Th>
+              <Th sort={{ columnIndex: 3, sortBy: sortState, onSort: handleSort }}>Roni</Th>
               <Th sort={{ columnIndex: 4, sortBy: sortState, onSort: handleSort }}>Status</Th>
               <Th
                 dataLabel="Tier"
@@ -547,7 +547,7 @@ const APICredentialsPage = ({
               >
                 <TierSortableColumnHeader columnIndex={5} sortBy={sortState} onSort={handleSort} />
               </Th>
-              <Th sort={{ columnIndex: 6, sortBy: sortState, onSort: handleSort }}>API key</Th>
+              <Th sort={{ columnIndex: 6, sortBy: sortState, onSort: handleSort }}>Toki</Th>
               <Th sort={{ columnIndex: 7, sortBy: sortState, onSort: handleSort }}>Requested time</Th>
               <Th />
             </Tr>

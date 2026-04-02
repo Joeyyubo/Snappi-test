@@ -124,7 +124,7 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
   const [searchValue, setSearchValue] = useState('');
   const [selectedIds, setSelectedIds] = useState(() => new Set());
   const [sortState, setSortState] = useState({
-    index: 1,
+    index: 2,
     direction: 'asc',
     defaultDirection: 'asc'
   });
@@ -161,6 +161,7 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
     const reasonText = (row.rejectionReason || '').toLowerCase();
     const matchesSearch =
       !q ||
+      (row.name && row.name.toLowerCase().includes(q)) ||
       row.api.toLowerCase().includes(q) ||
       row.owner.toLowerCase().includes(q) ||
       useCaseText.includes(q) ||
@@ -179,24 +180,27 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
       let cmp = 0;
       switch (index) {
         case 1:
+          cmp = (a.name || '').localeCompare(b.name || '', undefined, { sensitivity: 'base' });
+          break;
+        case 2:
           cmp = (a.api || '').localeCompare(b.api || '', undefined, { sensitivity: 'base' });
           break;
-        case 2: {
+        case 3: {
           const ua = (a.useCase || USE_CASE_EXPANDED_TEXT) || '';
           const ub = (b.useCase || USE_CASE_EXPANDED_TEXT) || '';
           cmp = ua.localeCompare(ub, undefined, { sensitivity: 'base' });
           break;
         }
-        case 3:
+        case 4:
           cmp = (STATUS_RANK[a.status] ?? 0) - (STATUS_RANK[b.status] ?? 0);
           break;
-        case 4:
+        case 5:
           cmp = (TIER_LIMIT[a.tier] ?? 0) - (TIER_LIMIT[b.tier] ?? 0);
           break;
-        case 5:
+        case 6:
           cmp = (a.owner || '').localeCompare(b.owner || '', undefined, { sensitivity: 'base' });
           break;
-        case 6:
+        case 7:
           cmp = (a.requestedTime || '').localeCompare(b.requestedTime || '', undefined, { numeric: true });
           break;
         default:
@@ -553,7 +557,7 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
           />
         </div>
         <Title headingLevel="h1" size="2xl">
-          API key approval
+          Toki approval
         </Title>
         <p
           style={{
@@ -561,7 +565,7 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
             color: 'var(--pf-t--global--text--color--subtle)'
           }}
         >
-          Review and approve API key requests
+          Review and approve Toki requests
         </p>
 
         <Toolbar
@@ -702,7 +706,8 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
               </ToolbarFilter>
               <ToolbarItem>
                 <SearchInput
-                  placeholder="Find by API, requester, or use case"
+                  placeholder="Find by Roni, Toki name, requester, or use case"
+                  aria-label="Find by Roni, Toki name, requester, or use case"
                   value={searchValue}
                   onChange={(_, value) => setSearchValue(value)}
                   onClear={() => setSearchValue('')}
@@ -743,18 +748,19 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
         >
           <Table
             className="approvals-key-table"
-            aria-label="API key approval table"
+            aria-label="Toki approval table"
             gridBreakPoint={TableGridBreakpoint.none}
             style={{
               tableLayout: 'fixed',
               width: '100%',
-              minWidth: '56rem'
+              minWidth: '62rem'
             }}
           >
             <colgroup>
               <col style={{ width: '1.25rem' }} />
-              <col style={{ width: '11%' }} />
-              <col style={{ width: '19%' }} />
+              <col style={{ width: '12%' }} />
+              <col style={{ width: '10%' }} />
+              <col style={{ width: '17%' }} />
               <col style={{ width: '13%' }} />
               <col style={{ width: '13%' }} />
               <col style={{ width: '12%' }} />
@@ -765,31 +771,34 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
             <Tr>
               <Th screenReaderText="Row selection" style={APPROVALS_SELECT_COL_STYLE} />
               <Th sort={{ columnIndex: 1, sortBy: sortState, onSort: handleSort }} style={APPROVALS_API_COL_STYLE}>
-                API
+                Toki name
+              </Th>
+              <Th sort={{ columnIndex: 2, sortBy: sortState, onSort: handleSort }} style={APPROVALS_API_COL_STYLE}>
+                Roni
               </Th>
               <Th
-                sort={{ columnIndex: 2, sortBy: sortState, onSort: handleSort }}
+                sort={{ columnIndex: 3, sortBy: sortState, onSort: handleSort }}
                 style={{ paddingInlineEnd: 'var(--pf-t--global--spacer--md)' }}
               >
                 Use case
               </Th>
               <Th
-                sort={{ columnIndex: 3, sortBy: sortState, onSort: handleSort }}
+                sort={{ columnIndex: 4, sortBy: sortState, onSort: handleSort }}
                 style={{ paddingInlineStart: 'var(--pf-t--global--spacer--md)' }}
               >
                 Status
               </Th>
               <Th dataLabel="Tier" style={APPROVALS_TIER_TH_TD_STYLE}>
-                <TierSortableColumnHeader columnIndex={4} sortBy={sortState} onSort={handleSort} />
+                <TierSortableColumnHeader columnIndex={5} sortBy={sortState} onSort={handleSort} />
               </Th>
               <Th
-                sort={{ columnIndex: 5, sortBy: sortState, onSort: handleSort }}
+                sort={{ columnIndex: 6, sortBy: sortState, onSort: handleSort }}
                 style={{ whiteSpace: 'nowrap' }}
               >
                 Requester
               </Th>
               <Th
-                sort={{ columnIndex: 6, sortBy: sortState, onSort: handleSort }}
+                sort={{ columnIndex: 7, sortBy: sortState, onSort: handleSort }}
                 style={{ whiteSpace: 'nowrap' }}
               >
                 Requested time
@@ -813,6 +822,9 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
                           : `Cannot select request for ${row.api} (${approvalStatusLabel(row.status)} keys are not selectable)`
                       }
                     />
+                  </Td>
+                  <Td style={APPROVALS_API_COL_STYLE}>
+                    <TruncatedTableText text={row.name} />
                   </Td>
                   <Td style={APPROVALS_API_COL_STYLE}>
                     <TruncatedTableLink

@@ -5,7 +5,7 @@ import { Popover } from '@patternfly/react-core';
 import { SortColumn, SortByDirection } from '@patternfly/react-table';
 import { QuestionCircleHelpTrigger } from './QuestionCircleHelpTrigger';
 
-const TIER_POPOVER_BODY = <p style={{ margin: 0 }}>API product limit tiers.</p>;
+const TIER_POPOVER_BODY = <p style={{ margin: 0 }}>Roni product limit tiers.</p>;
 
 /** Min width for Tier header (label + sort + help). Keep modest so the column does not look oversized. */
 export const TIER_TABLE_COLUMN_MIN_WIDTH = '7.5rem';

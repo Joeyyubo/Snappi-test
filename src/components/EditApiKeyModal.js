@@ -75,16 +75,16 @@ const EditApiKeyModal = ({ credential, isOpen, onClose, onSave }) => {
   );
 
   return (
-    <Modal title="Edit API key" isOpen={isOpen} onClose={onClose} variant="small" aria-labelledby="edit-api-key-title">
-      <ModalHeader title="Edit API key" labelId="edit-api-key-title" />
+    <Modal title="Edit Toki" isOpen={isOpen} onClose={onClose} variant="small" aria-labelledby="edit-api-key-title">
+      <ModalHeader title="Edit Toki" labelId="edit-api-key-title" />
       <ModalBody>
         <p style={{ marginBottom: 'var(--pf-t--global--spacer--md)', color: 'var(--pf-t--global--text--color--subtle)' }}>
-          Update the API key details such as change tiers or add more details.
+          Update the Toki details such as change tiers or add more details.
         </p>
         <Alert
           variant={AlertVariant.info}
           isInline
-          title="The API key will become pending approval after edition."
+          title="The Toki will become pending approval after edition."
           style={{ marginBottom: 'var(--pf-t--global--spacer--lg)' }}
         />
         <Form
@@ -94,13 +94,13 @@ const EditApiKeyModal = ({ credential, isOpen, onClose, onSave }) => {
             handleSave();
           }}
         >
-          <FormGroup role="group" label="API" fieldId="edit-api-name-readonly">
+          <FormGroup role="group" label="Roni" fieldId="edit-api-name-readonly">
             <TextInput
               id="edit-api-name-readonly"
               value={api}
               isReadOnly
               readOnlyVariant="default"
-              aria-label="API (read only)"
+              aria-label="Roni (read only)"
             />
           </FormGroup>
           <FormGroup role="group" label="Tier" isRequired fieldId="edit-api-key-tier">
@@ -162,13 +162,13 @@ const EditApiKeyModal = ({ credential, isOpen, onClose, onSave }) => {
               </Select>
             </div>
           </FormGroup>
-          <FormGroup role="group" label="API key name" isRequired fieldId="edit-api-key-name">
+          <FormGroup role="group" label="Toki name" isRequired fieldId="edit-api-key-name">
             <TextInput
               id="edit-api-key-name"
               value={name}
               onChange={(_e, v) => setName(v)}
-              aria-label="API key name"
-              placeholder="Name of this key"
+              aria-label="Toki name"
+              placeholder="Name of this Toki"
             />
           </FormGroup>
           <FormGroup role="group" label="Use case" fieldId="edit-api-key-use-case">

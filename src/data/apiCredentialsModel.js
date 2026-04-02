@@ -4,40 +4,41 @@
 
 import { CATALOG_PRODUCT_NAMES, getCatalogProductByName } from './apiCatalogModel';
 
+/** Long use-case cell copy — generic for external demo (no internal project detail). */
 export const USE_CASE_EXPANDED_TEXT =
-  'Expansion Content, holy cannoli looks like we figured it out, holy cannoli looks like we figured it out, holy cannoli looks like we figured it out, holy ca.';
+  'Illustrative use case text for demo purposes only. Real requester context is not shown in external walkthroughs.';
 
-/** Varied demo use-case copy for tables (short / medium / long). */
+/** Varied demo use-case copy for tables (short / medium / long) — all demo-safe. */
 export const USE_CASE_MOCK_SAMPLES = [
-  'Batch sync only.',
-  'Retail POS integration for checkout.',
-  'Short test.',
+  'Sandbox integration testing.',
+  'Sample partner application.',
+  'Short validation request.',
   USE_CASE_EXPANDED_TEXT,
-  'Internal analytics dashboard. Read-only.',
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-  'Mobile app.',
-  'Compliance reporting for EU region; requires quarterly reconciliation exports and audit trail access.',
+  'Read-only analytics prototype.',
+  'Placeholder narrative for UI review. No production systems referenced.',
+  'Mobile client smoke test.',
+  'Regional reporting workflow (illustrative).',
   'OK',
-  'Partner portal: rate-limited endpoints for tier-two partners, webhook callbacks for subscription lifecycle, optional sandbox testing.'
+  'Webhook subscription lifecycle demo.'
 ];
 
 const KEY_NAMES = [
-  'Name of this key',
-  'Auth API Key',
-  'Payment Gateway Credential',
-  'Catalog API Key',
-  'Inventory Sync Key',
-  'Notification Service Key',
-  'Analytics API Credential',
-  'Customer Profile Key',
-  'Shipping API Key',
-  'Billing API Credential',
-  'Partner Portal Key',
-  'Warehouse Sync Key',
-  'Checkout API v2 Key',
-  'Loyalty Program Key',
-  'Pricing Service Key',
-  'Support Webhook Key'
+  'Demo-Key-01',
+  'Demo-Key-02',
+  'Demo-Key-03',
+  'Demo-Key-04',
+  'Demo-Key-05',
+  'Demo-Key-06',
+  'Demo-Key-07',
+  'Demo-Key-08',
+  'Demo-Key-09',
+  'Demo-Key-10',
+  'Demo-Key-11',
+  'Demo-Key-12',
+  'Demo-Key-13',
+  'Demo-Key-14',
+  'Demo-Key-15',
+  'Demo-Key-16'
 ];
 
 const STATUSES = [
@@ -78,32 +79,30 @@ const TIERS = [
   'New'
 ];
 
-/** Varied owners for My API keys / approvals / API catalog (mix of names and email-style IDs). */
+/** Requester identities — anonymized for external demo screen shares. */
 export const CREDENTIAL_OWNERS = [
-  'Priya Sharma',
-  'james.morrison@example.com',
-  'María Fernández',
-  'platform-automation@acme.demo',
-  'Wei Chen',
-  'sarah.k.ortiz@example.org',
-  'Jordan Okafor',
-  'dev-north@internal.demo',
-  'Elena Volkov',
-  'n.mueller@example.net'
+  'applicant-aa@demo.example',
+  'applicant-ab@demo.example',
+  'applicant-ac@demo.example',
+  'applicant-ad@demo.example',
+  'applicant-ae@demo.example',
+  'applicant-af@demo.example',
+  'applicant-ag@demo.example',
+  'applicant-ah@demo.example',
+  'applicant-ai@demo.example',
+  'applicant-aj@demo.example'
 ];
 
 /** Owner assigned to newly requested keys (demo “current user”). */
-export const DEMO_CURRENT_USER_OWNER = 'Avery Patel';
+export const DEMO_CURRENT_USER_OWNER = 'demo.you@example.com';
 
-/** Extra catalog names for Request API key modal (search / scroll demos) */
+/** Extra API labels for Request API key modal (search / scroll demos) — generic only. */
 const REQUESTABLE_API_EXTRA = [
-  'Toy store API',
-  'Pet store API',
-  'Cat store API',
-  'Car store API',
-  'Pet sell API',
-  'Pet sale API',
-  'Pet stop API'
+  'Sample API G',
+  'Sample API H',
+  'Sample API I',
+  'Sample API J',
+  'Sample API K'
 ];
 
 /** APIs available in Request API key modal (deduped, no placeholder row label) */
@@ -134,11 +133,11 @@ const REJECTION_REASONS = [
   null,
   null,
   null,
-  'Ion test. Lorem ipsum dolor sit amet consectetur adipiscing elit.',
+  'Request did not meet the illustrated approval criteria (demo).',
   null,
   null,
   null,
-  'Policy mismatch. The requested scope is not approved for this API.',
+  'Scope or tier not approved for this sample API (demo).',
   null,
   null,
   null,
@@ -208,10 +207,10 @@ export const REQUESTED_TIME_DISPLAY = formatRequestedTimeUtc(2026, 0, 24, 10, 15
 export const API_KEY_NAME_PATTERN = /^[a-zA-Z0-9-]+$/;
 
 export const API_KEY_NAME_FORMAT_ERROR =
-  "Only letters, numbers, and hyphens (-) are allowed. No spaces or other characters (e.g. 'My-Key-01').";
+  "Only letters, numbers, and hyphens (-) are allowed. No spaces or other characters (e.g. 'My-Toki-01').";
 
 export const API_KEY_NAME_DUPLICATE_ERROR =
-  'API key name already in use. Enter a unique name.';
+  'Toki name already in use. Enter a unique name.';
 
 export function buildCredentialsData() {
   return KEY_NAMES.map((name, i) => {
@@ -241,7 +240,7 @@ export function buildCatalogDetailsApiKeysDemo(catalogApiName) {
   return [
     {
       id: base('1'),
-      name: 'Name of this key',
+      name: 'Catalog-demo-key-01',
       api: catalogApiName,
       status: 'Active',
       tier: 'Low',
@@ -251,7 +250,7 @@ export function buildCatalogDetailsApiKeysDemo(catalogApiName) {
     },
     {
       id: base('2'),
-      name: 'Name of this key',
+      name: 'Catalog-demo-key-02',
       api: catalogApiName,
       status: 'Active',
       tier: 'High',
@@ -261,7 +260,7 @@ export function buildCatalogDetailsApiKeysDemo(catalogApiName) {
     },
     {
       id: base('3'),
-      name: 'My application',
+      name: 'Catalog-demo-key-03',
       api: catalogApiName,
       status: 'Pending',
       tier: 'Low',
