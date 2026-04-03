@@ -8,12 +8,13 @@ import {
   CardTitle,
   Grid,
   GridItem,
-  Text,
-  TextContent,
+  Content,
+  ContentVariants,
   List,
   ListItem,
   Split,
-  SplitItem
+  SplitItem,
+  Stack
 } from '@patternfly/react-core';
 import {
   RocketIcon,
@@ -116,14 +117,13 @@ const TotoPage = () => (
     >
       <Split hasGutter>
         <SplitItem isFilled>
-          <TextContent>
+          <Stack hasGutter>
             <Title headingLevel="h1" size="4xl">
               Toto — 为忙碌团队准备的控制台伴侣
             </Title>
-            <Text
-              component="p"
+            <Content
+              component={ContentVariants.p}
               style={{
-                marginTop: pf.space.md,
                 fontSize: pf.font.bodyDefault,
                 color: pf.color.textSubtle,
                 maxWidth: 'min(100%, 36rem)'
@@ -131,8 +131,8 @@ const TotoPage = () => (
             >
               想象一下：周一早晨咖啡还没凉，你已经能在同一块玻璃里看到流量、策略与审批状态。
               Toto 不承诺魔法，只承诺把重复点击变成可复用的习惯。
-            </Text>
-          </TextContent>
+            </Content>
+          </Stack>
           <div style={{ marginTop: pf.space.xl, display: 'flex', flexWrap: 'wrap', gap: pf.space.sm }}>
             <Button variant="primary">预约演示</Button>
             <Button variant="secondary">下载一页简介</Button>
@@ -170,9 +170,12 @@ const TotoPage = () => (
                   }}
                 />
                 <CardTitle>{title}</CardTitle>
-                <Text component="p" style={{ marginTop: pf.space.sm, color: pf.color.textSubtle }}>
+                <Content
+                  component={ContentVariants.p}
+                  style={{ marginTop: pf.space.sm, color: pf.color.textSubtle }}
+                >
                   {body}
-                </Text>
+                </Content>
               </CardBody>
             </Card>
           </GridItem>
@@ -201,24 +204,30 @@ const TotoPage = () => (
           >
             「以前我们要在三个标签页里拼出一幅图，现在 Toto 把故事讲完了。周五下午终于能准时消失。」
           </blockquote>
-          <Text component="p" style={{ marginTop: pf.space.sm, color: pf.color.textSubtle, fontSize: pf.font.bodySm }}>
+          <Content
+            component={ContentVariants.p}
+            style={{ marginTop: pf.space.sm, color: pf.color.textSubtle, fontSize: pf.font.bodySm }}
+          >
             — 某金融科技平台 SRE 负责人，代号「北极狐」
-          </Text>
+          </Content>
         </SplitItem>
         <SplitItem style={{ minWidth: 'min(100%, 14rem)' }}>
           <Card>
             <CardBody>
-              <TextContent>
+              <Stack hasGutter>
                 <Title headingLevel="h4" size="md">
                   今日随机数据
                 </Title>
-                <Text component="p" style={{ marginTop: pf.space.sm }}>
+                <Content component={ContentVariants.p} style={{ marginTop: pf.space.sm }}>
                   <strong>99.982%</strong> 周可用性（演示）
-                </Text>
-                <Text component="p" style={{ color: pf.color.textSubtle, fontSize: pf.font.bodySm }}>
+                </Content>
+                <Content
+                  component={ContentVariants.p}
+                  style={{ color: pf.color.textSubtle, fontSize: pf.font.bodySm }}
+                >
                   平均审批耗时 <strong>11 分 07 秒</strong> · 告警误报下降 <strong>37%</strong>（均为虚构示例）
-                </Text>
-              </TextContent>
+                </Content>
+              </Stack>
             </CardBody>
           </Card>
         </SplitItem>
