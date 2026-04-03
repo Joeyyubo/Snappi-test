@@ -36,6 +36,7 @@ import MCPServerTestConnectionPage from './components/MCPServerTestConnectionPag
 import MCPServerLogsPage from './components/MCPServerLogsPage';
 import APIKeyApprovalsPage from './components/APIKeyApprovalsPage';
 import ObservabilityPage from './components/ObservabilityPage';
+import TotoPage from './components/TotoPage';
 import APIDetailsPage from './components/APIDetailsPage';
 import APICredentialsPage from './components/APICredentialsPage';
 import APIKeyDetailPage from './components/APIKeyDetailPage';
@@ -54,7 +55,7 @@ import {
 
 const App = () => {
   const [isNavOpen, setIsNavOpen] = useState(true);
-  const [activeItem, setActiveItem] = useState('api-key-approvals');
+  const [activeItem, setActiveItem] = useState('toto');
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isAppsDropdownOpen, setIsAppsDropdownOpen] = useState(false);
   const [isGatewayDetailsOpen, setIsGatewayDetailsOpen] = useState(false);
@@ -529,6 +530,9 @@ const App = () => {
   const navigation = (
     <Nav onSelect={onNavSelect} aria-label="Navigation">
       <NavList>
+        <NavItem itemId="toto" isActive={activeItem === 'toto'} onClick={() => setActiveItem('toto')}>
+          Toto
+        </NavItem>
         <NavItem
           itemId="api-access"
           isActive={activeItem === 'api-access'}
@@ -615,6 +619,8 @@ const App = () => {
     }
     
     switch (activeItem) {
+      case 'toto':
+        return <TotoPage />;
       case 'observability':
         return <ObservabilityPage />;
       case 'gateways':
