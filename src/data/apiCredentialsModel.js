@@ -79,6 +79,26 @@ const TIERS = [
   'New'
 ];
 
+/** Demo display names for My Toki “User” column (not the same as `owner` email). */
+export const DEMO_TABLE_USER_NAMES = [
+  'Morgan Chen',
+  'Riley Park',
+  'Jordan Okonkwo',
+  'Samira Nasser',
+  'Casey Wu',
+  'Alex Rivera',
+  'Jamie Frost',
+  'Taylor Brooks',
+  'Avery Singh',
+  'Quinn Delgado',
+  'Reese Malhotra',
+  'Rowan Patel',
+  'Skyler Gomez',
+  'Drew Nakamura',
+  'Blair Sato',
+  'Cameron Ali'
+];
+
 /** Requester identities — anonymized for external demo screen shares. */
 export const CREDENTIAL_OWNERS = [
   'applicant-aa@demo.example',
@@ -219,6 +239,7 @@ export function buildCredentialsData() {
     return {
     id: `cred-${i}`,
     name,
+    user: DEMO_TABLE_USER_NAMES[i % DEMO_TABLE_USER_NAMES.length],
     owner: catalog?.owner ?? CREDENTIAL_OWNERS[i % CREDENTIAL_OWNERS.length],
     api: apiName,
     status: STATUSES[i],

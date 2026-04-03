@@ -25,7 +25,8 @@ import { TIER_TOOLTIPS, TIER_LIMIT, CREDENTIAL_TIER_OPTIONS } from '../data/apiC
 import { renderApiKeyField } from './apiKeyFieldDisplay';
 import {
   getApiKeyNameTableDisplay,
-  TruncatedTableLink
+  TruncatedTableLink,
+  TruncatedTableText
 } from './ApiKeyNameText';
 import {
   TierSortableColumnHeader,
@@ -104,7 +105,8 @@ const MyTokiPage = ({
       row.name.toLowerCase().includes(searchValue.toLowerCase()) ||
       row.status.toLowerCase().includes(searchValue.toLowerCase()) ||
       row.tier.toLowerCase().includes(searchValue.toLowerCase()) ||
-      row.api.toLowerCase().includes(searchValue.toLowerCase());
+      row.api.toLowerCase().includes(searchValue.toLowerCase()) ||
+      (row.user || '').toLowerCase().includes(searchValue.toLowerCase());
     const matchesStatus = statusFilters.length === 0 || statusFilters.includes(row.status);
     const matchesTier = tierFilters.length === 0 || tierFilters.includes(row.tier);
     return matchesSearch && matchesStatus && matchesTier;
@@ -121,18 +123,21 @@ const MyTokiPage = ({
           cmp = (a.name || '').localeCompare(b.name || '', undefined, { sensitivity: 'base' });
           break;
         case 2:
-          cmp = (a.api || '').localeCompare(b.api || '', undefined, { sensitivity: 'base' });
+          cmp = (a.user || '').localeCompare(b.user || '', undefined, { sensitivity: 'base' });
           break;
         case 3:
-          cmp = (STATUS_RANK[a.status] ?? 0) - (STATUS_RANK[b.status] ?? 0);
+          cmp = (a.api || '').localeCompare(b.api || '', undefined, { sensitivity: 'base' });
           break;
         case 4:
-          cmp = (TIER_LIMIT[a.tier] ?? 0) - (TIER_LIMIT[b.tier] ?? 0);
+          cmp = (STATUS_RANK[a.status] ?? 0) - (STATUS_RANK[b.status] ?? 0);
           break;
         case 5:
-          cmp = apiKeyColumnRank(a, revealedSet) - apiKeyColumnRank(b, revealedSet);
+          cmp = (TIER_LIMIT[a.tier] ?? 0) - (TIER_LIMIT[b.tier] ?? 0);
           break;
         case 6:
+          cmp = apiKeyColumnRank(a, revealedSet) - apiKeyColumnRank(b, revealedSet);
+          break;
+        case 7:
           cmp = (a.requestedTime || '').localeCompare(b.requestedTime || '', undefined, { numeric: true });
           break;
         default:
@@ -346,25 +351,28 @@ const MyTokiPage = ({
           width: 4%;
         }
         .my-toki-table thead th:nth-child(2) {
-          width: 21%;
+          width: 18%;
         }
         .my-toki-table thead th:nth-child(3) {
-          width: 24%;
+          width: 14%;
         }
         .my-toki-table thead th:nth-child(4) {
-          width: 12%;
+          width: 18%;
         }
         .my-toki-table thead th:nth-child(5) {
           width: 10%;
         }
         .my-toki-table thead th:nth-child(6) {
-          width: 10%;
+          width: 9%;
         }
         .my-toki-table thead th:nth-child(7) {
-          width: 16%;
+          width: 9%;
         }
         .my-toki-table thead th:nth-child(8) {
-          width: 5%;
+          width: 14%;
+        }
+        .my-toki-table thead th:nth-child(9) {
+          width: 4%;
         }
         .my-toki-table tbody > tr > td {
           vertical-align: middle;
@@ -503,8 +511,8 @@ const MyTokiPage = ({
               </ToolbarFilter>
               <ToolbarItem>
                 <SearchInput
-                  placeholder="Find by Roni or Toki name"
-                  aria-label="Find by Roni or Toki name"
+                  placeholder="Find by Roni, Toki name, or User"
+                  aria-label="Find by Roni, Toki name, or User"
                   value={searchValue}
                   onChange={(_, value) => setSearchValue(value)}
                   onClear={() => setSearchValue('')}
@@ -526,8 +534,9 @@ const MyTokiPage = ({
                 }}
               />
               <Th sort={{ columnIndex: 1, sortBy: sortState, onSort: handleSort }}>Toki name</Th>
-              <Th sort={{ columnIndex: 2, sortBy: sortState, onSort: handleSort }}>Roni</Th>
-              <Th sort={{ columnIndex: 3, sortBy: sortState, onSort: handleSort }}>Status</Th>
+              <Th sort={{ columnIndex: 2, sortBy: sortState, onSort: handleSort }}>User</Th>
+              <Th sort={{ columnIndex: 3, sortBy: sortState, onSort: handleSort }}>Roni</Th>
+              <Th sort={{ columnIndex: 4, sortBy: sortState, onSort: handleSort }}>Status</Th>
               <Th
                 dataLabel="Tier"
                 style={{
@@ -536,10 +545,10 @@ const MyTokiPage = ({
                   minWidth: TIER_TABLE_COLUMN_STYLE.minWidth
                 }}
               >
-                <TierSortableColumnHeader columnIndex={4} sortBy={sortState} onSort={handleSort} />
+                <TierSortableColumnHeader columnIndex={5} sortBy={sortState} onSort={handleSort} />
               </Th>
-              <Th sort={{ columnIndex: 5, sortBy: sortState, onSort: handleSort }}>Toki</Th>
-              <Th sort={{ columnIndex: 6, sortBy: sortState, onSort: handleSort }}>Requested time</Th>
+              <Th sort={{ columnIndex: 6, sortBy: sortState, onSort: handleSort }}>Toki</Th>
+              <Th sort={{ columnIndex: 7, sortBy: sortState, onSort: handleSort }}>Requested time</Th>
               <Th />
             </Tr>
           </Thead>
@@ -568,6 +577,9 @@ const MyTokiPage = ({
                     </Button>
                   </Td>
                   <Td style={{ verticalAlign: 'middle' }}>{renderApiKeyNameCell(row)}</Td>
+                  <Td style={{ verticalAlign: 'middle' }}>
+                    <TruncatedTableText text={row.user || '—'} />
+                  </Td>
                   <Td style={{ verticalAlign: 'middle' }}>
                     <TruncatedTableLink
                       text={row.api}
@@ -647,7 +659,7 @@ const MyTokiPage = ({
                 {expandedRows[row.id] && (
                   <Tr isExpanded style={{ borderTop: 'none' }}>
                     <Td
-                      colSpan={8}
+                      colSpan={9}
                       style={{
                         borderTop: 'none',
                         borderBottom: borderDefaultStyle,
