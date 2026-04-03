@@ -2,7 +2,6 @@ import React from 'react';
 import {
   PageSection,
   Title,
-  Button,
   Card,
   CardBody,
   CardTitle,
@@ -10,8 +9,6 @@ import {
   GridItem,
   Content,
   ContentVariants,
-  List,
-  ListItem,
   Split,
   SplitItem,
   Stack
@@ -81,23 +78,23 @@ const HeroIllustration = () => (
 const featureCards = [
   {
     icon: RocketIcon,
-    title: '秒级上线节奏',
-    body: '从草稿到可观测的生产路径，Toto 把发布流水线收成一条顺滑曲线，团队少开会、多交付。'
+    title: 'Ship in minutes, not meetings',
+    body: 'Toto turns the path from draft to observable production into a single smooth curve—fewer status meetings, more shipped work.'
   },
   {
     icon: ChartLineIcon,
-    title: '指标讲人话',
-    body: '把延迟、错误率与业务事件叠在同一张叙事里，值班同学一眼知道该先救哪一段链路。'
+    title: 'Metrics that read like a story',
+    body: 'Latency, errors, and business signals live in one narrative so on-call knows which part of the chain to fix first.'
   },
   {
     icon: ShieldAltIcon,
-    title: '默认安全姿态',
-    body: '密钥轮换、最小权限与审计轨迹开箱可用；合规检查从「补材料」变成「点通过」。'
+    title: 'Secure by default',
+    body: 'Key rotation, least privilege, and audit trails are ready out of the box—compliance shifts from chasing paperwork to clicking approve.'
   },
   {
     icon: AutomationIcon,
-    title: '自动化玩伴',
-    body: '策略模板、回滚剧本与告警降噪规则可复用，新同事复制粘贴也能跑出老炮效果。'
+    title: 'Automation you can reuse',
+    body: 'Policy templates, rollback playbooks, and alert-noise rules are copy-paste friendly—even new teammates can run like veterans.'
   }
 ];
 
@@ -119,7 +116,7 @@ const TotoPage = () => (
         <SplitItem isFilled>
           <Stack hasGutter>
             <Title headingLevel="h1" size="4xl">
-              Toto — 为忙碌团队准备的控制台伴侣
+              Toto — a console companion for busy teams
             </Title>
             <Content
               component={ContentVariants.p}
@@ -129,22 +126,10 @@ const TotoPage = () => (
                 maxWidth: 'min(100%, 36rem)'
               }}
             >
-              想象一下：周一早晨咖啡还没凉，你已经能在同一块玻璃里看到流量、策略与审批状态。
-              Toto 不承诺魔法，只承诺把重复点击变成可复用的习惯。
+              Picture this: before your Monday coffee cools, you already see traffic, policy, and approvals in one pane of glass.
+              Toto does not promise magic—only fewer repeated clicks and habits you can reuse.
             </Content>
           </Stack>
-          <div style={{ marginTop: pf.space.xl, display: 'flex', flexWrap: 'wrap', gap: pf.space.sm }}>
-            <Button variant="primary">预约演示</Button>
-            <Button variant="secondary">下载一页简介</Button>
-          </div>
-          <List
-            component="ul"
-            style={{ marginTop: pf.space['2xl'], color: pf.color.textSubtle, fontSize: pf.font.bodySm }}
-          >
-            <ListItem>14 天试用 · 无需信用卡</ListItem>
-            <ListItem>可与现有网关与控制面并存</ListItem>
-            <ListItem>支持私有化与分区部署</ListItem>
-          </List>
         </SplitItem>
         <SplitItem>
           <HeroIllustration />
@@ -154,7 +139,7 @@ const TotoPage = () => (
 
     <PageSection isWidthLimited>
       <Title headingLevel="h2" size="xl" style={{ marginBottom: pf.space.lg }}>
-        为什么团队会留下 Toto
+        Why teams stick with Toto
       </Title>
       <Grid hasGutter>
         {featureCards.map(({ icon: Icon, title, body }) => (
@@ -191,7 +176,7 @@ const TotoPage = () => (
       <Split hasGutter>
         <SplitItem isFilled>
           <Title headingLevel="h2" size="lg">
-            客户原声（示例摘录）
+            Customer voice (sample)
           </Title>
           <blockquote
             style={{
@@ -202,13 +187,14 @@ const TotoPage = () => (
               fontStyle: 'italic'
             }}
           >
-            「以前我们要在三个标签页里拼出一幅图，现在 Toto 把故事讲完了。周五下午终于能准时消失。」
+            &ldquo;We used to stitch three browser tabs into one mental model. Toto tells the story for us. Friday afternoons are
+            human again.&rdquo;
           </blockquote>
           <Content
             component={ContentVariants.p}
             style={{ marginTop: pf.space.sm, color: pf.color.textSubtle, fontSize: pf.font.bodySm }}
           >
-            — 某金融科技平台 SRE 负责人，代号「北极狐」
+            — Head of SRE, fictional fintech platform (&ldquo;Arctic Fox&rdquo;)
           </Content>
         </SplitItem>
         <SplitItem style={{ minWidth: 'min(100%, 14rem)' }}>
@@ -216,16 +202,16 @@ const TotoPage = () => (
             <CardBody>
               <Stack hasGutter>
                 <Title headingLevel="h4" size="md">
-                  今日随机数据
+                  Snapshot numbers
                 </Title>
                 <Content component={ContentVariants.p} style={{ marginTop: pf.space.sm }}>
-                  <strong>99.982%</strong> 周可用性（演示）
+                  <strong>99.982%</strong> weekly availability (demo)
                 </Content>
                 <Content
                   component={ContentVariants.p}
                   style={{ color: pf.color.textSubtle, fontSize: pf.font.bodySm }}
                 >
-                  平均审批耗时 <strong>11 分 07 秒</strong> · 告警误报下降 <strong>37%</strong>（均为虚构示例）
+                  Mean approval time <strong>11m 07s</strong> · noisy alerts down <strong>37%</strong> (illustrative only)
                 </Content>
               </Stack>
             </CardBody>
