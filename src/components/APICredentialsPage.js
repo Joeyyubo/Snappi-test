@@ -25,8 +25,7 @@ import { TIER_TOOLTIPS, TIER_LIMIT, CREDENTIAL_TIER_OPTIONS } from '../data/apiC
 import { renderApiKeyField } from './apiKeyFieldDisplay';
 import {
   getApiKeyNameTableDisplay,
-  TruncatedTableLink,
-  TruncatedTableText
+  TruncatedTableLink
 } from './ApiKeyNameText';
 import {
   TierSortableColumnHeader,
@@ -105,8 +104,7 @@ const APICredentialsPage = ({
       row.name.toLowerCase().includes(searchValue.toLowerCase()) ||
       row.status.toLowerCase().includes(searchValue.toLowerCase()) ||
       row.tier.toLowerCase().includes(searchValue.toLowerCase()) ||
-      row.api.toLowerCase().includes(searchValue.toLowerCase()) ||
-      row.owner.toLowerCase().includes(searchValue.toLowerCase());
+      row.api.toLowerCase().includes(searchValue.toLowerCase());
     const matchesStatus = statusFilters.length === 0 || statusFilters.includes(row.status);
     const matchesTier = tierFilters.length === 0 || tierFilters.includes(row.tier);
     return matchesSearch && matchesStatus && matchesTier;
@@ -123,21 +121,18 @@ const APICredentialsPage = ({
           cmp = (a.name || '').localeCompare(b.name || '', undefined, { sensitivity: 'base' });
           break;
         case 2:
-          cmp = (a.owner || '').localeCompare(b.owner || '', undefined, { sensitivity: 'base' });
-          break;
-        case 3:
           cmp = (a.api || '').localeCompare(b.api || '', undefined, { sensitivity: 'base' });
           break;
-        case 4:
+        case 3:
           cmp = (STATUS_RANK[a.status] ?? 0) - (STATUS_RANK[b.status] ?? 0);
           break;
-        case 5:
+        case 4:
           cmp = (TIER_LIMIT[a.tier] ?? 0) - (TIER_LIMIT[b.tier] ?? 0);
           break;
-        case 6:
+        case 5:
           cmp = apiKeyColumnRank(a, revealedSet) - apiKeyColumnRank(b, revealedSet);
           break;
-        case 7:
+        case 6:
           cmp = (a.requestedTime || '').localeCompare(b.requestedTime || '', undefined, { numeric: true });
           break;
         default:
@@ -534,9 +529,8 @@ const APICredentialsPage = ({
                 }}
               />
               <Th sort={{ columnIndex: 1, sortBy: sortState, onSort: handleSort }}>Toki name</Th>
-              <Th sort={{ columnIndex: 2, sortBy: sortState, onSort: handleSort }}>Owner</Th>
-              <Th sort={{ columnIndex: 3, sortBy: sortState, onSort: handleSort }}>Roni</Th>
-              <Th sort={{ columnIndex: 4, sortBy: sortState, onSort: handleSort }}>Status</Th>
+              <Th sort={{ columnIndex: 2, sortBy: sortState, onSort: handleSort }}>Roni</Th>
+              <Th sort={{ columnIndex: 3, sortBy: sortState, onSort: handleSort }}>Status</Th>
               <Th
                 dataLabel="Tier"
                 style={{
@@ -545,10 +539,10 @@ const APICredentialsPage = ({
                   minWidth: TIER_TABLE_COLUMN_STYLE.minWidth
                 }}
               >
-                <TierSortableColumnHeader columnIndex={5} sortBy={sortState} onSort={handleSort} />
+                <TierSortableColumnHeader columnIndex={4} sortBy={sortState} onSort={handleSort} />
               </Th>
-              <Th sort={{ columnIndex: 6, sortBy: sortState, onSort: handleSort }}>Toki</Th>
-              <Th sort={{ columnIndex: 7, sortBy: sortState, onSort: handleSort }}>Requested time</Th>
+              <Th sort={{ columnIndex: 5, sortBy: sortState, onSort: handleSort }}>Toki</Th>
+              <Th sort={{ columnIndex: 6, sortBy: sortState, onSort: handleSort }}>Requested time</Th>
               <Th />
             </Tr>
           </Thead>
@@ -577,9 +571,6 @@ const APICredentialsPage = ({
                     </Button>
                   </Td>
                   <Td style={{ verticalAlign: 'middle' }}>{renderApiKeyNameCell(row)}</Td>
-                  <Td style={{ verticalAlign: 'middle' }}>
-                    <TruncatedTableText text={row.owner} />
-                  </Td>
                   <Td style={{ verticalAlign: 'middle' }}>
                     <TruncatedTableLink
                       text={row.api}
@@ -659,7 +650,7 @@ const APICredentialsPage = ({
                 {expandedRows[row.id] && (
                   <Tr isExpanded style={{ borderTop: 'none' }}>
                     <Td
-                      colSpan={9}
+                      colSpan={8}
                       style={{
                         borderTop: 'none',
                         borderBottom: borderDefaultStyle,
