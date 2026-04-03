@@ -68,7 +68,7 @@ function apiKeyColumnRank(row, revealedKeyIds) {
   return 1;
 }
 
-const APICredentialsPage = ({
+const MyTokiPage = ({
   onApiKeyNameClick,
   revealedKeyIds,
   onOpenRevealModal,
@@ -187,7 +187,7 @@ const APICredentialsPage = ({
     const reason = (row.rejectionReason && String(row.rejectionReason).trim()) || REJECTION_REASON_FALLBACK;
     return (
       <Popover
-        id={`my-api-keys-rejected-${row.id}`}
+        id={`my-toki-rejected-${row.id}`}
         headerContent={
           <span
             style={{
@@ -300,7 +300,7 @@ const APICredentialsPage = ({
   return (
     <>
       <style>{`
-        .toolbar-api-credentials .pf-v6-c-toolbar__content:last-of-type {
+        .toolbar-my-toki .pf-v6-c-toolbar__content:last-of-type {
           display: flex;
           flex-direction: row;
           flex-wrap: nowrap;
@@ -322,7 +322,7 @@ const APICredentialsPage = ({
           display: none !important;
         }
         /* ToolbarFilter uses outline Labels — fill chip background like design (gray pill) */
-        .toolbar-api-credentials .pf-v6-c-label-group .pf-v6-c-label.pf-m-outline {
+        .toolbar-my-toki .pf-v6-c-label-group .pf-v6-c-label.pf-m-outline {
           --pf-v6-c-label--m-outline--BackgroundColor: var(--pf-t--global--color--nonstatus--gray--default);
           --pf-v6-c-label--BorderWidth: 0;
           --pf-v6-c-label--BorderColor: transparent;
@@ -334,45 +334,42 @@ const APICredentialsPage = ({
             --pf-t--global--color--nonstatus--gray--hover
           );
         }
-        .toolbar-api-credentials .pf-v6-c-label-group .pf-v6-c-label.pf-m-outline .pf-v6-c-label__actions .pf-v6-c-button {
+        .toolbar-my-toki .pf-v6-c-label-group .pf-v6-c-label.pf-m-outline .pf-v6-c-label__actions .pf-v6-c-button {
           --pf-v6-c-button__icon--Color: var(--pf-t--global--icon--color--regular);
         }
         /* Fixed column widths so expanding a row (colspan detail) does not reflow header/body columns */
-        .my-api-keys-table.pf-v6-c-table {
+        .my-toki-table.pf-v6-c-table {
           table-layout: fixed;
           width: 100%;
         }
-        .my-api-keys-table thead th:nth-child(1) {
+        .my-toki-table thead th:nth-child(1) {
           width: 4%;
         }
-        .my-api-keys-table thead th:nth-child(2) {
+        .my-toki-table thead th:nth-child(2) {
           width: 21%;
         }
-        .my-api-keys-table thead th:nth-child(3) {
+        .my-toki-table thead th:nth-child(3) {
+          width: 24%;
+        }
+        .my-toki-table thead th:nth-child(4) {
           width: 12%;
         }
-        .my-api-keys-table thead th:nth-child(4) {
-          width: 12%;
-        }
-        .my-api-keys-table thead th:nth-child(5) {
+        .my-toki-table thead th:nth-child(5) {
           width: 10%;
         }
-        .my-api-keys-table thead th:nth-child(6) {
+        .my-toki-table thead th:nth-child(6) {
           width: 10%;
         }
-        .my-api-keys-table thead th:nth-child(7) {
+        .my-toki-table thead th:nth-child(7) {
           width: 16%;
         }
-        .my-api-keys-table thead th:nth-child(8) {
-          width: 10%;
-        }
-        .my-api-keys-table thead th:nth-child(9) {
+        .my-toki-table thead th:nth-child(8) {
           width: 5%;
         }
-        .my-api-keys-table tbody > tr > td {
+        .my-toki-table tbody > tr > td {
           vertical-align: middle;
         }
-        .my-api-keys-table .pf-v6-c-table__expandable-row-content {
+        .my-toki-table .pf-v6-c-table__expandable-row-content {
           overflow-wrap: anywhere;
           word-break: break-word;
           max-width: 100%;
@@ -423,7 +420,7 @@ const APICredentialsPage = ({
         </Flex>
 
         <Toolbar
-          className="toolbar-api-credentials"
+          className="toolbar-my-toki"
           clearAllFilters={clearAllFilters}
           clearFiltersButtonText="Clear filters"
           style={{ marginTop: 'var(--pf-t--global--spacer--md)' }}
@@ -519,7 +516,7 @@ const APICredentialsPage = ({
         </Toolbar>
 
         <div style={{ marginTop: 'var(--pf-t--global--spacer--sm)' }}>
-          <Table aria-label="My Toki table" className="my-api-keys-table" isExpandable>
+          <Table aria-label="My Toki table" className="my-toki-table" isExpandable>
           <Thead>
             <Tr>
               <Th
@@ -677,4 +674,4 @@ const APICredentialsPage = ({
   );
 };
 
-export default APICredentialsPage;
+export default MyTokiPage;

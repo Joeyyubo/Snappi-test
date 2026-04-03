@@ -37,7 +37,7 @@ import MCPServerLogsPage from './components/MCPServerLogsPage';
 import APIKeyApprovalsPage from './components/APIKeyApprovalsPage';
 import ObservabilityPage from './components/ObservabilityPage';
 import APIDetailsPage from './components/APIDetailsPage';
-import APICredentialsPage from './components/APICredentialsPage';
+import MyTokiPage from './components/MyTokiPage';
 import APIKeyDetailPage from './components/APIKeyDetailPage';
 import RevealApiKeyModal from './components/RevealApiKeyModal';
 import EditApiKeyModal from './components/EditApiKeyModal';
@@ -693,7 +693,7 @@ const App = () => {
           );
         }
         return (
-          <APICredentialsPage
+          <MyTokiPage
             credentialsData={credentialsList}
             onApiKeyNameClick={setSelectedApiKey}
             revealedKeyIds={revealedKeyIds}
