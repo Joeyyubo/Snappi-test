@@ -3311,7 +3311,7 @@ status:
               id="server-credentials"
               value={serverConfig.credentials}
               onChange={(value) => setServerConfig({ ...serverConfig, credentials: value })}
-              placeholder="API key, token, or credentials (optional)"
+              placeholder="Toki, token, or credentials (optional)"
             />
           </FormGroup>
           

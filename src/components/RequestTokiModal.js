@@ -38,10 +38,10 @@ import {
 import { QuestionCircleHelpTrigger } from './QuestionCircleHelpTrigger';
 
 /**
- * Request a new API key — same modal width as Edit API key (`variant="small"`).
- * Tier stays disabled until an API is selected.
+ * Request a new Toki — same modal width as Edit Toki (`variant="small"`).
+ * Tier stays disabled until a Roni is selected.
  */
-const RequestApiKeyModal = ({ isOpen, onClose, onSubmit, existingKeyNames = [] }) => {
+const RequestTokiModal = ({ isOpen, onClose, onSubmit, existingKeyNames = [] }) => {
   const [api, setApi] = useState('');
   const [tier, setTier] = useState('');
   const [name, setName] = useState('');
@@ -440,4 +440,4 @@ const RequestApiKeyModal = ({ isOpen, onClose, onSubmit, existingKeyNames = [] }
   );
 };
 
-export default RequestApiKeyModal;
+export default RequestTokiModal;

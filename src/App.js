@@ -34,18 +34,18 @@ import MCPServerConfigPage from './components/MCPServerConfigPage';
 import MCPServerDiscoveryPage from './components/MCPServerDiscoveryPage';
 import MCPServerTestConnectionPage from './components/MCPServerTestConnectionPage';
 import MCPServerLogsPage from './components/MCPServerLogsPage';
-import APIKeyApprovalsPage from './components/APIKeyApprovalsPage';
+import TokiApprovalPage from './components/TokiApprovalPage';
 import ObservabilityPage from './components/ObservabilityPage';
-import APIDetailsPage from './components/APIDetailsPage';
+import RoniDetailsPage from './components/RoniDetailsPage';
 import MyTokiPage from './components/MyTokiPage';
-import APIKeyDetailPage from './components/APIKeyDetailPage';
-import RevealApiKeyModal from './components/RevealApiKeyModal';
-import EditApiKeyModal from './components/EditApiKeyModal';
-import DeleteApiKeyModal from './components/DeleteApiKeyModal';
-import RequestApiKeyModal from './components/RequestApiKeyModal';
-import RequestApiKeySuccessToast from './components/RequestApiKeySuccessToast';
-import APIKeyUpdatedToast from './components/APIKeyUpdatedToast';
-import APIKeyDeletedToast from './components/APIKeyDeletedToast';
+import TokiDetailPage from './components/TokiDetailPage';
+import RevealTokiModal from './components/RevealTokiModal';
+import EditTokiModal from './components/EditTokiModal';
+import DeleteTokiModal from './components/DeleteTokiModal';
+import RequestTokiModal from './components/RequestTokiModal';
+import RequestTokiSuccessToast from './components/RequestTokiSuccessToast';
+import TokiUpdatedToast from './components/TokiUpdatedToast';
+import TokiDeletedToast from './components/TokiDeletedToast';
 import {
   buildCredentialsData,
   DEMO_CURRENT_USER_OWNER,
@@ -625,7 +625,7 @@ const App = () => {
         if (selectedApiDetails) {
           if (selectedApiKey && selectedApiKey.api === selectedApiDetails) {
             return (
-              <APIKeyDetailPage
+              <TokiDetailPage
                 credential={selectedApiKey}
                 breadcrumbSource="api-catalog"
                 catalogApiName={selectedApiDetails}
@@ -650,7 +650,7 @@ const App = () => {
             );
           }
           return (
-            <APIDetailsPage
+            <RoniDetailsPage
               apiName={selectedApiDetails}
               onBack={() => {
                 setSelectedApiDetails(null);
@@ -675,11 +675,11 @@ const App = () => {
             />
           );
         }
-        return <APIKeyApprovalsPage onNavigateToApiCatalog={navigateToApiCatalogFromApproval} />;
+        return <TokiApprovalPage onNavigateToApiCatalog={navigateToApiCatalogFromApproval} />;
       case 'api-access':
         if (selectedApiKey) {
         return (
-          <APIKeyDetailPage
+          <TokiDetailPage
               credential={selectedApiKey}
               onBack={() => setSelectedApiKey(null)}
               revealedKeyIds={revealedKeyIds}
@@ -705,7 +705,7 @@ const App = () => {
           />
         );
       default:
-        return <APIKeyApprovalsPage onNavigateToApiCatalog={navigateToApiCatalogFromApproval} />;
+        return <TokiApprovalPage onNavigateToApiCatalog={navigateToApiCatalogFromApproval} />;
     }
   };
 
@@ -731,7 +731,7 @@ const App = () => {
     <Page masthead={masthead} sidebar={sidebar} isContentFilled>
       {renderContent()}
       {showRequestKeySuccessToast && requestKeySuccessToast && (
-        <RequestApiKeySuccessToast
+        <RequestTokiSuccessToast
           api={requestKeySuccessToast.api}
           keyName={requestKeySuccessToast.keyName}
           onClose={dismissRequestKeyToast}
@@ -739,7 +739,7 @@ const App = () => {
         />
       )}
       {showEditKeySuccessToast && editKeySuccessToast && (
-        <APIKeyUpdatedToast
+        <TokiUpdatedToast
           api={editKeySuccessToast.api}
           keyName={editKeySuccessToast.keyName}
           updates={editKeySuccessToast.updates}
@@ -748,30 +748,30 @@ const App = () => {
         />
       )}
       {showDeleteKeySuccessToast && deleteKeySuccessToast && (
-        <APIKeyDeletedToast
+        <TokiDeletedToast
           api={deleteKeySuccessToast.api}
           keyName={deleteKeySuccessToast.keyName}
           onClose={dismissDeleteKeyToast}
         />
       )}
-      <RevealApiKeyModal
+      <RevealTokiModal
         rowId={revealModalRowId}
         onClose={() => setRevealModalRowId(null)}
         onRevealed={(id) => setRevealedKeyIds((prev) => new Set(prev).add(id))}
       />
-      <EditApiKeyModal
+      <EditTokiModal
         credential={editingCredential}
         isOpen={Boolean(editCredentialId && editingCredential)}
         onClose={() => setEditCredentialId(null)}
         onSave={handleEditApiKeySave}
       />
-      <DeleteApiKeyModal
+      <DeleteTokiModal
         credential={deletingCredential}
         isOpen={Boolean(deleteCredentialId && deletingCredential)}
         onClose={() => setDeleteCredentialId(null)}
         onConfirm={handleDeleteApiKeyConfirm}
       />
-      <RequestApiKeyModal
+      <RequestTokiModal
         isOpen={requestApiKeyOpen}
         onClose={closeRequestApiKeyModal}
         onSubmit={handleRequestApiKeySubmit}

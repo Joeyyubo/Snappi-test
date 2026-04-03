@@ -6,18 +6,17 @@ import {
   Button
 } from '@patternfly/react-core';
 import { TimesIcon } from '@patternfly/react-icons';
-import ApiKeyToastFrame from './ApiKeyToastFrame';
+import TokiToastFrame from './TokiToastFrame';
 
 /**
- * Info notice after Edit API key (PatternFly info alert).
- * Renders below masthead; auto-dismisses after PatternFly-style interval.
+ * Success notice after Request Toki (PatternFly success alert).
  */
-const APIKeyUpdatedToast = ({ api, keyName, updates, onClose, onViewDetails }) => (
-  <ApiKeyToastFrame aria-label="Toki updated" onClose={onClose}>
+const RequestTokiSuccessToast = ({ api, keyName, onClose, onViewDetails }) => (
+  <TokiToastFrame aria-label="Toki request success" onClose={onClose}>
     <Alert
-      variant={AlertVariant.info}
+      variant={AlertVariant.success}
       isLiveRegion
-      title="Toki updated"
+      title="Toki requested successfully"
       actionClose={
         <Button variant="plain" onClick={onClose} aria-label="Dismiss notification" icon={<TimesIcon />} />
       }
@@ -31,21 +30,12 @@ const APIKeyUpdatedToast = ({ api, keyName, updates, onClose, onViewDetails }) =
         <span style={{ fontWeight: 'var(--pf-t--global--font--weight--body--bold)' }}>Roni: </span>
         {api}
       </div>
-      <div style={{ marginBottom: 'var(--pf-t--global--spacer--xs)' }}>
+      <div>
         <span style={{ fontWeight: 'var(--pf-t--global--font--weight--body--bold)' }}>Toki name: </span>
         {keyName}
       </div>
-      <div
-        style={{
-          wordBreak: 'break-word',
-          color: 'var(--pf-t--global--text--color--regular)'
-        }}
-      >
-        <span style={{ fontWeight: 'var(--pf-t--global--font--weight--body--bold)' }}>Updates: </span>
-        {updates}
-      </div>
     </Alert>
-  </ApiKeyToastFrame>
+  </TokiToastFrame>
 );
 
-export default APIKeyUpdatedToast;
+export default RequestTokiSuccessToast;

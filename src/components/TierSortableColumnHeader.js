@@ -18,7 +18,7 @@ export const TIER_TABLE_COLUMN_STYLE = {
 };
 
 /**
- * Sortable "Tier" header with FA question-circle popover (My API keys / API key approval).
+ * Sortable "Tier" header with FA question-circle popover (My Toki / Toki approval).
  */
 export function TierSortableColumnHeader({ columnIndex, sortBy, onSort }) {
   const isSortedBy = sortBy && columnIndex === sortBy.index;

@@ -39,9 +39,9 @@ import {
 } from '../data/apiCredentialsModel';
 import { TierSortableColumnHeader } from './TierSortableColumnHeader';
 import { TruncatedTableLink, TruncatedTableText, UseCaseTwoLineCell } from './ApiKeyNameText';
-import { ApproveApiKeyModal, RejectApiKeyModal } from './ApiKeyApprovalActionModals';
-import { BulkApproveApiKeysModal, BulkRejectApiKeysModal } from './BulkApiKeyApprovalModals';
-import ApiKeyApprovalResultToast from './ApiKeyApprovalResultToast';
+import { ApproveApiKeyModal, RejectApiKeyModal } from './TokiApprovalActionModals';
+import { BulkApproveApiKeysModal, BulkRejectApiKeysModal } from './BulkTokiApprovalModals';
+import TokiApprovalResultToast from './TokiApprovalResultToast';
 
 /** Wider than shared Tier min — approvals table uses fixed layout; header needs Tier + sort + help */
 const APPROVALS_TIER_COLUMN_MIN_WIDTH = '10.75rem';
@@ -79,7 +79,7 @@ const APPROVALS_STATUS_COL_STYLE = {
   paddingInlineStart: 'var(--pf-t--global--spacer--md)'
 };
 
-/** Row actions (kebab): align to table trailing edge like My API keys (fixed layout can widen this cell). */
+/** Row actions (kebab): align to table trailing edge like My Toki (fixed layout can widen this cell). */
 const APPROVALS_ACTIONS_COL_STYLE = {
   verticalAlign: 'middle',
   textAlign: 'end',
@@ -107,7 +107,7 @@ const bulkActionButtonStyle = {
   borderRadius: 'var(--pf-t--global--border--radius--large)'
 };
 
-const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
+const TokiApprovalPage = ({ onNavigateToApiCatalog }) => {
   const [credentialsData, setCredentialsData] = useState(() => buildCredentialsData());
 
   const [projectOpen, setProjectOpen] = useState(false);
@@ -932,7 +932,7 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
         />
       ) : null}
       {approvalToast ? (
-        <ApiKeyApprovalResultToast
+        <TokiApprovalResultToast
           kind={approvalToast.kind}
           count={approvalToast.count}
           api={approvalToast.api}
@@ -944,4 +944,4 @@ const APIKeyApprovalsPage = ({ onNavigateToApiCatalog }) => {
   );
 };
 
-export default APIKeyApprovalsPage;
+export default TokiApprovalPage;

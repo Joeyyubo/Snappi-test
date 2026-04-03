@@ -1,14 +1,14 @@
 import React from 'react';
 import { Alert, AlertVariant, Button } from '@patternfly/react-core';
 import { TimesIcon } from '@patternfly/react-icons';
-import ApiKeyToastFrame from './ApiKeyToastFrame';
+import TokiToastFrame from './TokiToastFrame';
 
 /**
- * Success notice after Delete API key (PatternFly success alert).
+ * Success notice after Delete Toki (PatternFly success alert).
  * Renders below masthead; auto-dismisses after PatternFly-style interval.
  */
-const APIKeyDeletedToast = ({ api, keyName, onClose }) => (
-  <ApiKeyToastFrame aria-label="Toki deleted" onClose={onClose}>
+const TokiDeletedToast = ({ api, keyName, onClose }) => (
+  <TokiToastFrame aria-label="Toki deleted" onClose={onClose}>
     <Alert
       variant={AlertVariant.success}
       isLiveRegion
@@ -26,7 +26,7 @@ const APIKeyDeletedToast = ({ api, keyName, onClose }) => (
         {keyName}
       </div>
     </Alert>
-  </ApiKeyToastFrame>
+  </TokiToastFrame>
 );
 
-export default APIKeyDeletedToast;
+export default TokiDeletedToast;

@@ -17,7 +17,7 @@ const REVEALED_API_KEY = 'KAsDZ-U1pWW-KAsDZ-UhpBx-182jsP';
 /**
  * Shared reveal flow for list + detail pages; parent tracks revealedKeyIds.
  */
-const RevealApiKeyModal = ({ rowId, onClose, onRevealed }) => {
+const RevealTokiModal = ({ rowId, onClose, onRevealed }) => {
   const [revealStep, setRevealStep] = useState(1);
   const [revealAcknowledged, setRevealAcknowledged] = useState(false);
   const [copyTooltip, setCopyTooltip] = useState('Copy to clipboard');
@@ -130,4 +130,4 @@ const RevealApiKeyModal = ({ rowId, onClose, onRevealed }) => {
   );
 };
 
-export default RevealApiKeyModal;
+export default RevealTokiModal;
