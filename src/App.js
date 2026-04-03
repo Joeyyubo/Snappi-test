@@ -49,6 +49,7 @@ import TokiDeletedToast from './components/TokiDeletedToast';
 import {
   buildCredentialsData,
   DEMO_CURRENT_USER_OWNER,
+  DEMO_TABLE_USER_NAMES,
   REQUESTED_TIME_DISPLAY
 } from './data/apiCredentialsModel';
 
@@ -199,6 +200,7 @@ const App = () => {
         {
           id,
           name: createdName,
+          user: DEMO_TABLE_USER_NAMES[prev.length % DEMO_TABLE_USER_NAMES.length],
           owner: DEMO_CURRENT_USER_OWNER,
           api: apiName,
           status: 'Pending',
