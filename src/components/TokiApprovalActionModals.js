@@ -71,7 +71,7 @@ function RequestSummaryBody({ row }) {
 }
 
 /**
- * Approve a pending API key request — same modal width as Request API key (`variant="small"`).
+ * Approve a pending Toki request — same modal width as Request Toki (`variant="small"`).
  */
 export function ApproveApiKeyModal({ isOpen, onClose, row, onApprove }) {
   return (
@@ -103,7 +103,7 @@ export function ApproveApiKeyModal({ isOpen, onClose, row, onApprove }) {
 }
 
 /**
- * Reject a pending API key request — same modal width as Request API key (`variant="small"`).
+ * Reject a pending Toki request — same modal width as Request Toki (`variant="small"`).
  */
 export function RejectApiKeyModal({ isOpen, onClose, row, onReject }) {
   const [reason, setReason] = useState('');

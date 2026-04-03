@@ -40,7 +40,7 @@ import {
 } from '@patternfly/react-table';
 import { getCatalogProductByName } from '../data/apiCatalogModel';
 import { buildCatalogDetailsApiKeysDemo } from '../data/apiCredentialsModel';
-import CatalogApiKeysTabPanel from './CatalogApiKeysTabPanel';
+import RoniTokiTabPanel from './RoniTokiTabPanel';
 
 function renderCatalogStatusLabel(status) {
   switch (status) {
@@ -212,18 +212,18 @@ const dtStyle = {
   color: 'var(--pf-t--global--text--color--subtle)'
 };
 
-const APIDetailsPage = ({
+const RoniDetailsPage = ({
   apiName,
   onBack,
   breadcrumbParent = 'APIs',
   onRequestApiKey,
-  /** When set (e.g. from App credentialsList), catalog API keys tab uses live data and delete works. */
+  /** When set (e.g. from App credentialsList), Toki tab uses live data and delete works. */
   apiKeysRows: apiKeysRowsProp,
   onOpenDelete,
   onOpenEdit,
-  /** Open API key details (same app shell; breadcrumb handled in APIKeyDetailPage). */
+  /** Open Toki detail (same app shell; breadcrumb handled in TokiDetailPage). */
   onOpenApiKeyDetail,
-  /** When true once after returning from key detail, select API keys tab. */
+  /** When true once after returning from Toki detail, select Toki tab. */
   resumeApiKeysTab,
   onResumeApiKeysTabConsumed
 }) => {
@@ -247,7 +247,7 @@ const APIDetailsPage = ({
     return product ? buildCatalogDetailsApiKeysDemo(apiName) : [];
   }, [apiKeysRowsProp, product, apiName]);
 
-  /** Reset tab only when switching to a different API product (not on first mount — allows resumeApiKeysTab). */
+  /** Reset tab only when switching to a different Roni product (not on first mount — allows resume Toki tab). */
   useEffect(() => {
     if (prevApiNameRef.current !== null && prevApiNameRef.current !== apiName) {
       setActiveTabKey('overview');
@@ -327,7 +327,7 @@ const APIDetailsPage = ({
           </FlexItem>
           <FlexItem>
             <Button variant="primary" onClick={() => onRequestApiKey?.()}>
-              Request API key
+              Request Toki
             </Button>
           </FlexItem>
         </Flex>
@@ -338,7 +338,7 @@ const APIDetailsPage = ({
         >
           <Tab eventKey="overview" title={<TabTitleText>Overview</TabTitleText>} />
           <Tab eventKey="definition" title={<TabTitleText>Definition</TabTitleText>} />
-          <Tab eventKey="api-keys" title={<TabTitleText>API keys</TabTitleText>} />
+          <Tab eventKey="api-keys" title={<TabTitleText>Toki</TabTitleText>} />
         </Tabs>
       </PageSection>
 
@@ -356,7 +356,7 @@ const APIDetailsPage = ({
                 title="Catalog entry not found"
                 style={{ marginBottom: 'var(--pf-t--global--spacer--md)' }}
               >
-                No metadata is defined for &quot;{apiName}&quot; in the API catalog model.
+                No metadata is defined for &quot;{apiName}&quot; in the Roni catalog model.
               </Alert>
             )}
             {product && (
@@ -373,7 +373,7 @@ const APIDetailsPage = ({
                         <GridItem md={6}>
                           <DescriptionList isCompact>
                             <DescriptionListGroup>
-                              <DescriptionListTerm style={dtStyle}>API product name</DescriptionListTerm>
+                              <DescriptionListTerm style={dtStyle}>Roni product name</DescriptionListTerm>
                               <DescriptionListDescription>
                                 {product.productDisplayName}
                               </DescriptionListDescription>
@@ -509,15 +509,14 @@ const APIDetailsPage = ({
                 title="Catalog entry not found"
                 style={{ marginBottom: 'var(--pf-t--global--spacer--md)' }}
               >
-                No API keys can be listed for &quot;{apiName}&quot; until it exists in the API catalog model.
+                No Toki can be listed for &quot;{apiName}&quot; until it exists in the Roni catalog model.
               </Alert>
             )}
             {product && (
-              <CatalogApiKeysTabPanel
+              <RoniTokiTabPanel
                 rows={catalogApiKeysRows}
                 onOpenDelete={onOpenDelete}
                 onOpenEdit={onOpenEdit}
-                onRequestApiKey={onRequestApiKey}
                 onApiKeyNameClick={onOpenApiKeyDetail}
               />
             )}
@@ -528,4 +527,4 @@ const APIDetailsPage = ({
   );
 };
 
-export default APIDetailsPage;
+export default RoniDetailsPage;

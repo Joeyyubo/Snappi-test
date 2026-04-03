@@ -85,19 +85,19 @@ const renderStatus = (status) => {
   );
 };
 
-const APIKeyDetailPage = ({
+const TokiDetailPage = ({
   credential,
   onBack,
   revealedKeyIds,
   onOpenRevealModal,
   onOpenEdit,
   onOpenDelete,
-  /** 'my-api-keys' | 'api-catalog' — catalog flow: API catalog > API product > key name */
+  /** 'my-api-keys' | 'api-catalog' — catalog flow: Roni catalog → Roni product → Toki name */
   breadcrumbSource = 'my-api-keys',
   catalogApiName,
   onNavigateToApiCatalog,
   onNavigateToParentApi,
-  /** Rejected: open Request API key modal on current page */
+  /** Rejected: open Request Toki modal on current page */
   onRequestNewApiKey,
   requestSubmitSuccessAlert = false,
   onDismissRequestSubmitSuccessAlert
@@ -136,7 +136,7 @@ const APIKeyDetailPage = ({
     <>
       <style>{`
         /* PF breadcrumb items default to nowrap, which truncates long active labels */
-        .api-key-detail-breadcrumb .pf-v6-c-breadcrumb__item:last-child {
+        .toki-detail-breadcrumb .pf-v6-c-breadcrumb__item:last-child {
           white-space: normal;
           max-width: 100%;
         }
@@ -147,7 +147,7 @@ const APIKeyDetailPage = ({
             variant={AlertVariant.success}
             isInline
             isLiveRegion
-            title="API key requested successfully"
+            title="Toki requested successfully"
             timeout={8000}
             onTimeout={() => onDismissRequestSubmitSuccessAlert?.()}
             actionClose={
@@ -161,12 +161,12 @@ const APIKeyDetailPage = ({
             style={{ marginBottom: 'var(--pf-t--global--spacer--md)' }}
           />
         )}
-        <Breadcrumb className="api-key-detail-breadcrumb" style={{ flexWrap: 'wrap' }}>
+        <Breadcrumb className="toki-detail-breadcrumb" style={{ flexWrap: 'wrap' }}>
           {breadcrumbSource === 'api-catalog' ? (
             <>
               <BreadcrumbItem>
                 <Button variant="link" onClick={onNavigateToApiCatalog} isInline>
-                  API catalog
+                  Roni catalog
                 </Button>
               </BreadcrumbItem>
               <BreadcrumbItem>
@@ -190,7 +190,7 @@ const APIKeyDetailPage = ({
             <>
               <BreadcrumbItem>
                 <Button variant="link" onClick={onBack} isInline>
-                  My API keys
+                  My Toki
                 </Button>
               </BreadcrumbItem>
               <BreadcrumbItem
@@ -261,7 +261,7 @@ const APIKeyDetailPage = ({
             <GridItem span={12} lg={showUsageExamples ? 6 : 12}>
               <DescriptionList>
                 <DescriptionListGroup>
-                  <DescriptionListTerm>API key name</DescriptionListTerm>
+                  <DescriptionListTerm>Toki name</DescriptionListTerm>
                   <DescriptionListDescription
                     style={{
                       whiteSpace: 'normal',
@@ -338,7 +338,7 @@ const APIKeyDetailPage = ({
                             {rejectionReason || 'No additional details were provided for this rejection.'}
                           </div>
                           <Button variant="link" isInline onClick={() => onRequestNewApiKey?.()}>
-                            Request a new API key
+                            Request a new Toki
                           </Button>
                         </>
                       )}
@@ -358,7 +358,7 @@ const APIKeyDetailPage = ({
                 </DescriptionListGroup>
                 {status === 'Active' && (
                   <DescriptionListGroup>
-                    <DescriptionListTerm>API key</DescriptionListTerm>
+                    <DescriptionListTerm>Toki</DescriptionListTerm>
                     <DescriptionListDescription>
                       {renderApiKeyField({
                         status,
@@ -428,4 +428,4 @@ const APIKeyDetailPage = ({
   );
 };
 
-export default APIKeyDetailPage;
+export default TokiDetailPage;

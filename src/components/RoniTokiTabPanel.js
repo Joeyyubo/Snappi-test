@@ -56,9 +56,9 @@ function apiKeyColumnRank(row, revealedSet) {
 const linkStyle = { color: 'var(--pf-t--global--text--color--link--default)' };
 
 /**
- * API keys tab on API catalog details (toolbar + expandable sortable table).
+ * Toki tab on Roni product details (toolbar + expandable sortable table).
  */
-const CatalogApiKeysTabPanel = ({ rows, onOpenDelete }) => {
+const RoniTokiTabPanel = ({ rows, onOpenDelete, onOpenEdit, onApiKeyNameClick }) => {
   const [statusFilterOpen, setStatusFilterOpen] = useState(false);
   const [tierFilterOpen, setTierFilterOpen] = useState(false);
   const [statusFilters, setStatusFilters] = useState([]);
@@ -154,23 +154,42 @@ const CatalogApiKeysTabPanel = ({ rows, onOpenDelete }) => {
 
   const renderNameCell = (row) => {
     const { display, full, isTruncated } = getApiKeyNameTableDisplay(row.name);
-    const inner = <span style={linkStyle}>{display}</span>;
+    const label = <span style={linkStyle}>{display}</span>;
+    const interactive = onApiKeyNameClick ? (
+      <button
+        type="button"
+        onClick={() => onApiKeyNameClick(row)}
+        style={{
+          background: 'none',
+          border: 'none',
+          padding: 0,
+          cursor: 'pointer',
+          font: 'inherit',
+          textAlign: 'left',
+          maxWidth: '100%'
+        }}
+      >
+        {label}
+      </button>
+    ) : (
+      label
+    );
     if (isTruncated) {
       return (
         <Tooltip content={full}>
           <span style={{ display: 'inline-flex', maxWidth: '100%' }} tabIndex={0}>
-            {inner}
+            {interactive}
           </span>
         </Tooltip>
       );
     }
-    return inner;
+    return interactive;
   };
 
   return (
     <>
       <style>{`
-        .toolbar-catalog-api-keys .pf-v6-c-toolbar__content:last-of-type {
+        .toolbar-roni-toki .pf-v6-c-toolbar__content:last-of-type {
           display: flex;
           flex-direction: row;
           flex-wrap: nowrap;
@@ -189,7 +208,7 @@ const CatalogApiKeysTabPanel = ({ rows, onOpenDelete }) => {
         .tier-dropdown-list-catalog .pf-v6-c-menu__item-select-icon {
           display: none !important;
         }
-        .toolbar-catalog-api-keys .pf-v6-c-label-group .pf-v6-c-label.pf-m-outline {
+        .toolbar-roni-toki .pf-v6-c-label-group .pf-v6-c-label.pf-m-outline {
           --pf-v6-c-label--m-outline--BackgroundColor: var(--pf-t--global--color--nonstatus--gray--default);
           --pf-v6-c-label--BorderWidth: 0;
           --pf-v6-c-label--BorderColor: transparent;
@@ -201,12 +220,12 @@ const CatalogApiKeysTabPanel = ({ rows, onOpenDelete }) => {
             --pf-t--global--color--nonstatus--gray--hover
           );
         }
-        .toolbar-catalog-api-keys .pf-v6-c-label-group .pf-v6-c-label.pf-m-outline .pf-v6-c-label__actions .pf-v6-c-button {
+        .toolbar-roni-toki .pf-v6-c-label-group .pf-v6-c-label.pf-m-outline .pf-v6-c-label__actions .pf-v6-c-button {
           --pf-v6-c-button__icon--Color: var(--pf-t--global--icon--color--regular);
         }
       `}</style>
       <Toolbar
-        className="toolbar-catalog-api-keys"
+        className="toolbar-roni-toki"
         clearAllFilters={clearAllFilters}
         clearFiltersButtonText="Clear filters"
       >
@@ -288,7 +307,7 @@ const CatalogApiKeysTabPanel = ({ rows, onOpenDelete }) => {
             </ToolbarFilter>
             <ToolbarItem>
               <SearchInput
-                placeholder="Find by name"
+                placeholder="Find by Toki name"
                 value={searchValue}
                 onChange={(_, value) => setSearchValue(value)}
                 onClear={() => setSearchValue('')}
@@ -300,7 +319,7 @@ const CatalogApiKeysTabPanel = ({ rows, onOpenDelete }) => {
       </Toolbar>
 
       <div style={{ marginTop: 'var(--pf-t--global--spacer--sm)' }}>
-        <Table aria-label="API keys for this API product">
+        <Table aria-label="Toki for this Roni product">
           <Thead>
             <Tr>
               <Th
@@ -310,12 +329,12 @@ const CatalogApiKeysTabPanel = ({ rows, onOpenDelete }) => {
                   paddingRight: 'var(--pf-t--global--spacer--xs)'
                 }}
               />
-              <Th sort={{ columnIndex: 1, sortBy: sortState, onSort: handleSort }}>API key name</Th>
+              <Th sort={{ columnIndex: 1, sortBy: sortState, onSort: handleSort }}>Toki name</Th>
               <Th sort={{ columnIndex: 2, sortBy: sortState, onSort: handleSort }}>Status</Th>
               <Th dataLabel="Tier" style={TIER_TABLE_COLUMN_STYLE}>
                 <TierSortableColumnHeader columnIndex={3} sortBy={sortState} onSort={handleSort} />
               </Th>
-              <Th sort={{ columnIndex: 4, sortBy: sortState, onSort: handleSort }}>API key</Th>
+              <Th sort={{ columnIndex: 4, sortBy: sortState, onSort: handleSort }}>Toki</Th>
               <Th sort={{ columnIndex: 5, sortBy: sortState, onSort: handleSort }}>Requested time</Th>
               <Th />
             </Tr>
@@ -381,7 +400,13 @@ const CatalogApiKeysTabPanel = ({ rows, onOpenDelete }) => {
                       )}
                     >
                       <DropdownList>
-                        <DropdownItem key="edit" onClick={() => setActionsOpenRowId(null)}>
+                        <DropdownItem
+                          key="edit"
+                          onClick={() => {
+                            setActionsOpenRowId(null);
+                            onOpenEdit?.(row);
+                          }}
+                        >
                           Edit
                         </DropdownItem>
                         <DropdownItem
@@ -427,4 +452,4 @@ const CatalogApiKeysTabPanel = ({ rows, onOpenDelete }) => {
   );
 };
 
-export default CatalogApiKeysTabPanel;
+export default RoniTokiTabPanel;

@@ -1,10 +1,10 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { Button, Tooltip } from '@patternfly/react-core';
 
-/** Max characters shown before "..." for API key names in lists and headings. */
+/** Max characters shown before "..." for Toki names in lists and headings. */
 export const API_KEY_NAME_DISPLAY_MAX_LEN = 20;
 
-/** Same limit for Owner, API, and other table cells. */
+/** Same limit for Owner, Roni, and other table cells. */
 export const TABLE_CELL_DISPLAY_MAX_LEN = API_KEY_NAME_DISPLAY_MAX_LEN;
 
 /**
@@ -39,7 +39,7 @@ const fullTextWrapStyle = {
 };
 
 /**
- * Inline API key name; if truncated with "...", full value is shown in a Tooltip on hover/focus.
+ * Inline Toki name; if truncated with "...", full value is shown in a Tooltip on hover/focus.
  * Set `truncate={false}` for detail pages and anywhere the full name must show with no tooltip.
  */
 export function ApiKeyNameText({ name, style, className, truncate = true }) {
@@ -84,7 +84,7 @@ const useCaseTwoLineStyle = {
 };
 
 /**
- * API key approval “Use case” cell: up to two lines with ellipsis.
+ * Toki approval “Use case” cell: up to two lines with ellipsis.
  * Tooltip only when content overflows the two-line clamp (ellipsis / hidden remainder), not when it fits fully.
  */
 export function UseCaseTwoLineCell({ text, style, className }) {

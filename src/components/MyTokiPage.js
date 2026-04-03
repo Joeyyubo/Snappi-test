@@ -25,8 +25,7 @@ import { TIER_TOOLTIPS, TIER_LIMIT, CREDENTIAL_TIER_OPTIONS } from '../data/apiC
 import { renderApiKeyField } from './apiKeyFieldDisplay';
 import {
   getApiKeyNameTableDisplay,
-  TruncatedTableLink,
-  TruncatedTableText
+  TruncatedTableLink
 } from './ApiKeyNameText';
 import {
   TierSortableColumnHeader,
@@ -69,7 +68,7 @@ function apiKeyColumnRank(row, revealedKeyIds) {
   return 1;
 }
 
-const APICredentialsPage = ({
+const MyTokiPage = ({
   onApiKeyNameClick,
   revealedKeyIds,
   onOpenRevealModal,
@@ -105,8 +104,7 @@ const APICredentialsPage = ({
       row.name.toLowerCase().includes(searchValue.toLowerCase()) ||
       row.status.toLowerCase().includes(searchValue.toLowerCase()) ||
       row.tier.toLowerCase().includes(searchValue.toLowerCase()) ||
-      row.api.toLowerCase().includes(searchValue.toLowerCase()) ||
-      row.owner.toLowerCase().includes(searchValue.toLowerCase());
+      row.api.toLowerCase().includes(searchValue.toLowerCase());
     const matchesStatus = statusFilters.length === 0 || statusFilters.includes(row.status);
     const matchesTier = tierFilters.length === 0 || tierFilters.includes(row.tier);
     return matchesSearch && matchesStatus && matchesTier;
@@ -123,21 +121,18 @@ const APICredentialsPage = ({
           cmp = (a.name || '').localeCompare(b.name || '', undefined, { sensitivity: 'base' });
           break;
         case 2:
-          cmp = (a.owner || '').localeCompare(b.owner || '', undefined, { sensitivity: 'base' });
-          break;
-        case 3:
           cmp = (a.api || '').localeCompare(b.api || '', undefined, { sensitivity: 'base' });
           break;
-        case 4:
+        case 3:
           cmp = (STATUS_RANK[a.status] ?? 0) - (STATUS_RANK[b.status] ?? 0);
           break;
-        case 5:
+        case 4:
           cmp = (TIER_LIMIT[a.tier] ?? 0) - (TIER_LIMIT[b.tier] ?? 0);
           break;
-        case 6:
+        case 5:
           cmp = apiKeyColumnRank(a, revealedSet) - apiKeyColumnRank(b, revealedSet);
           break;
-        case 7:
+        case 6:
           cmp = (a.requestedTime || '').localeCompare(b.requestedTime || '', undefined, { numeric: true });
           break;
         default:
@@ -192,7 +187,7 @@ const APICredentialsPage = ({
     const reason = (row.rejectionReason && String(row.rejectionReason).trim()) || REJECTION_REASON_FALLBACK;
     return (
       <Popover
-        id={`my-api-keys-rejected-${row.id}`}
+        id={`my-toki-rejected-${row.id}`}
         headerContent={
           <span
             style={{
@@ -305,7 +300,7 @@ const APICredentialsPage = ({
   return (
     <>
       <style>{`
-        .toolbar-api-credentials .pf-v6-c-toolbar__content:last-of-type {
+        .toolbar-my-toki .pf-v6-c-toolbar__content:last-of-type {
           display: flex;
           flex-direction: row;
           flex-wrap: nowrap;
@@ -327,7 +322,7 @@ const APICredentialsPage = ({
           display: none !important;
         }
         /* ToolbarFilter uses outline Labels — fill chip background like design (gray pill) */
-        .toolbar-api-credentials .pf-v6-c-label-group .pf-v6-c-label.pf-m-outline {
+        .toolbar-my-toki .pf-v6-c-label-group .pf-v6-c-label.pf-m-outline {
           --pf-v6-c-label--m-outline--BackgroundColor: var(--pf-t--global--color--nonstatus--gray--default);
           --pf-v6-c-label--BorderWidth: 0;
           --pf-v6-c-label--BorderColor: transparent;
@@ -339,45 +334,42 @@ const APICredentialsPage = ({
             --pf-t--global--color--nonstatus--gray--hover
           );
         }
-        .toolbar-api-credentials .pf-v6-c-label-group .pf-v6-c-label.pf-m-outline .pf-v6-c-label__actions .pf-v6-c-button {
+        .toolbar-my-toki .pf-v6-c-label-group .pf-v6-c-label.pf-m-outline .pf-v6-c-label__actions .pf-v6-c-button {
           --pf-v6-c-button__icon--Color: var(--pf-t--global--icon--color--regular);
         }
         /* Fixed column widths so expanding a row (colspan detail) does not reflow header/body columns */
-        .my-api-keys-table.pf-v6-c-table {
+        .my-toki-table.pf-v6-c-table {
           table-layout: fixed;
           width: 100%;
         }
-        .my-api-keys-table thead th:nth-child(1) {
+        .my-toki-table thead th:nth-child(1) {
           width: 4%;
         }
-        .my-api-keys-table thead th:nth-child(2) {
+        .my-toki-table thead th:nth-child(2) {
           width: 21%;
         }
-        .my-api-keys-table thead th:nth-child(3) {
+        .my-toki-table thead th:nth-child(3) {
+          width: 24%;
+        }
+        .my-toki-table thead th:nth-child(4) {
           width: 12%;
         }
-        .my-api-keys-table thead th:nth-child(4) {
-          width: 12%;
-        }
-        .my-api-keys-table thead th:nth-child(5) {
+        .my-toki-table thead th:nth-child(5) {
           width: 10%;
         }
-        .my-api-keys-table thead th:nth-child(6) {
+        .my-toki-table thead th:nth-child(6) {
           width: 10%;
         }
-        .my-api-keys-table thead th:nth-child(7) {
+        .my-toki-table thead th:nth-child(7) {
           width: 16%;
         }
-        .my-api-keys-table thead th:nth-child(8) {
-          width: 10%;
-        }
-        .my-api-keys-table thead th:nth-child(9) {
+        .my-toki-table thead th:nth-child(8) {
           width: 5%;
         }
-        .my-api-keys-table tbody > tr > td {
+        .my-toki-table tbody > tr > td {
           vertical-align: middle;
         }
-        .my-api-keys-table .pf-v6-c-table__expandable-row-content {
+        .my-toki-table .pf-v6-c-table__expandable-row-content {
           overflow-wrap: anywhere;
           word-break: break-word;
           max-width: 100%;
@@ -428,7 +420,7 @@ const APICredentialsPage = ({
         </Flex>
 
         <Toolbar
-          className="toolbar-api-credentials"
+          className="toolbar-my-toki"
           clearAllFilters={clearAllFilters}
           clearFiltersButtonText="Clear filters"
           style={{ marginTop: 'var(--pf-t--global--spacer--md)' }}
@@ -524,7 +516,7 @@ const APICredentialsPage = ({
         </Toolbar>
 
         <div style={{ marginTop: 'var(--pf-t--global--spacer--sm)' }}>
-          <Table aria-label="My Toki table" className="my-api-keys-table" isExpandable>
+          <Table aria-label="My Toki table" className="my-toki-table" isExpandable>
           <Thead>
             <Tr>
               <Th
@@ -534,9 +526,8 @@ const APICredentialsPage = ({
                 }}
               />
               <Th sort={{ columnIndex: 1, sortBy: sortState, onSort: handleSort }}>Toki name</Th>
-              <Th sort={{ columnIndex: 2, sortBy: sortState, onSort: handleSort }}>Owner</Th>
-              <Th sort={{ columnIndex: 3, sortBy: sortState, onSort: handleSort }}>Roni</Th>
-              <Th sort={{ columnIndex: 4, sortBy: sortState, onSort: handleSort }}>Status</Th>
+              <Th sort={{ columnIndex: 2, sortBy: sortState, onSort: handleSort }}>Roni</Th>
+              <Th sort={{ columnIndex: 3, sortBy: sortState, onSort: handleSort }}>Status</Th>
               <Th
                 dataLabel="Tier"
                 style={{
@@ -545,10 +536,10 @@ const APICredentialsPage = ({
                   minWidth: TIER_TABLE_COLUMN_STYLE.minWidth
                 }}
               >
-                <TierSortableColumnHeader columnIndex={5} sortBy={sortState} onSort={handleSort} />
+                <TierSortableColumnHeader columnIndex={4} sortBy={sortState} onSort={handleSort} />
               </Th>
-              <Th sort={{ columnIndex: 6, sortBy: sortState, onSort: handleSort }}>Toki</Th>
-              <Th sort={{ columnIndex: 7, sortBy: sortState, onSort: handleSort }}>Requested time</Th>
+              <Th sort={{ columnIndex: 5, sortBy: sortState, onSort: handleSort }}>Toki</Th>
+              <Th sort={{ columnIndex: 6, sortBy: sortState, onSort: handleSort }}>Requested time</Th>
               <Th />
             </Tr>
           </Thead>
@@ -577,9 +568,6 @@ const APICredentialsPage = ({
                     </Button>
                   </Td>
                   <Td style={{ verticalAlign: 'middle' }}>{renderApiKeyNameCell(row)}</Td>
-                  <Td style={{ verticalAlign: 'middle' }}>
-                    <TruncatedTableText text={row.owner} />
-                  </Td>
                   <Td style={{ verticalAlign: 'middle' }}>
                     <TruncatedTableLink
                       text={row.api}
@@ -659,7 +647,7 @@ const APICredentialsPage = ({
                 {expandedRows[row.id] && (
                   <Tr isExpanded style={{ borderTop: 'none' }}>
                     <Td
-                      colSpan={9}
+                      colSpan={8}
                       style={{
                         borderTop: 'none',
                         borderBottom: borderDefaultStyle,
@@ -686,4 +674,4 @@ const APICredentialsPage = ({
   );
 };
 
-export default APICredentialsPage;
+export default MyTokiPage;

@@ -24,9 +24,9 @@ import { EDIT_MODAL_TIER_OPTIONS } from '../data/apiCredentialsModel';
 const ALLOWED_EDIT_TIERS = new Set(EDIT_MODAL_TIER_OPTIONS.map((o) => o.value));
 
 /**
- * Edit API key — opened from API key details (Edit) or My API keys row actions (Edit).
+ * Edit Toki — opened from Toki details or My Toki row actions.
  */
-const EditApiKeyModal = ({ credential, isOpen, onClose, onSave }) => {
+const EditTokiModal = ({ credential, isOpen, onClose, onSave }) => {
   const [name, setName] = useState('');
   const [tier, setTier] = useState('');
   const [useCase, setUseCase] = useState('');
@@ -197,4 +197,4 @@ const EditApiKeyModal = ({ credential, isOpen, onClose, onSave }) => {
   );
 };
 
-export default EditApiKeyModal;
+export default EditTokiModal;

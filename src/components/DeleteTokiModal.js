@@ -11,10 +11,9 @@ import {
 } from '@patternfly/react-core';
 
 /**
- * Delete API key confirmation — typing the exact key name enables Delete.
- * Opened from API key details or My API keys row actions.
+ * Delete Toki confirmation — typing the exact Toki name enables Delete.
  */
-const DeleteApiKeyModal = ({ credential, isOpen, onClose, onConfirm }) => {
+const DeleteTokiModal = ({ credential, isOpen, onClose, onConfirm }) => {
   const [confirmInput, setConfirmInput] = useState('');
 
   useEffect(() => {
@@ -85,4 +84,4 @@ const DeleteApiKeyModal = ({ credential, isOpen, onClose, onConfirm }) => {
   );
 };
 
-export default DeleteApiKeyModal;
+export default DeleteTokiModal;
