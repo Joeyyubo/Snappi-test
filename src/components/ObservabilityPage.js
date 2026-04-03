@@ -293,6 +293,204 @@ const TrafficOutcomeCard = () => {
   );
 };
 
+/** Cubic ribbon between two vertical bands (Sankey-style). */
+function sankeyRibbon(x0, w0, y0, h0, x1, y1, h1) {
+  const xS = x0 + w0;
+  const xT = x1;
+  const mx = (xS + xT) / 2;
+  return `M${xS},${y0} C${mx},${y0} ${mx},${y1} ${xT},${y1} L${xT},${y1 + h1} C${mx},${y1 + h1} ${mx},${y0 + h0} ${xS},${y0 + h0} Z`;
+}
+
+/** Demo Sankey: ingress → API surface → HTTP outcome (illustrative). */
+const TrafficFlowSankeyCard = ({ clipId }) => {
+  const W = 720;
+  const H = 220;
+  const top = 28;
+  const innerH = 152;
+  const bw = 14;
+  const x0 = 24;
+  const x1 = 280;
+  const x2 = 536;
+
+  const layout = useMemo(() => {
+    const p = (pct) => (innerH * pct) / 100;
+    const ingress = { x: x0, y: top, h: innerH, label: 'Ingress' };
+    const mid = [
+      { key: 'catalog', pct: 54, label: 'API catalog', color: pf.color.brand },
+      { key: 'keys', pct: 28, label: 'My API keys', color: pf.color.info },
+      { key: 'approval', pct: 18, label: 'Toki approval', color: pf.color.warning }
+    ];
+    let y = top;
+    const midNodes = mid.map((m) => {
+      const h = p(m.pct);
+      const node = { ...m, x: x1, y, h };
+      y += h;
+      return node;
+    });
+
+    const out = [
+      { key: 'ok', pct: 88, label: '2xx / 3xx', color: pf.color.success },
+      { key: 'c4', pct: 8, label: '4xx', color: pf.color.warning },
+      { key: 's5', pct: 4, label: '5xx', color: pf.color.danger }
+    ];
+    y = top;
+    const outNodes = out.map((o) => {
+      const h = p(o.pct);
+      const node = { ...o, x: x2, y, h };
+      y += h;
+      return node;
+    });
+
+    /** Layer 0 → 1 */
+    const l01 = [
+      { from: ingress, to: midNodes[0], frac: 54 / 100 },
+      { from: ingress, to: midNodes[1], frac: 28 / 100 },
+      { from: ingress, to: midNodes[2], frac: 18 / 100 }
+    ];
+    let srcY = top;
+    const links01 = l01.map(({ from, to, frac }) => {
+      const h = innerH * frac;
+      const link = {
+        d: sankeyRibbon(from.x, bw, srcY, h, to.x, to.y, to.h),
+        color: to.color
+      };
+      srcY += h;
+      return link;
+    });
+
+    /** Layer 1 → 2: split each mid node into ok / 4xx / 5xx (demo proportions) */
+    const splits = {
+      catalog: [
+        { to: 0, pctOfMid: 46 / 54 },
+        { to: 1, pctOfMid: 6 / 54 },
+        { to: 2, pctOfMid: 2 / 54 }
+      ],
+      keys: [
+        { to: 0, pctOfMid: 26 / 28 },
+        { to: 1, pctOfMid: 2 / 28 },
+        { to: 2, pctOfMid: 0 }
+      ],
+      approval: [
+        { to: 0, pctOfMid: 16 / 18 },
+        { to: 1, pctOfMid: 0 },
+        { to: 2, pctOfMid: 2 / 18 }
+      ]
+    };
+
+    /** Layer 1 → 2 with stacked target bands per outcome node */
+    const consumed = [0, 0, 0];
+    const links12v2 = [];
+    midNodes.forEach((node) => {
+      const segs = splits[node.key];
+      let sy = node.y;
+      segs.forEach((seg) => {
+        const sh = node.h * seg.pctOfMid;
+        if (sh < 0.25) return;
+        const ti = seg.to;
+        const tgt = outNodes[ti];
+        const ty = tgt.y + consumed[ti];
+        const th = sh;
+        consumed[ti] += th;
+        links12v2.push({
+          d: sankeyRibbon(node.x, bw, sy, sh, tgt.x, ty, th),
+          color: tgt.color,
+          opacity: 0.45
+        });
+        sy += sh;
+      });
+    });
+
+    return { ingress, midNodes, outNodes, links01, links12: links12v2, bw };
+  }, []);
+
+  return (
+    <Card>
+      <CardHeader>
+        <Flex
+          justifyContent={{ default: 'justifyContentSpaceBetween' }}
+          alignItems={{ default: 'alignItemsCenter' }}
+        >
+          <CardTitle>Traffic flow (Sankey)</CardTitle>
+          <Label color="blue" isCompact>
+            Demo data
+          </Label>
+        </Flex>
+      </CardHeader>
+      <CardBody>
+        <Content>
+          <small style={{ color: pf.color.textSubtle }}>
+            Illustrative flow from ingress to API surfaces to HTTP outcomes — not live telemetry.
+          </small>
+        </Content>
+        <div style={{ marginTop: pf.space.md, overflowX: 'auto' }}>
+          <svg width="100%" height={H} viewBox={`0 0 ${W} ${H}`} style={{ minWidth: 520 }} aria-label="Sankey diagram">
+            <defs>
+              <clipPath id={clipId}>
+                <rect x="0" y="0" width={W} height={H} />
+              </clipPath>
+            </defs>
+            <g clipPath={`url(#${clipId})`}>
+              {layout.links01.map((link, i) => (
+                <path key={`l01-${i}`} d={link.d} fill={link.color} fillOpacity={0.35} stroke="none" />
+              ))}
+              {layout.links12.map((link, i) => (
+                <path key={`l12-${i}`} d={link.d} fill={link.color} fillOpacity={link.opacity} stroke="none" />
+              ))}
+              <rect
+                x={layout.ingress.x}
+                y={layout.ingress.y}
+                width={layout.bw}
+                height={layout.ingress.h}
+                fill={pf.color.textSubtle}
+                rx={2}
+              />
+              {layout.midNodes.map((n) => (
+                <rect key={n.key} x={n.x} y={n.y} width={layout.bw} height={n.h} fill={n.color} rx={2} />
+              ))}
+              {layout.outNodes.map((n) => (
+                <rect key={n.key} x={n.x} y={n.y} width={layout.bw} height={n.h} fill={n.color} rx={2} />
+              ))}
+              <text
+                x={layout.ingress.x - 8}
+                y={layout.ingress.y + layout.ingress.h / 2}
+                textAnchor="end"
+                dominantBaseline="middle"
+                style={{ fontSize: pf.font.bodySm, fill: pf.color.textRegular }}
+              >
+                {layout.ingress.label}
+              </text>
+              {layout.midNodes.map((n) => (
+                <text
+                  key={`t-${n.key}`}
+                  x={n.x + layout.bw + 8}
+                  y={n.y + n.h / 2}
+                  textAnchor="start"
+                  dominantBaseline="middle"
+                  style={{ fontSize: pf.font.bodySm, fill: pf.color.textRegular }}
+                >
+                  {n.label}
+                </text>
+              ))}
+              {layout.outNodes.map((n) => (
+                <text
+                  key={`o-${n.key}`}
+                  x={n.x + layout.bw + 8}
+                  y={n.y + n.h / 2}
+                  textAnchor="start"
+                  dominantBaseline="middle"
+                  style={{ fontSize: pf.font.bodySm, fill: pf.color.textRegular }}
+                >
+                  {n.label}
+                </text>
+              ))}
+            </g>
+          </svg>
+        </div>
+      </CardBody>
+    </Card>
+  );
+};
+
 const ErrorRateSparkCard = ({ sparkId }) => {
   const w = 280;
   const h = 64;
@@ -325,6 +523,7 @@ const ErrorRateSparkCard = ({ sparkId }) => {
 const ObservabilityPage = () => {
   const areaGradId = 'observability-request-area';
   const sparkGradId = 'observability-error-spark';
+  const sankeyClipId = 'observability-sankey-clip';
 
   return (
     <>
@@ -357,6 +556,9 @@ const ObservabilityPage = () => {
           </GridItem>
           <GridItem span={12} md={6}>
             <ErrorRateSparkCard sparkId={sparkGradId} />
+          </GridItem>
+          <GridItem span={12}>
+            <TrafficFlowSankeyCard clipId={sankeyClipId} />
           </GridItem>
         </Grid>
       </PageSection>
